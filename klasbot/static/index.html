@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Klasbot MVP Skeleton</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Klasbot</h1>
+      <p>Minimal FastAPI skeleton: health, basic UI, and SSE generation stream.</p>
+      <form id="generate-form">
+        <label for="prompt">Topic / Prompt</label>
+        <input id="prompt" name="prompt" type="text" placeholder="e.g., Fractions for Grade 4" />
+        <button type="submit">Generate Draft</button>
+      </form>
+      <pre id="output" aria-live="polite"></pre>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
