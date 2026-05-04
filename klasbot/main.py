@@ -4,12 +4,11 @@ import asyncio
 import logging
 from pathlib import Path
 
-import httpx
 from fastapi import FastAPI, Query
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 
 from klasbot.config import OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_TIMEOUT_SECONDS
-from klasbot.ollama_client import OllamaClient
+from klasbot.ollama_client import OllamaClient, OllamaStreamError
 
 logger = logging.getLogger(__name__)
 
@@ -61,8 +60,8 @@ async def _sse_tokens(prompt: str):
         async for token in ollama_client.stream_generate(OLLAMA_MODEL, prompt):
             yield f"data: {token}\n\n"
         logger.info("Completed Ollama generation stream", extra={"model": OLLAMA_MODEL})
-    except (httpx.HTTPError, ValueError, KeyError) as exc:
-        logger.exception("Failed to stream from Ollama; switching to placeholder fallback", exc_info=exc)
+    except OllamaStreamError:
+        logger.exception("Failed to stream from Ollama; switching to placeholder fallback")
         yield "data: [Ollama unavailable - showing fallback draft]\n\n"
         async for chunk in _placeholder_sse(prompt):
             yield chunk
