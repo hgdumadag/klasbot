@@ -1,0 +1,1765 @@
+{
+  "document": {
+    "subject": "Science",
+    "title": "MATATAG K TO 10 CURRICULUM OF THE K TO 12 PROGRAM SCIENCE GRADES 3-10",
+    "version_label": "August 2023",
+    "source_year": "2023",
+    "grade_min": 3,
+    "grade_max": 10,
+    "source_filename": "FINAL MATATAG Science CG 2023 Grades 3-10.pdf",
+    "source_citation": "fileciteturn0file0",
+    "parse_summary": {
+      "unit_count": 32,
+      "grade_count": 8,
+      "average_confidence": 0.95,
+      "warning_count": 0,
+      "warnings": []
+    }
+  },
+  "units": [
+    {
+      "grade_level": "Grade 3",
+      "quarter": 1,
+      "domain": "MATERIALS",
+      "content": "Science in our daily life; Science processes; Materials and their uses",
+      "content_standards": "Science is important in understanding how the natural world works.; Using science process skills, simple science equipment, and participating in guided activities leads to better understanding of science.; Physical properties of materials determine their use.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate simple science processes to explore common local materials, their physical properties and uses. They participate in guided science activities including simple measurements using units, such as millimeters, centimeters, and meters. They demonstrate safe handling procedures to use equipment and materials.",
+      "suggested_tasks": "Design a product out of recyclable materials that would be useful in everyday life, such as a vase, containers, clay pot, cardboard objects, recycled plastic clothes/hats, straw bags, and objects made out of aluminum or steel cans.",
+      "source_pages": "29",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify objects, activities, or natural events observed in their local environment that can be explained by science;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "participate in guided science activities by asking questions and tinkering with materials;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe the uses of various science equipment and materials used in simple activities, such as a ruler, hand lens, scissors, balloons, modeling clay, and cardboard;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "describe different science process skills used in performing simple science activities, such as observing, predicting, and measuring using units such as millimeter, centimeter, and meter;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe the physical properties of solid materials, such as hard, shiny, or stretchable;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "explain that changes in materials can be harmful to living and non-living things in the environment, such as trash disposal, and burning household materials;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "demonstrate proper handling and disposal of materials according to their properties, such as reusing objects, disposing of excess oil into garbage, and recycling paper, plastic or glass;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "describe how changes in solid materials make them useful, such as when they are shaped, pressed, hammered, joined, or cut; and"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "identify the properties and uses of metals used by the local community such as iron, gold, silver, and copper."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 3",
+      "quarter": 2,
+      "domain": "LIVING THINGS",
+      "content": "Guided science activities using process skills; Living and non-living things; Characteristics of living things; Basic needs of living things",
+      "content_standards": "Using science process skills, simple pieces of science equipment, and participating in guided activities leads to a better understanding of science.; Characteristics of growth, response and reproduction identify living things.; Body parts of plants and animals enable them to live and grow.; All living things have the same basic needs that need to be met by their environment.",
+      "performance_standard": "By the end of the Quarter, learners describe the basic needs of living things. They explain how the body parts allow them to carry out their daily activities. They recognize the need to protect the environment to ensure that the basic needs of living things can be met. They observe and measure living and non- living things in their local environment. They make models and collages of living things and their basic needs.",
+      "suggested_tasks": "A. Make (create) a model of a chosen living thing using readily available recyclable or indigenous materials. B. Make a collage of the basic needs of a chosen living thing using readily available recyclable plant or animal materials.",
+      "source_pages": "30",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "use the skills of observing, predicting, and measuring in performing simple guided science activities;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "observe and describe the difference between living and non-living things and give examples of each that can be found in the local environment;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe the characteristics of living things: they grow, respond, and reproduce;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "observe and describe the outer body parts of animals, such as head, legs or wings, and identify their role to move and to gather food;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "observe the outer parts of plants, such as leaves, roots, and stems and identify their role to get water and nutrients from the soil;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "identify the basic needs of all living things, such as air, food, water, and shelter;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "observe examples and explain how living things depend on one another and on the environment to meet their basic needs; and"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "recognize that there is a need to protect and conserve the environment for living things to survive."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 3",
+      "quarter": 3,
+      "domain": "FORCE, MOTION, AND ENERGY",
+      "content": "Exploring and Questioning; Moving objects; Light and sound",
+      "content_standards": "Objects that change position encounter a push or a pull.; Using science processes and curiosity is important in understanding how objects move.; Light and sound are examples of energy that affect daily life.; People can modify light and sound to make them useful.",
+      "performance_standard": "By the end of the Quarter, learners use everyday language to explore, describe, and make suggestions about simple movements of objects. They identify and explore sources of light and sound in their local environment and suggest how to use them safely in their lives. Learners apply their curiosity in the world around them and their creativity to propose solutions to simple challenges.",
+      "suggested_tasks": "A. Choose a children's storybook and identify scenes where movement, light, or sound is used. Describe and show to the class how movement, light or sound is being used or changed in the story to make it real or interesting. B. Design and make a working model that can be used to send a simple message to another learner who is 5 meters away. Your device should send a message using either movement, light, or sound. Show the class your finished invention and be ready to describe how it works and how you have used movement, light or sound to carry or transfer the message. Indicate any problems you had and how you could improve your design.",
+      "source_pages": "31",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "explore and demonstrate different ways to make objects move by natural causes, such as wind and water, or by people, such as pushing, pulling, rolling, and carrying;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "explore and describe things that affect the movement of objects, including size, shape, heaviness, material, and surface texture;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "measure and describe changes in the position of people or objects in relation to their original position, such as moving closer, farther, left, or right;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "explore and describe how sound is made and transferred in everyday situations, such as the ringing of a bell or the hearing of noises;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe sources of light and their use in everyday situations;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "participate in guided science activities to explore and describe sources of light, how it behaves or can be changed, and its uses in everyday situations;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "explain how light and sound can be harmful to people and make suggestions on how to protect oneself from them; and"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "participate in guided activities to explore and describe some ways to use movement, sound, and light to send information between two people."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 3",
+      "quarter": 4,
+      "domain": "EARTH AND SPACE",
+      "content": "The Non-Living environment; Patterns in the weather; Celestial objects",
+      "content_standards": "Non-living things found in the environment are the sources of useful products.; Weather affects our daily activities and may pose threats to health and safety.; The natural objects in the sky affect the activities of people.",
+      "performance_standard": "By the end of the Quarter, learners explore their immediate neighborhood to locate and describe useful non-living things that can be used by people to produce useful materials and objects. They learn through guided activities to make safe and careful observations of natural objects in the sky and demonstrate scientific ways of recording observations to reveal patterns in nature.",
+      "suggested_tasks": "A. Express ideas creatively through artwork, poems, and songs, about health and safety measures to avoid the harmful effects of Sun's heat. Express ideas about safety measures during different weather conditions creatively. B. Record, organize, and present observations on the changes in the weather over a period of 5 to 7 days.",
+      "source_pages": "32",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "participate in guided activities to locate and describe different types of non-living things found in and around their school, such as rocks, soil, water, air, metals, clouds, rain, and sunlight;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "identify some useful things that people have made from non-living materials and describe what natural materials have been used to make the items;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "recognize that the non-living materials that make up the environment are referred to as 'earth materials';"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "observe and record changes in the weather during a day or over some days and describe the different types and patterns of weather that occur in the local area;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe how changes in the weather can affect daily activities and explain how some types of weather can be dangerous for people;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "participate in guided activities to carefully observe and describe the natural objects commonly seen in the sky during daytime and nighttime, including the Sun, the Moon, planets, and stars;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "participate in guided activities to explore and record how and when the Sun, the Moon, planets, and stars can be seen moving across the sky;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "explain how natural objects in the sky affect activities of people; and"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe safety measures that people can use to avoid the harmful effects of the Sun's light."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 1,
+      "domain": "MATERIALS",
+      "content": "Science inventions; Materials and their uses; Gathering scientific information",
+      "content_standards": "Science inventions have brought about major changes to our daily lives.; Chemical properties of materials determine their uses.; Communication skills and open mindedness are needed in solving environmental issues.",
+      "performance_standard": "By the end of the Quarter, learners describe chemical properties of materials and changes to them. They demonstrate an understanding that science processes can solve everyday problems and use creativity and determination to provide examples. They exhibit objectivity and open-mindedness in gathering information related to environmental issues and concerns in the community.",
+      "suggested_tasks": "A. Create a simple model, illustration or write a story about a favorite science invention that you use in everyday life. B. Plan and produce a sample of useful fertilizer from household waste.",
+      "source_pages": "33",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "use information from secondary sources to identify a famous Filipino and/or foreign scientist and their invention/s;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "use information from the home or the local community to identify a science invention and explain its impact on their everyday life;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe the chemical properties of materials, such as they can be burnt, react with other materials, or are degradable or biodegradable;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "describe changes in properties of materials when exposed to certain changes in temperature, such as changes when wood or coal are burned;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "demonstrate ways to minimize harmful changes in materials, such as restriction of burning of waste materials, and care in handling reactive materials;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "identify issues and concerns in the local community and how they could be addressed by science, such as the treatment of waste; and"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "apply science process skills and attitudes in conducting a guided survey about environmental issues and concerns including grouping and classifying, communicating, and open mindedness."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 2,
+      "domain": "LIVING THINGS",
+      "content": "Systems in plants and animals; Plants and animals and their habitats; Life cycles of animals; Animals and the food they eat; Food chains",
+      "content_standards": "Animals and plants have systems that function to keep them alive.; Animals and plants live in habitats that meet their basic needs.; Animals have life cycles that include development and reproduction.; Animals can be grouped according to the food that they eat.; Food chains show a series of living things that depend on each other for food.; Using drawings, tables, and flowcharts is an important skill in learning science concepts and in learning about science processes.",
+      "performance_standard": "By the end of the Quarter, learners identify that plants and animals have systems whose function is to keep them alive. They observe, describe, and create representations to show how living things interact with their habitat, survive, and reproduce in specific environments. They use flowcharts to show the feeding relationship among different organisms within a given environment.",
+      "suggested_tasks": "Create a diorama, terrarium, or an aquarium to illustrate how some plants or animals live on land or in water.",
+      "source_pages": "34",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "describe in simple terms how the following human body systems work: muscular, skeletal, digestive, circulatory, and respiratory;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "observe the root and shoot system in plants and describe why they are important;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "use a drawing or diagram to classify some Philippine animals and plants, based on their habitat: some live on land (terrestrial), live in water (aquatic) or fly in the air (aerial);"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "make a list or draw up a table with examples of animals and plants in a particular habitat, such as a garden, rice field, seashore, and mangrove swamp;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "use flow charts to compare the different stages in the life cycle of animals, such as a butterfly, frog, chicken, and human;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "use information from secondary sources to group animals according to the food they eat. Some are: a. plant eaters (herbivores), b. meat eaters (carnivores), and c. plant and meat-eaters (omnivores); and"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "draw a simple food chain using living things from the Philippines and label them as herbivores, carnivores, and omnivores."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 3,
+      "domain": "FORCE, MOTION, AND ENERGY",
+      "content": "Forces and movement; Observing, measuring, and predicting; Magnets; Sound, light, and heat energy",
+      "content_standards": "Science processes help in observing and predicting how things move.; Pushes and pulls can change the position and shape of objects.; Gathering scientific information helps explain the behavior of objects and materials.; Magnets affect some objects and materials without touching them.; Energy is present whenever there is movement, sound, light, or heat.",
+      "performance_standard": "By the end of the Quarter, learners use simple equipment and processes to measure and record data related to movement and describe and predict the way things around them move using more scientifically technical language and concepts, such as speed and force. They demonstrate an understanding that science processes are used to gain deeper understanding about forces and energy that cannot be seen directly, including the properties of magnet, light, sound, and heat. Learners apply their observation skills and objectivity to identify where energy is evident in their local communities and how it is used by people.",
+      "suggested_tasks": "A. Develop a poster to show some sources and uses of heat energy in your home or neighborhood. B. Collaborate in a small group to develop a safety guide that explains how to stay safe around intense light and sound. Include information on ways to protect eyes and ears and explain how the suggested ways could provide protection.",
+      "source_pages": "35",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "participate in guided activities to discover and predict how rigid and soft objects can be moved and/or changed in shape;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "measure accurately the distance and time when things move using simple equipment;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "identify that how far an object moves in a given time is called speed;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "construct and label simple graphs of different speeds including stationary and uniform speeds, both fast and slow;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "participate in guided activities to demonstrate that pushes and pulls can be used to change the speed and direction of an object including making it go faster, turn it to a different direction, slow it down, and stop it;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "determine how forces can change the shape of objects such as when they are pushed, pulled, stretched, bent, twisted, or squeezed;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "carry out guided investigations to identify the properties of magnets, including how they affect other magnets and objects made of different materials;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "identify examples of how objects can affect other objects even when they are not in contact with each other, such as magnets attracting other objects, light from the sun affecting our eyes, and skin, and loud noises hurting our ears;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "identify that energy is something that can cause change including light, sound, and heat energy; and"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "observe and identify sources and uses of light, sound, and heat energy at school, at home and in the local community."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 4,
+      "domain": "EARTH AND SPACE",
+      "content": "Soils; Characteristics of weather; Characteristics of the Sun",
+      "content_standards": "Soil and water resources are needed by plants and animals to live and grow.; Characteristics of the weather can be observed and measured.; The Sun is a ball of hot gases about 100 times the size of Earth, which radiates light energy needed by living things.",
+      "performance_standard": "By the end of the Quarter, learners use simple equipment to identify how types of soil hold water to support the growth of plants. They use instruments and secondary sources to measure and describe the characteristics of weather and use the information to make predictions about weather patterns in their local area. They demonstrate appreciation for the dangers of extreme weather events and use safe practice to protect themselves if they are caught in bad weather. Learners use personal observations and reliable secondary information sources to describe the Sun and explain its importance to life on Earth.",
+      "suggested_tasks": "Construct a sundial that can indicate the time of the day.",
+      "source_pages": "36",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "participate in guided activities using simple equipment to compare different types of soil including sandy, clay, silt, and loam, including comparing the ability of the soils to hold water;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "recognize that water is one of the basic needs of plants and animals;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "participate in a guided investigation to identify the effect of different types of soil on the growth of plants;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "identify some of the basic characteristics used to describe the weather, such as air temperature, air pressure, wind speed, wind direction, humidity, rain, and cloud cover;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "use weather instruments to measure and record some of the characteristics of weather during a school day;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "examine a local weather chart to make simple interpretations about the local weather and how it might change and describe and practice safety precautions to use during poor or extreme weather conditions;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "describe some of the overall characteristics of the Sun, such as its composition, its size, and the main energy it radiates;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "describe the changes in the direction and length of shadows from a shadow stick and use the information to infer why the Sun changes position during a day; and"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "make suggestions about the importance of the Sun to living things for a group or class discussion and confirm and record ideas by referring to trustworthy secondary sources of information."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 1,
+      "domain": "MATERIALS",
+      "content": "Matter in daily life; Matter and the three states; Scientific investigation",
+      "content_standards": "Scientists identify three states of matter based on shape and volume.; Temperature can cause changes of state.; Planned simple scientific investigations require several steps and processes.; An understanding of matter can be applied to solve real world problems.",
+      "performance_standard": "By the end of the Quarter, learners describe three states of matter based on properties of shape and volume and identify that heat is involved in changes of state. They plan a simple scientific investigation following appropriate steps and using units such as milliliters, liters, grams, kilograms, and degrees Celsius for measuring.",
+      "suggested_tasks": "Plan and carry out a scientific investigation on a simple everyday problem such as \"do gases have weight\"?",
+      "source_pages": "37",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "describe matter as anything that has mass and takes up space;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "identify that matter has (exists in) three states called solids, liquids, and gases;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe the properties of solids, liquids, and gases in terms of shape and volume: a. solids: definite shape and volume b. liquids: no definite shape; definite volume c. gases: no definite shape or volume;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "identify objects at home and in the classroom as solid, liquid or gas;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "use measuring cylinders or beakers to measure volume using units, such as milliliters (mL), and liters (L);"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "describe how changes in temperature cause matter to change in state, such as solid to liquid to gas;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "describe the steps of a simple science investigation: a. What is the problem? b. What materials do you need? c. What do you need to do? d. What have you found out/learned?;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "identify and appropriately use units in simple science activities, such as milligrams (mg,) grams (g), kilograms (kg), and degrees centigrade (oC); and"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "plan simple scientific investigations in answering questions, such as \"Do gases (like air) or liquids (like water) have mass?\", using appropriate simple science equipment, such as a balance, and a thermometer, with appropriate units."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 2,
+      "domain": "LIVING THINGS",
+      "content": "Body systems in animals; Plants, animals, and microorganisms; Life cycles of living things; Specialized structures in plants.",
+      "content_standards": "Animals have systems that help them grow, respond, and reproduce.; Living things can be grouped as plants, animals, and microorganisms based on their characteristics.; The life cycles of plants and animals allow them to survive and reproduce.; Plants have specialized structures that help them overcome unfavorable conditions.",
+      "performance_standard": "By the end of the Quarter, learners describe and create models of the body systems whose function is to help humans grow, develop, and reproduce. They use tables to group living things as plants, animals, or microorganisms. They use skills of observation, predicting, measuring, and recording to plan and carry out a simple activity to observe the life cycle of a plant and compare it to the life cycles of animals.",
+      "suggested_tasks": "A. Make a model using local recyclable materials of one of the human body systems to show how it works. B. Set up a simple science activity to observe and record the changes in plants as they grow from seed to maturity.",
+      "source_pages": "38",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify from pictures and labeled diagrams the parts of the digestive system as mouth, gullet, stomach, small intestine, and large intestine, and describe how they work;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "identify from pictures and diagrams the parts of the respiratory system as the nose, windpipe, and lungs, and describe how they work;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "identify from pictures and labeled diagrams the parts of the female reproductive system as ovaries, uterus, and vagina and those of the male reproductive system as the prostate, testis, and penis and describe how they work;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "use a table to show how living things can be classified into groups based on similar characteristics: a. plants including flowering and non-flowering; b. animals including mammals, reptiles, insects, birds, fish, amphibians, and reptiles; c. microorganisms including fungi and bacteria;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "identify which groups of animals reproduce by giving birth to live young, such as mammals, and which reproduce by laying eggs, such as birds and reptiles;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "compare the life cycles of mammals from birth to adulthood, birds from egg to a mature organism, and plants from seed to a young plant, and then to a mature plant;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "describe the purpose of specialized structures in plants, such as rhizomes, tubers, thorns, bulbs, and aerial roots;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "explain how some plants have adapted to unfavorable conditions in the environment, such as lack of rain or floods; and"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "use information from secondary sources to describe examples of how some animals have changed to better suit their environment, such as mimicry or camouflage."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 3,
+      "domain": "FORCE, MOTION, AND ENERGY",
+      "content": "Contact and non- contact forces; Investigating scientifically; Friction; Gravity; Static electricity; Conductors, insulators, and simple circuits",
+      "content_standards": "Science investigations provide evidence to support predictions and explanations.; Forces are pushes or pulls that act in a specific direction.; Friction is an everyday force created by two surfaces interacting.; Gravity causes all objects to fall towards the ground.; Static electricity occurs when some materials rub on other materials causing charges to jump.; Electric current requires a pathway for charges to flow.",
+      "performance_standard": "By the end of the Quarter, learners use objectivity and measurement to carry out scientific investigations using fair tests and multiple trials to explore how forces influence the movement of familiar objects and extend their understanding to predict how gravity affects objects on Earth. They plan and carry out valid and reliable scientific investigations to explore frictional forces by identifying and controlling variables. They observe and describe basic features of static electricity and electric current through practical activities and use their understanding and interest to explain and show appreciation for some applications of forces and electrical energy in the home and community.",
+      "suggested_tasks": "A. Develop a graphic organizer, such as a concept map or Venn diagram, to show the similarities and differences between contact forces and non-contact forces. Include examples of situations and materials that demonstrate contact and non-contact forces and suggest ways these could be used to improve everyday life in the community. B. Set up an inclined plane for toy cars, and apply the concept of friction to stop the toy car as fast as possible after it moves past the inclined plane. C. Develop a graphic organizer, such as a concept map or Venn diagram, to compare and contrast conductors and insulators of electricity. Include examples of materials that conduct and insulate and suggest ways that recycled materials could be used to develop better conductors and insulators.",
+      "source_pages": "39",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "carry out simple investigations to demonstrate that contact forces cause objects to move in the same direction as the direction that the force is applied;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "plan and carry out a scientific investigation to determine the effect of different surfaces on the size of frictional forces;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "demonstrate how friction can produce heat and investigate ways of reducing and increasing friction;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "identify gravity as a non-contact force that affects the behaviors of materials and objects on Earth in predictable ways;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "predict and explain whether heavier objects will fall faster than lighter objects due to the force of gravity;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "observe and describe the effects of gravity to the motion of an object;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "investigate the effects of static electricity using common materials, such as a comb, plastic and glass rods, and balloons;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "assemble and draw a simple circuit using batteries, wires, switch, and bulb and/or toy motor or buzzer;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "design and construct a simple electrical circuit to identify what materials will conduct electricity and use it to identify materials from the environment that will and will not conduct electricity; and"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "make a simple electromagnet and observe and record its properties."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 4,
+      "domain": "EARTH AND SPACE",
+      "content": "Landforms, rocks and minerals; Weathering and erosion; Using models; The Water Cycle; Weather disturbances; The Solar System",
+      "content_standards": "Landforms influence living and non-living components of the environment.; Rocks are composed of grains of minerals that break down to form soil.; Weathering and erosion shape the Earth's surface by breaking down and transporting rocks.; The Water Cycle includes processes of evaporation, precipitation and transportation.; Weather disturbances feature low pressure, strong winds, and storms.; The planets and moons vary in physical features and composition.; Phases of the Moon depend on its position relative to Earth and Sun.",
+      "performance_standard": "By the end of the Quarter, learners relate changes in landforms and earth materials to processes and effects of the water cycle. They explain causes and impacts of extreme weather and identify appropriate and safe ways to respond to such events. They demonstrate curiosity as they make detailed observations guided by science classification systems and demonstrate creativity in communicating information about earth processes to other people. They show an appreciation of the scale of space in describing the features of the solar system and use models to communicate significant relationships and movements.",
+      "suggested_tasks": "A. Create a video of a weather report or act out a TV weather broadcast segment explaining a weather disturbance. B. Construct a scale model of the sun and the inner planets of the solar system showing the planet's relative sizes and distances from the sun.",
+      "source_pages": "40",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify local examples of natural landforms and bodies of water such as mountains, valleys, rivers, and coastlines, and describe how they influence non-living and living components of the environment;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "explore the school grounds or the local area to observe or collect different types of rocks, describing their similarities and differences in terms of their features, such as texture, color, and grain crystal size;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "classify common rocks from provided samples using a simple rock classification system, such as a dichotomous key;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "explain how soil is formed from rocks and minerals;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "demonstrate how erosion transports Earth materials;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "explain the role of the water cycle in the environment;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "construct a model to communicate some of the key processes in the water cycle;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "describe some effects of weather disturbances that occur in or near the Philippines;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe the weather conditions according to a Public Storm Warning Signal issued by the Philippine Atmospheric, Geophysical and Astronomical Services Administration (PAGASA);"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "describe typical weather conditions before, during and after a tropical cyclone;"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "describe the general structure of the solar system, identifying the names of the major celestial objects, their main features, and general composition; and;"
+        },
+        {
+          "sequence": 12,
+          "competency_text": "make drawings or a simple model to show the motion of the Earth and Moon relative to the Sun to explain the phases of the moon that people see from Earth."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 1,
+      "domain": "MATERIALS",
+      "content": "Diagrams and flowcharts; Processes of changes of state; Physical and chemical change; Mixtures and separation techniques",
+      "content_standards": "Diagrams and flowcharts demonstrate processes involving heat energy and changes of state.; Changes in materials can be either reversible or irreversible.; Mixtures and the products of their separation techniques are very useful in our daily lives.; Scientific investigations need to satisfy the features of a fair test and use accurate and reliable measurements.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate an understanding of the benefits of various separation techniques. They use diagrams and flowcharts to describe changes of state. They use the words reversible and irreversible to describe changes to materials. They demonstrate skills in the use of equipment. They recognize and apply their understanding of the features of a fair test.",
+      "suggested_tasks": "A. Apply an appropriate separation technique to solve a local or household problem. B. Plan and conduct a simple scientific investigation involving a physical change, such as \"Does sugar dissolve faster in hot or cold water?\" Use your understanding of a fair test to answer the question.",
+      "source_pages": "41",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "describe changes of state for solids, liquids, and gases as melting, evaporation, freezing, condensation using diagrams and flowcharts;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "explain the role of heat energy in change of state processes;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "explain why physical changes are reversible, and chemical changes are irreversible;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "describe useful everyday examples of uniform and non-uniform mixtures, such as solutions and suspensions;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe air as a mixture of oxygen, carbon dioxide, nitrogen, and water vapor;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "demonstrate various techniques in separating mixtures, such as decantation, winnowing, scooping, picking, evaporation, filtering, sieving, and using magnets;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "explain the benefits of each mixture separation technique in preparing useful products;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "apply the features of a fair test: a. change one factor, b. measure one factor, and c. keep all other factors the same; and"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "recognize the features of a fair test and that scientific investigations also involve a) doing at least three trials, or use replication, and b) observing, measuring, and recording accurately."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 2,
+      "domain": "LIVING THINGS",
+      "content": "The circulatory system; Reproduction in plants; Vertebrates and invertebrates; Food webs; Interactions between living things; Biotic and abiotic factors in an ecosystem.",
+      "content_standards": "Animals have systems that help them grow, respond, and reproduce.; There are several modes of reproduction in plants.; To be valid and reliable, scientific investigations need to include fair tests and multiple trials.; Animals can be grouped as vertebrates or invertebrates based on their characteristics.; Producers, consumers, scavengers, and decomposers have important roles in food webs.; Interactions within an ecosystem can have important impacts on the living things within it.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate an understanding of the different ways that plants reproduce. Plan a simple scientific investigation to determine which method works best in a given habitat. They describe and provide examples of vertebrates as animals with a backbone and invertebrates as animals that do not have a backbone. They design an example of a food web showing the role of consumers, producers, scavengers, and decomposers. They identify the technical terms biotic and abiotic as referring to living and non-living things.",
+      "suggested_tasks": "A. Apply the features of a fair test to investigate how much water is needed to grow a common garden plant from a seed. B. Select an appropriate medium to design an example of a food web in a local ecosystem.",
+      "source_pages": "42",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify from pictures and diagrams the parts of the circulatory system as heart, blood, and blood vessels, and describe how they work;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "describe the different ways that plants reproduce, such as pollination, seed production, and plant propagation;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "plan a simple scientific investigation that includes the features of a fair test, replication, and accurate measurement to determine which type of plant propagation, such as cutting, budding, layering, grafting, works best for garden plants;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "describe the differences between animals with a backbone (vertebrates) and animals without backbones (invertebrates) by using common local examples of each group;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe the roles of producers, consumers, scavengers, and decomposers in a food web;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "use information from secondary sources to describe that living things interact with each other in the natural environment, such as through competition, or predation;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "describe living things, such as animals and plants, as biotic factors and light, water, temperature, and soil type, as abiotic factors of an ecosystem; and"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "explain how interaction between living things and interactions between living and non- living things may bring good or harm to the living things involved."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 3,
+      "domain": "FORCE, MOTION, AND ENERGY",
+      "content": "Simple machines; Properties of water and sound waves; Longitudinal and Transverse waves",
+      "content_standards": "Simple machines allow people to change the direction and size of forces.; Waves transfer energy between source and receiver.; Science processes and concepts help solve everyday problems.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate objective inquiry by carrying out investigations to critically observe patterns and systems scientifically. They support their observations and conclusions using secondary sources to explain occurrences and concepts using technical scientific language. They use critical thinking skills and creativity to make models and other devices to communicate their understanding to other people.",
+      "suggested_tasks": "A. Develop an information poster that aims at showing learners who are interested in music-related subjects to consider the benefits of studying science. The poster should use words, pictures or drawings and labelled diagrams to explain how musical instruments utilize the properties of sound waves. The poster may suggest ways that learners could use scientific processes to develop their musical techniques. B. Design and propose or improve the design of a simple machine that can be used at home, in school, or in the community. Include the following details: 1. Name and purpose of the simple machine; 2. Description of how the simple machine works and its intended function; 3. Materials needed for constructing the simple machine; 4. Sketch or diagram illustrating the design and functionality of the proposed simple machine; and 5. Explain how the proposed simple machine can be useful in the chosen setting (home, school, or community) and its potential benefits. C. Utilize the concept of motion and gravity to write a creative story, poem, or any written art.",
+      "source_pages": "43",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "observe and describe examples and uses of simple machines found at home, at school, and in the community;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "demonstrate through guided investigation the advantages and limitations of simple machines such as inclined planes, wedges, levers, and pulleys;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "carry out fair tests to show how levers can be used to change the magnitude and direction of a force;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "identify that waves carry energy from a source to a receiver;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "carry out investigations with water waves in a ripple tank, a big tub of water or improvised ripple tank and observe and describe the features of the waves including their: a. shape, such as crests and troughs; b. size, such as width and height; and c. patterns of movement, such as how they bend, or reflect off walls;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "research using secondary sources to identify how the properties of waves are described using scientific terms such as amplitude, frequency, wavelength, and velocity;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "identify differences and similarities between longitudinal waves and transverse waves;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "demonstrate using simple models how longitudinal waves and transverse waves carry energy;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "identify some examples of longitudinal waves, and transverse waves; and"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "describe and explain how sound changes when the source or the receiver are moving."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 4,
+      "domain": "EARTH AND SPACE",
+      "content": "Volcanic activity and safety; Seasons in the Philippines; Motions of the Earth; Constellations; Understanding stability and change",
+      "content_standards": "Volcanoes are vents from which molten rock from Earth's crust erupts onto the surface releasing pressure and gases.; The Philippine volcanoes can violently and unpredictably erupt lava, ash, and ballistic projectiles.; Weather and climate have predictable patterns throughout the year, which affect human activities.; The revolution and the rotation of the Earth demonstrate observable patterns.; Constellations are patterns of stars in the sky.",
+      "performance_standard": "By the end of the Quarter, learners appreciate that volcanoes can have unexpected and severe impacts on communities and that the uncertainty and impacts of unpredicted eruptions can be offset by understanding and following alerts from authorities. Learners appreciate weather patterns that produce seasons that are largely predictable, and they use models to scientifically understand and describe natural processes and timing that can be relied upon, such as the changes of season. Learners identify that scientific models are valuable in explaining other observations of patterns in nature, such as the apparent movement of celestial objects across the sky. They exhibit respect for cultures and interpretations of natural phenomena by indigenous people over generations and balance that with respect for explaining phenomena using scientific inquiry and objectivity. <<PAGE 45>>",
+      "suggested_tasks": "A. Design and describe an evacuation plan for a house or school in the event of a nearby and intensifying volcanic eruption. Indicate planned actions to reach a safe place and outline the reasoning behind the planned actions. B. Select a constellation that can be seen from the Philippines and describe its features. Explain its practical and cultural significance for Filipino people in the past and present.",
+      "source_pages": "44-45",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "explain what volcanoes are and how they are formed;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "use local information or other reliable sources to identify where the nearest active and inactive volcanoes are located and assess the risk of impacts from eruptions to their local community;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "discuss the patterns of volcanic eruptions in the Philippines over the last 100 years with family and community members to assess and describe how predictable patterns of eruptions are;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "identify and describe some of the materials formed during volcanic eruptions in the Philippines;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Interpret PHIVOLCS Volcano Monitoring (Alert Levels) to demonstrate what to do before, during, and after a volcanic eruption;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "describe the different seasons in the Philippines and suggest activities that are appropriate for each season;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "demonstrate the rotation of the Earth on its axis using a globe to explain day and night;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "make a Sun-Earth-Moon system model to demonstrate and explain the observable effects of predictable patterns and events including: a. changes in seasons, b. changes observed in the patterns of visible star over a year, and c. solar and lunar eclipses;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "explain why ancient human cultures relied on constellations to indicate directions and verify seasons; and"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "gather information from local indigenous community members or from reliable secondary sources to investigate ways that indigenous people of the Philippines represented and communicated understandings of: a. the predictability of solar and lunar eclipses, and b. patterns /interpretations in the night sky and their use for tracking time."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 1,
+      "domain": "SCIENCE OF MATERIALS",
+      "content": "Use of models; The Particle model and changes of state; Planning, following, and recording scientific investigations; Solutions, solubility, and concentration",
+      "content_standards": "Scientists use models to explain phenomena.; The particle model explains the properties of solids, liquids, and gases and the processes involved in changes of state.; Diagrams and flowcharts are very useful in demonstrating and explaining the motion and arrangement of particles during changes of state.; There are specific processes for planning, conducting, and recording scientific investigations.; The properties of solutions such as solubility and reaction to litmus determine their use.",
+      "performance_standard": "By the end of the Quarter, learners recognize that scientists use models to describe the particle model of matter. They use diagrams and illustrations to explain the motion and arrangement of particles during changes of state. They demonstrate an understanding of the role of solute and solvent in solutions and the factors that affect solubility. They demonstrate skills to plan and conduct a scientific investigation making accurate measurements and using standard units.",
+      "suggested_tasks": "Design and carry out an investigation to determine the amount of salt in a sample of seawater.",
+      "source_pages": "46",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "recognize that scientists use models to explain phenomena that cannot be easily seen or detected;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "describe the Particle Model of Matter as \"All matter is made up of tiny particles with each pure substance having its own kind of particles.\";"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe that particles are constantly in motion, have spaces between them, attract each other, and move faster as the temperature increases (or with the addition of heat);"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "use diagrams and illustrations to describe the arrangement, spacing, and relative motion of the particles in each of the three states (phases) of matter;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "explain the changes of state in terms of particle arrangement and energy changes: a. solid → liquid → vapor, and b. vapor → liquid → solid;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "follow appropriate steps of a scientific investigation which includes: a. Aim or problem, b. Materials and equipment, c. Method or procedures, d. Results including data, and e. Conclusion."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "make accurate measurements using standard units for physical quantities and organize the collected data when carrying out a scientific investigation;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "identify the role of the solute and solvent in a solution;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "express quantitatively the amount of solute present in a given volume of solvent;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "demonstrate how different factors affect the solubility of a solute in a given solvent, such as heat;"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "identify solutions, which can be found at home and in school and that react with litmus indicator, as acids, bases, and salts; and"
+        },
+        {
+          "sequence": 12,
+          "competency_text": "demonstrate proper use and handling of science equipment."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 2,
+      "domain": "LIFE SCIENCE",
+      "content": "Science equipment: the compound microscope; Plant and animal cells; Cellular reproduction; Levels of biological organization; Trophic levels and the transfer of energy",
+      "content_standards": "Familiarity and proper use of a compound microscope are essential to observe cells.; The organelles of plant and animal cells can be identified using a compound microscope.; Cells are the basic unit of life and mitosis, and meiosis are the basic forms of cell division.; Fertilization occurs when a male reproductive cell fuses with a female reproductive cell.; Sexual reproduction is the basis of heredity.; The level of biological organization provides a simple way of connecting the simplest part of the living world to the most complex.; Identifying trophic levels helps understand the transfer of energy from one organism to another as shown in a food pyramid.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate understanding of the parts and function of a compound microscope and use this to identify cell structure. They recognize that the cell is the basic unit of life and that some organisms are unicellular and some are multicellular. They explain that there are two types of cell division, and that reproduction can occur through sexual or asexual processes. They use diagrams to make connections between organisms and their environment at various levels of organization. They explain the process of energy transfer through trophic levels in food chains.",
+      "suggested_tasks": "Create a visual representation, such as poster, model, or e-poster, explaining the trophic level in a chosen ecosystem.",
+      "source_pages": "47",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify the parts and functions, and demonstrate proper handling and storing of a compound microscope;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "use proper techniques in observing and identifying the parts of a cell with a microscope such as the cell membrane, nucleus, cytoplasm, mitochondria, and chloroplasts;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "recognize that some organisms consist of a single cell (unicellular) like in bacteria and some consist of many cells (multicellular) like in a human;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "differentiate plant and animal cells based on their organelles;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "recognize that cells reproduce through two types of cell division, mitosis and meiosis, and describe mitosis as cell division for growth and repair;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "explain that genetic information is passed on to offspring from both parents by the process of meiosis and fertilization;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "differentiate sexual from asexual reproduction in terms of: a) number of parents involved, and b) similarities of offspring to parents;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "use a labelled diagram to describe the connections between the levels of biological organization to one another from cells to the biosphere;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe the trophic levels of an organism as levels of energy in a food pyramid; and"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "use examples of food pyramids to describe the transfer of energy between organisms from one trophic level to another."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 3,
+      "domain": "FORCE, MOTION, AND ENERGY",
+      "content": "Balanced and unbalanced forces; Motion: displacement and velocity; Distance-Time graphs; Identifying and controlling variables; Heat transfer",
+      "content_standards": "Scientists and engineers analyze forces to predict their effects on movement.; Vectors differentiate the concepts of speed and velocity.; Graphing motion provides more accurate predictions about speed and velocity.; The particle model explains natural systems and processes.; Scientists and engineers conduct innovative research to find solutions to the current global energy crisis by seeking renewable energy solutions.",
+      "performance_standard": "By the end of the Quarter, learners employ scientific techniques, concepts, and models to investigate forces and motion and represent their understanding using scientific language, force diagrams, and distance-time graphs. They use their curiosity, knowledge and understanding, and skills to propose solutions to problems related to motion and energy. They explore how modern technologies might be used to overcome current global energy concerns.",
+      "suggested_tasks": "Develop a 2-4 page brochure for parents or leaders in your community to inform them about modern technologies that can be used sustainably to transform heat into electricity in the local community.",
+      "source_pages": "48",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify that forces act between objects and can be measured."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "identify and describe everyday situations that demonstrate: a. balanced forces such as a box resting on an inclined plane, a man standing still, or an object moving with constant velocity; b. unbalanced forces, such as freely falling fruit or an accelerating car;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "draw a free-body diagram to represent the relative magnitude and direction of the forces involving balanced and unbalanced forces;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "identify that when forces are not balanced, they can cause changes in the object's speed or direction of motion;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "explain the difference between distance and displacement in everyday situations in relation to a reference point;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "distinguish between speed and velocity using the concept of vectors;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "describe uniform velocity and represent it using distance-time graphs;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "explain the difference between heat and temperature;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "identify advantageous and disadvantageous examples of conduction, convection, and radiation;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "explain in terms of the particle model the processes underlying convection and conduction of heat energy; and"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "gather information from secondary sources to identify and describe examples of innovative devices that can be used to transform heat energy into electrical energy."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 4,
+      "domain": "EARTH AND SPACE SCIENCE",
+      "content": "System models; Earthquakes; The Sun's influence on Earth",
+      "content_standards": "Rapid movements along normal, reverse or strike-slip faults cause earthquakes.; The damage or effects on communities depend on the magnitude of and distance from an earthquake.; Sunlight is the Earth's external source of energy.; Solar energy influences the atmosphere and weather patterns.; The revolution, rotation, and the tilt of the Earth explain the patterns of day and night and the seasons.",
+      "performance_standard": "By the end of the Quarter, learners appreciate the value of using systems to analyze and explain natural phenomena and demonstrate their understanding in explaining the dynamics of faults and earthquakes. They are confident in identifying and assessing the earthquake risk for their local communities using authentic and reliable secondary data. They use the country's disaster awareness and risk reduction management plans to identify and explain to others what to do in the event of an earthquake. Learners explain the cause and effects of secondary impacts that some coastal communities may experience should a tsunami be produced by either local or distant earthquake activity. Learners use reliable scientific information to identify and explain how solar energy influences the atmosphere and weather systems of the Earth and use such information to appreciate and explain the dominant processes that influence the climate of the Philippines. <<PAGE 50>>",
+      "suggested_tasks": "A. Design, test, and evaluate a model house that can withstand a model earthquake. B. Design, test, and evaluate a model of an innovative house that can adapt to the different weather conditions in the country.",
+      "source_pages": "49-50",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "classify geological faults according to the angle of the fault plane and direction of slip;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "use models or illustrations to explain how movements along faults generate earthquakes and identify and explain which types of faults are most likely to occur in the Philippines and explain why;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe how the effects of earthquakes on communities depend on their magnitude;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "use the PHIVOLCS FaultFinder or other reliable information source to identify where the nearest fault system is located from their community and assess the risk of earthquakes to their local community;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "make models of fault scenarios to illustrate: a. the epicenter of an earthquake from its focus, b. the intensity of an earthquake from its magnitude, and c. how underwater earthquakes may or may not generate tsunamis;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "refer to the local disaster readiness plans to demonstrate what to do during and after an earthquake;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "explain how earthquakes result in tsunamis that devastate shoreline communities;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "describe procedures that the authorities have in place to alert communities of pending tsunamis and what procedures can be implemented should a tsunami impact a community;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "explain how energy from the Sun interacts with the atmosphere;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "make a physical model or use drawings to demonstrate how the tilt of the Earth relative to its orbit around the Sun affects the intensity of sunlight absorbed by different areas of Earth over a year;"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "explain, using models, how the tilt of the Earth affects the changes in the length of daytime at different times of the year; and"
+        },
+        {
+          "sequence": 12,
+          "competency_text": "explain how solar energy contributes to the occurrence of land and sea breezes, monsoons, and the Intertropical Convergence Zone (ITCZ)."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 1,
+      "domain": "LIFE SCIENCE",
+      "content": "Organ systems working together; Heredity; Taxonomic classification; Photosynthesis, respiration and cycles in nature",
+      "content_standards": "Organ systems work together for the growth and survival of the organism.; Inherited traits passed from parents to offspring are governed by the rules on the patterns of inheritance.; Classification of living things shows life's diversity.; Photosynthesis and respiration are processes that show how living things obtain energy and nutrients from the environment.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate the use of models, flow charts, and diagrams to illustrate how body systems work together for the growth and survival of an organism. They represent patterns of inheritance and predict simple ratios of offspring. They explain that the classification of living things shows the diversity and unity of living things. They describe the processes of respiration and photosynthesis and plan and record a scientific investigation to verify the raw materials needed. They use flow charts and diagrams to explain cycles in nature.",
+      "suggested_tasks": "Conduct a scientific investigation to verify the raw materials needed for photosynthesis.",
+      "source_pages": "51",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "using a labeled diagram, trace how food travels through the digestive tract and explain how different digestive processes work, including mechanical processing, secretion, digestion, absorption, and elimination;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "use models, flow charts, diagrams, and simulations to explain how body systems work together, such as digestion and excretion;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe how plant organs (leaf, stem, roots) work together as the transport system;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "represent patterns of inheritance of a simple dominant/ recessive characteristic through generations of a family;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "predict simple ratios of offspring genotypes and phenotypes in crosses involving dominant/recessive gene pairs;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "describe the importance of the six-kingdom system and the three-domain system of classification of living things;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "explain why humans are classified under Class Mammalia and the Order Primates;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "using flow charts and labeled diagrams explain the role of plants and animals in the cycles of nature, such as the carbon, oxygen, and water cycles;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe the process of photosynthesis and respiration, and identify its raw materials needed and products;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "using information from secondary sources identify the different parts of the cell where photosynthesis and respiration occur;"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "plan a scientific investigation to verify the raw materials needed for photosynthesis."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 2,
+      "domain": "SCIENCE OF MATERIALS",
+      "content": "Use of timelines and charts; The Atomic Model; Subatomic particles; Elements and compounds; The Periodic table",
+      "content_standards": "The use of timeline and charts can illustrate scientific knowledge of the structure of the atom has evolved over time.; The current structure of the atom includes subatomic particles, their symbol, mass, charge, and location.; Elements and compounds are identified as pure substances.; The periodic table is a useful tool to determine the chemical properties of elements.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate an understanding of the structure of the atom and how our understandings have changed over time. They draw models of the atom and use tables to represent the properties of subatomic particles. They demonstrate their knowledge and understanding of the periodic table by identifying the elements, their symbols, their valence electrons, and their positions within the groups and periods. They design and/or create timelines or documentaries as interesting learning tools.",
+      "suggested_tasks": "Design an illustrated timeline or create a documentary that describes and discusses the development of the models of atomic structure contributed by Dalton, Thomson, Rutherford, and Bohr.",
+      "source_pages": "52",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "develop a timeline for the historical background of the development of the current Atomic Model that identifies tiny particles as atoms;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "draw the structure of an atom in terms of the nucleus and electron shells;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "differentiate the subatomic particles protons, neutrons, and electrons in terms of their symbol, mass, charge, and location within an atom;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "describe the properties of pure substances as: a. having fixed chemical composition, examples of which are elements and compounds, and b. that all the atoms of an element have a unique number of protons;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "discuss the significant contributions of early scientists in the development of the periodic table;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "identify the names and symbols of the first 20 or several common elements of the periodic table;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "explain that the arrangement of elements in the periodic table as 7 periods and 18 groups is based on their atomic structure and chemical properties, such as reactivity;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "explain that the electron structure of an atom determines its position on the periodic table;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "calculate the number of protons, neutrons, and electrons in the atom of several elements, such as aluminum; and"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "explain that the elements within a group in the periodic table have the same number of valence electrons."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 3,
+      "domain": "EARTH AND SPACE SCIENCE",
+      "content": "Distribution of the continents; Crustal features and interactions; Typhoons; Tides",
+      "content_standards": "The distribution of continents and oceans on Earth is related to the presence of the oceanic crust and continental crust.; Volcanic terrain is built by the slow accumulation of erupted lava.; The earth's surface is made of separate and movable plates.; Bodies of water and landforms affect typhoons.; The interaction between the Sun, Earth, and Moon causes tides.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate an appreciation of the large-scale features of the 'blue planet' Earth and relate those features to the geological characteristics of the upper crustal layers of the Earth. They identify and describe the nature and impact of volcanic activity in building new crust and identify that these crust forming processes account for patterns and changes in the distribution of volcanoes, earthquakes, and mountain chains that have occurred over time. Learners draw on their understanding of the relationships between landforms and oceans to explain the formation and impacts of typhoons. They also identify that predictable interactions of the Sun-Earth-Moon system result in tidal effects.",
+      "suggested_tasks": "Design and construct a model house to withstand a simulation of wind speed in a typhoon, test the model, and redesign if needed.",
+      "source_pages": "53",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify what proportion of the Earth's surface is covered with water as opposed to land;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "gather information from secondary sources to name and describe the upper crustal layers of the solid earth;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe the different types of volcanoes found around the world according to their: a. activity b. type of eruption c. location in the crust;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "relate the shape of a volcano's cone to its composition;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "relate the location and distribution of active volcanoes, earthquake epicenters, and major mountain belts to the distribution of oceanic crust and continental crust;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "identify how oceanic crust and continental crust is associated with the Earth's lithospheric plates;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "gather information from secondary sources to explain: a. how typhoons develop, and b. why the Philippines is prone to typhoons;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "use a map and a record of tracking data to trace the path of typhoons that enter the Philippine Area of Responsibility (PAR);"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "discuss how bodies of water and landforms affect typhoons;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "gather information from the Department of Science and Technology (DOST) and other reliable websites to identify how authorities support communities affected by typhoons;"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "relate the relative movements of the Earth, Moon, and Sun with the occurrence of tides; and"
+        },
+        {
+          "sequence": 12,
+          "competency_text": "draw on information from secondary sources to identify situations where tidal difference could be exploited to generate renewable energy."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 4,
+      "domain": "FORCE, MOTION, AND ENERGY",
+      "content": "Acceleration; Distance-time and Velocity-time graphs; Kinetic and Potential energy; Work and energy; Renewable energy; Properties of light",
+      "content_standards": "Forces cause objects to accelerate.; An object is accelerating if the magnitude and/or direction of its velocity changes.; Kinetic energy is the energy of movement, and potential energy is stored energy.; As an object falls from a height its energy is conserved because its potential energy is transformed to kinetic energy.; The resources of the Philippines provide many benefits to its people and their activities.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate understanding of the technical meaning of acceleration and apply their understanding to everyday situations involving motion. They represent and interpret acceleration in distance-time and velocity-time graphs to make predictions about the movement of objects. Learners link motion to kinetic energy and potential energy and explain transformations between them using everyday examples. Learners relate understanding of kinetic energy and potential energy to an appreciation of the hydro-electric resources of the Philippines for the generation of electricity for use in homes, communities, and industries. They use scientific investigations to explore the properties of light and apply their learning to solving problems in everyday situations.",
+      "suggested_tasks": "Make a working model of a party light that uses batteries as the power source. Describe the scientific ideas that you have utilized to change the properties of light.",
+      "source_pages": "54",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify that forces cause objects to accelerate, and that acceleration of an object is its rate of change of velocity;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "observe and describe examples of accelerating objects at school and in the local community, including objects that show uniform circular motion;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "construct and annotate distance-time graphs and velocity-time graphs to represent uniform and non-uniform acceleration;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "describe kinetic energy as the movement of objects or particles, and potential energy as energy stored due to the position of objects or particles;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "identify examples of everyday situations that demonstrate: a. kinetic energy being transformed to potential energy, and b. potential energy being transformed to kinetic energy;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "recognize that work is done when a force causes the displacement of an object;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "recognize that power is the rate of doing work;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "explain that the mechanical energy of an object is the sum of the kinetic energy and the potential energy available to do work;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe conservation of energy in everyday situations involving gravity, such as when objects fall;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "gather information from secondary sources to explain how potential energy stored in lakes and dams in the Philippines is used to produce kinetic energy to generate electricity for use in homes, communities, and industry; and"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "carry out guided investigations to describe and illustrate the reflection of light using plane and curved mirrors and the refraction of light using transparent blocks, lenses, and prisms with examples from everyday applications."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 1,
+      "domain": "FORCE, MOTION, AND ENERGY",
+      "content": "Newton's Laws; Force and energy; Electric current; Electrical circuits; Interpreting patterns in data; Electromagnetic waves",
+      "content_standards": "Newton's laws explain and predict how objects move due to the forces that act on them.; Electricity is a flow of electrons and can be measured and understood using current, voltage, and resistance in circuits.; Electromagnetic radiation travels using transverse waves of different wavelengths.; Scientists and engineers use electromagnetic radiation to design modern technologies that benefit people and society.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate a practical understanding of Newton's three laws of motion to describe relationships between variables and use these to explain everyday application of Newton's laws. Through practical investigations, learners demonstrate qualitative understanding of the features of electricity and apply their understanding of electrical circuitry in homes. Learners exhibit skills in gathering information from secondary sources to describe the frequencies across the electromagnetic spectrum and identify practical applications and detrimental effects that electromagnetic radiation may have on living things.",
+      "suggested_tasks": "A. Design a model vehicle from recycled materials using the Law of action-reaction to carry a 15-gram payload over a 5-meter displacement. Describe the forces interacting and the motions evident when your vehicle is moving, including any vectors that are relevant. B. Use secondary sources regarding problems associated with the distribution of electrical energy from power plants to homes. Use the findings to develop a system that can address the problems. C. Develop a poster that identifies the useful and dangerous attributes of the 7 main energies of the EMS.",
+      "source_pages": "55-56",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify inertia as the tendency for an object to stay at rest or in motion unless acted on by an unbalanced net force;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "demonstrate in practical situations and describe that acceleration is a change in speed and/or direction as the result of a net force;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "investigate the relationship among force, acceleration, and mass;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "explain that when any two objects interact, there are equal but opposite forces exerted between them, which is evident in many practical situations and applications;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "observe and identify action-reaction pairs in everyday situations such as stepping off a boat, or a book on a table, and draw force diagrams to explain how the pairs affect the motion of objects;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "identify that electricity is a flow of electrons and show appreciation for the need to observe safe measures in handling electricity;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "participate in guided investigations to infer the relationship among current, voltage, and resistance in assembled series and parallel circuits with varying number of loads and battery;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "draw diagrams of and assemble series and parallel circuits, showing switch, battery, loads/resistors, ammeter, and voltmeter;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "collaborate in a class discussion to recognize the advantages and limitations of using series or parallel circuits;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "describe electromagnetic radiation (EMR) as energy that is created by the vibrations of electrically charged particles which allows it to travel through materials or space as transverse waves;"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "compare the relative wavelengths and frequencies of different types of electromagnetic waves, including radio waves, microwaves, infrared, visible light, ultra-violet, x-rays, and gamma radiation;"
+        },
+        {
+          "sequence": 12,
+          "competency_text": "identify practical applications of electromagnetic radiation, such as radio waves used in telecommunications, and x-rays and gamma rays in medicine; and"
+        },
+        {
+          "sequence": 13,
+          "competency_text": "gather information from secondary sources to explain the harmful effects that EMR can have on living things."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 2,
+      "domain": "EARTH AND SPACE SCIENCE",
+      "content": "Scale, proportion and quantity; Plate boundaries; Structure of the Earth; Geologic time; Origin of the Solar System; Space Technologies",
+      "content_standards": "Evidence for continents moving includes jig-saw matching of coastlines, rock types, and the presence of similar fossils in places separated by vast distance.; The movement of lithospheric plates provides a theory for understanding Earth's geological history.; The geological time scale organizes major stages in the history of the Earth over more than 4 billion years.; Radioactive decay of material inside the Earth since it was formed is its internal source of energy.; The Earth's interior is made up of layers of varying characteristics.; Models represent the size, structure, and relationship of components of the Solar System; Observable evidence and models help explain the nature and origin of the Solar System.",
+      "performance_standard": "By the end of the Quarter, learners exhibit skills in evaluating information from secondary sources, and draw on their scientific understanding of the location and geological setting of the Philippines to explain its unique landforms and dynamic geologic activity in a global context. They demonstrate an appreciation of the size and scale of the Earth and describe evidence for a dynamic Earth over its long geological history as well as the evidence that is used to build a model for the internal structure of the Earth. Learners demonstrate curiosity and open-mindedness in extending their knowledge and <<PAGE 58>> understanding of the dynamic Earth to evaluate evidence for theories for the formation of the Solar System. They describe modern scientific processes and technologies that are used by scientists to investigate the nature and evolution of the Solar System and Universe.",
+      "suggested_tasks": "A. Design and build a 3D model of the features of the Earth including its interior structure. B. Develop an information report to describe and explain how modern space technologies are used to conduct groundbreaking research about the nature and origin of the Solar System.",
+      "source_pages": "57-58",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify and explain evidence that current continents are separate parts of what was a single continent millions of years ago;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "participate in a collaborative group or class task to examine and describe the topographical and geological evidence for plate boundaries occurring in the area where the Philippines is located;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe the types of plate boundaries found around the Earth;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "describe how fossils can be used for dating the age of rocks and sediments;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe how relative and absolute dating techniques are used to determine the subdivisions of geologic time;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "explain how the geologic time scale helps to recount the history of the Earth;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "describe how seismic wave data has been used to develop a model for the internal structure and composition of the Earth;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "create a scale drawing to represent relative thicknesses of the layers of Earth's interior, including the crust, lithosphere, asthenosphere, mantle, outer core, and inner core;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "distinguish among comets, meteoroids, asteroids, and dwarf planets, and describe how they help us to understand the nature and formation of the Earth and the Solar System;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "gather information from secondary sources to discuss the regular occurrence of meteor showers; and"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "explain how modern research about celestial objects uses new space technologies including telescopes and space probes."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 3,
+      "domain": "LIFE SCIENCE",
+      "content": "DNA replication and mutations; Biodiversity and endangered species; Types of ecosystems in the Philippines",
+      "content_standards": "Transmission of traits is determined by DNA, genes, and chromosomes.; High biodiversity means populations are more likely to overcome adverse conditions.; Human activities can adversely affect animals and plants in a variety of ecosystems.",
+      "performance_standard": "By the end of the Quarter, learners describe that the transmission of traits is determined by DNA, genes, and chromosomes. They explain that high levels of diversity help to maintain stability of an ecosystem. They research to classify critically endangered plants and animals of the Philippines and to identify strategies to protect and conserve them. They use drawings and diagrams to describe features of typical Philippine ecosystems and they conduct a survey to explore possibilities to minimize the impact of human activities.",
+      "suggested_tasks": "A. Write a report on an environmental action group analyzing their principles and their actions or activities regarding the human impact on the biosphere. B. Conduct a research project on a specific Philippine ecosystem and investigate its biodiversity, ecological interactions, and conservation challenges. Present your research findings through a scientific report or multimedia project.",
+      "source_pages": "59",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "use models and labeled diagrams to represent the double helix structure of DNA (deoxyribonucleic acid);"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "explain the role of DNA, genes, and chromosomes in the transmission of traits;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe mutations as changes in DNA or chromosomes and discuss some of the factors that cause mutations, such as infectious agents, radiation, and chemicals;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "use information from secondary sources to explain the beneficial, harmful, and neutral effects of mutations;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "explain the advantage of high biodiversity in maintaining the stability of an ecosystem during difficult conditions, such as food shortages, disease, and climate change;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "use information from secondary resources to classify animals and plants of the Philippines as critically endangered, endangered, or vulnerable species;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "discuss as a class how threats to biodiversity can lead to species extinction;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "use information from secondary sources to research how to protect and conserve endangered and/or economically important species in the local community;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe using labeled diagrams the biotic and abiotic features of tropical rainforests, swamps, estuaries, mangrove forests, and coral reefs;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "use information from secondary sources to describe the possible effects of human activities, such as deforestation, pollution, and introduction of invasive species, on living things in an ecosystem; and"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "plan to conduct a survey to explore the possibilities for minimizing the negative impacts of human activities on an ecosystem."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 4,
+      "domain": "SCIENCE OF MATERIALS",
+      "content": "Valid and reliable investigations; Chemical bonding; Ionic compounds; Covalent compounds; Metallic bonds; Chemical formula",
+      "content_standards": "Valid and reliable scientific investigations include identification and control of variables.; Formation or breaking down of ionic or covalent bonds results in a chemical change.; Bonds are formed between atoms either by sharing or transferring of electrons.; The type of bond formed determines whether the result is a covalent or ionic compound.; Symbols for the elements are used as a basis for writing chemical formula of compounds.; The properties of pure substances depend on the type of bonding within them.",
+      "performance_standard": "By the end of the Quarter, learners carry out a valid and reliable scientific investigation showing the formation of a new substance. They demonstrate an understanding of the significance of the valence electron of an element in the formation of bonds and identify bonds as ionic, covalent, or metallic. They use their knowledge of the symbols of elements to write the formula for a number of common compounds. They draw models of possible structures of ionic compounds and research the properties of ionic, covalent, and metallic substances. They use cartoons/comic strips to create interesting learning tools.",
+      "suggested_tasks": "Create a cartoon/comic strips portraying the main characters as \"ionic\", \"covalent\", and \"metallic\" bonds. The cartoon should communicate each character's role in holding atoms and/or molecules together and may show what happens to them in the way the substances are used in everyday life.",
+      "source_pages": "60",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "carry out a valid and reliable scientific investigation to show the formation of a new substance, such as formation of a carbonate (carbon dioxide in limewater), or formation of a precipitate (from silver nitrate solution);"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "explain that the formation of new bonds or the breaking of existing bonds constitutes a chemical change and the formation of a new substance;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe a valence electron as an electron in the outer shell of an atom that can take part in formation of bonds;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "identify the number of valence electrons of oxygen based on its position in the periodic table;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "explain the formation of ions as either the loss or gain of electrons to produce ionic bonds, using examples, such as the formation of sodium chloride;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "write the chemical formula and chemical names of some common ionic compounds, including sodium chloride (NaCl), magnesium oxide (MgO), potassium chloride (KCl) and magnesium chloride (MgCl2);"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "explain the formation of covalent bonds using a molecule of water and a molecule of carbon dioxide;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "write the chemical formula and chemical name of some common covalent compounds, including water (H2O), carbon dioxide (CO2), and ammonia (NH3);"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "show by using models that ionic compounds form crystalline structures whereas covalent compounds form individual molecules;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "explain properties of metals in terms of their structure and metallic bonding (sea of electrons model); and"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "investigate the properties of ionic, covalent, and metallic substances, such as melting point, hardness, electrical and thermal conductivity."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 1,
+      "domain": "EARTH AND SPACE SCIENCE",
+      "content": "Plate Tectonics; Global climate; Global interactions; Global and local Sustainability",
+      "content_standards": "Current models explain tectonic plate movement as part of a gravity-driven convection system that pushes young hot plates away from spreading ridges and pulls old cold plates down into subduction zones.; Plate movements and continental evolution account for the major surface features of the Earth.; Climate change and its impacts on the environment and people pose serious challenges which require solutions and action at local and global levels.; The rich natural resources of the Philippines require sustainable management.",
+      "performance_standard": "By the end of the Quarter, learners describe and explain the geologically dynamic nature of the Philippine Archipelago in relation to its plate tectonic setting and use models to explain the earth structures, movements, and natural events that occur. They use critical thinking and modeling to explain mechanisms that have contributed to the current distributions of continents and make predictions about changes that can be expected in the future. Learners gather information from secondary sources to describe rapid changes that are occurring in local and global climate patterns and propose solutions to address these changes at the local and global levels by drawing on awareness, responsible personal behavior to conserve materials and energy, and through the better societal management of the natural resources of the country. <<PAGE 62>>",
+      "suggested_tasks": "A. Plan and enact a community education strategy based on scientific understanding, data, and processes, to encourage and empower viewers to be responsible in their use of local natural resources. B. Develop a discussion paper on the value of mining green metals, such as cobalt and nickel for modern battery production. Include information about how modern batteries can contribute to addressing energy supply and other energy-related issues. The paper should provide information about the green metal reserves of the Philippines and what would be involved in establishing industries to produce batteries locally.",
+      "source_pages": "61-62",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify modern scientific processes used to detect and measure the displacement of tectonic plates;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "describe the structures, movements and events that occur at each type of plate boundary;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "identify the locations of major mountains, faults, volcanos, and ocean trenches using a map of the Philippine Archipelago, and interpret the features in relation to plate tectonics;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "predict the position and shape of the Philippine Archipelago in 50 million years, based on the current velocity of the Philippine Plate;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "gather information from secondary sources to describe and explain what mechanisms that drive the movement of tectonic plates including the role of the asthenosphere;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "explain how the subduction of an oceanic plate impacts on the plate above it;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "explain how plate tectonics can be used to explain the formation of the largest mountain ranges on Earth including the Himalayas and the Andes mountains;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "identify evidence of global warming and climate change;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "identify the role of greenhouse gases in enhanced global warming and climate change;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "describe how global climatic phenomena, such as the El Niño Southern Oscillation, may impact weather systems;"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "identify local impacts of global climate change and suggest ways that individuals can do to reduce the impact of global warming; and"
+        },
+        {
+          "sequence": 12,
+          "competency_text": "explain how increased societal uses of renewable energies could mitigate the effects of global climate change, including how the Philippines could make better use of its plentiful natural resources."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 2,
+      "domain": "FORCE, MOTION, AND ENERGY",
+      "content": "Projectile motion; Momentum and Collisions; Large-scale generation and distribution of electricity; Renewable and non- renewable energy",
+      "content_standards": "Newton's laws can be used to explain projectile motion and collisions.; Momentum in collisions increases as mass or velocity increases.; The electric companies provides high voltage electricity through power generation, transmission, and distribution to many parts of the archipelago.; Responsible planning and innovation lead to efficient generation and distribution of electricity in the Philippines.",
+      "performance_standard": "By the end of the Quarter, learners display critical thinking in describing the factors that affect the trajectory of projectiles. They distinguish between different types of collisions and describe the impacts on the motion of objects. They carry out investigations using models to identify relationships that affect the motion of objects and apply their understanding to real-life situations. Learners gather information from secondary sources to identify, describe, and explain how science impacts human activities and the environment. <<PAGE 64>>",
+      "suggested_tasks": "A. Conduct a survey of recent vehicular accidents in your locality to identify a high-risk spot where collisions are frequent. Offer a solution to mitigate collisions at the high-risk area by: 1. designing a structure aimed at reducing the impact of collisions, or 2. describe a system aimed at changing riders' or drivers' behavior by educating them about the collision danger in the location. B. Design and describe the significant features (rationale) of a 'vehicle' that will save a raw egg from breaking when dropped onto a concrete surface from 3 meters. Learners will test their model in a class event.",
+      "source_pages": "63-64",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "investigate and describe the relationship among the projectile variables including the angle and velocity of release, and projectile height and range, using everyday activities such as shooting basketballs or kicking footballs;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "describe different types of collisions as elastic or inelastic by providing some examples;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "use models to investigate elastic or inelastic collisions and describe the forces involved and their effects;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "explain that momentum depends on the mass and the velocity of a moving object that can be used to predict the impact the object will have if it hits another object;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "carry out guided investigations using different objects to describe momentum-related relationships, such as the more momentum an object has, the harder for it to stop;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "identify and explain that to change the momentum of an object, it is necessary to apply a force on the object over a period of time;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "gather information from secondary sources to identify ways to reduce the impact of collisions such as seatbelts, airbags, and crumple zones in vehicles;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "identify that momentum is conserved before and after the collision of objects;"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe how high voltage electricity from power plants is generated and safely distributed to industries, businesses, and homes, including the role of substations (grid stations), and electric meters;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "describe and explain the need for safety precautions in handling household electrical devices;"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "describe the similarities and differences between electric motors and electric generators;"
+        },
+        {
+          "sequence": 12,
+          "competency_text": "collaborate in a class discussion to identify ways to reduce the use of electrical energy in Filipino houses and communities and explain what local and global benefits can be achieved; and"
+        },
+        {
+          "sequence": 13,
+          "competency_text": "gather information from secondary sources to evaluate how renewable and non- renewable generation of electricity in the Philippines impacts human activities and the environment."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 3,
+      "domain": "SCIENCE OF MATERIALS",
+      "content": "Chemical reactions; Acids, bases, and salts.; Types of chemical reactions; Chemical reactions in the environment.; Chemical equations; Rates of reactions",
+      "content_standards": "Several simple observations indicate if a chemical reaction has taken place.; Chemical indicators produce color changes with acids, bases, and salts.; Valid and reliable scientific investigations identify the dependent and independent variables and control other variables.; Many types of chemical reactions are important in our daily lives and in the biotic and abiotic parts of the environment.; Atoms rearrange during chemical reactions but abide by the principle of conservation of mass as illustrated in balanced chemical equations.; Rates of chemical reactions are critical in production and preservation of many useful materials.",
+      "performance_standard": "By the end of the Quarter, learners demonstrate an understanding that household products can act as indicators for important chemicals. They describe the indicators of a chemical reaction and identify important types of chemical reactions. They explain how some important chemical reactions impact the natural and built environment. They write balanced chemical equations using formula and apply the principles of conservation of mass. They explain factors that affect the rate of a reaction and that some reactions are exothermic, and some are endothermic. They demonstrate skills to plan and conduct valid and reliable scientific investigations and record them appropriately. <<PAGE 66>>",
+      "suggested_tasks": "A. Conduct a valid and reliable investigation to test a number of vegetables, such as carrots and red cabbage to determine their usefulness as indicators for common acids and bases, such as vinegar, lemon juice, and bleach. B. Explore materials in the home to produce specific chemical reactions, such as mixing a solution of washing powder with a solution of baking powder.",
+      "source_pages": "65-66",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "describe the indicators for a chemical reaction as color change, the formation of a precipitate, the release of gas, and or odor, or a change in temperature;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "identify common acids, bases, and salts (e.g., hydrochloric acid, sodium hydroxide, and saline solution) using different indicators;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe important types of chemical reactions (combination, decomposition, single replacement, double replacement);"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "explain how important types of chemical reactions, such as combustion, acids on metals, acids on carbonates, photosynthesis, and respiration, relate to or impact the natural and built environments using information from secondary sources;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "recognize that scientists: a. use chemical equations to describe chemical reactions, and b. write equations in word form and using formula for common chemical reactions;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "explain that chemical equations demonstrate a rearrangement of atoms but the total mass of the system remains the same during a chemical reaction;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "apply the principles of conservation of mass to balance chemical equations;"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "explain the factors affecting the rates of chemical reactions as applied in food preservation and materials production, control of fire, pollution, and corrosion; and"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "identify that chemical reactions may be exothermic or endothermic"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 4,
+      "domain": "LIFE SCIENCE",
+      "content": "Homeostasis; Mechanisms of evolution; Biotechnology; Ecosystem's carrying capacity and population growth",
+      "content_standards": "Homeostasis is a self- regulating process that allows an organism to maintain stability.; Several theories provide lines of evidence about how organisms evolve.; The products and processes of biotechnology can have both beneficial and harmful effects on society and the environment.; Population growth influences the carrying capacity of an ecosystem",
+      "performance_standard": "By the end of the Quarter, learners describe homeostasis as a process that allows an organism to maintain stability. They describe and discuss in small groups that natural selection is the driving mechanism of evolutionary change. They explain the meaning of the term biotechnology and debate the societal, environmental, and ethical implications of utilizing biotechnological products and methods. They discuss the factors that limit the ecosystem's carrying capacity and the role of population growth.",
+      "suggested_tasks": "Write a critical analysis of the use of biotechnology and its impacts on society or the environment.",
+      "source_pages": "67",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "describe homeostasis as a state of balance among all the body systems in humans that needs to be maintained for survival and proper functioning; its indicators include body temperature, glucose level, and blood pressure;"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "explain how homeostasis is maintained through various feedback mechanisms, both positive and negative;"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "use information from secondary sources to describe natural selection as the primary mechanism driving evolutionary change;"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "discuss in small groups important concepts in the theories of evolution, such as variation, heredity, isolation, selection, and adaptation;"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "use information from secondary sources to explain how lines of evidence, such as fossils, biogeography, and comparative morphology, support the occurrence of evolution;"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "explain the term biotechnology and provide examples;"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "use information from secondary sources to identify the products of traditional biotechnology through fermentation (e.g. cheese, soy sauce, vinegar, nata de coco);"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "use information from secondary sources to identify examples of modern biotechnology, such as genetically modified organisms and processes (e.g. in vitro fertilization);"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "participate in a class debate on the societal, environmental, and ethical implications of using biotechnological products and methods;"
+        },
+        {
+          "sequence": 10,
+          "competency_text": "discuss the factors that limit the ecosystem's carrying capacity, such as adequate food, shelter, water, and mates; and"
+        },
+        {
+          "sequence": 11,
+          "competency_text": "explain that the ecosystem's population growth slows down as it gets closer to the carrying capacity."
+        }
+      ]
+    }
+  ]
+}

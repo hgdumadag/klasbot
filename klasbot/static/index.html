@@ -3,21 +3,384 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Klasbot MVP Skeleton</title>
+    <title>Klasbot</title>
+    <link rel="stylesheet" href="/static/vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
-    <main>
-      <h1>Klasbot</h1>
-      <p>Minimal FastAPI skeleton: health, basic UI, and SSE generation stream.</p>
-      <form id="generate-form">
-        <label for="prompt">Topic / Prompt</label>
-        <input id="prompt" name="prompt" type="text" placeholder="e.g., Fractions for Grade 4" />
-        <button type="submit">Generate Draft</button>
-      </form>
-      <pre id="output" aria-live="polite"></pre>
+    <main class="desktop-shell">
+      <section id="login-view" class="login-view">
+        <div class="login-panel">
+          <div class="brand-row">
+            <div class="brand-mark">K</div>
+            <div>
+              <h1>KlasBot</h1>
+              <p>Desktop kiosk · offline mode</p>
+            </div>
+          </div>
+          <form id="login-form" class="stack">
+            <label for="pin">Teacher PIN</label>
+            <input id="pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" />
+            <div id="pin-pad" class="pin-pad" aria-label="PIN keypad"></div>
+            <button type="submit" class="primary">Log in</button>
+          </form>
+          <p id="login-error" class="error" role="alert"></p>
+        </div>
+      </section>
+
+      <section id="app-view" class="app-view hidden">
+        <div class="window-chrome">
+          <div class="traffic-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="window-title">KlasBot — Lesson Workspace</div>
+          <div class="connection-state">Offline-first · Pi kiosk</div>
+        </div>
+
+        <div class="workspace-frame">
+          <aside class="sidebar">
+            <div class="brand-row sidebar-brand">
+              <div class="brand-mark">K</div>
+              <div>
+                <h1>KlasBot</h1>
+                <p>Desktop · v0.2</p>
+              </div>
+            </div>
+
+            <button id="new-lesson-button" class="rail-primary" type="button">New Lesson Plan</button>
+
+            <nav class="rail-section" aria-label="Workspace">
+              <h2>Workspace</h2>
+              <button id="current-draft-button" class="rail-item rail-item--on" type="button">Current Draft <span>*</span></button>
+              <button id="library-button" class="rail-item" type="button">My Library <span>Open</span></button>
+              <button id="admin-toggle" class="rail-item hidden" type="button">Teacher Admin <span>Admin</span></button>
+              <button id="curriculum-toggle" class="rail-item hidden" type="button">Curriculum <span>Upload</span></button>
+              <button id="format-admin-toggle" class="rail-item hidden" type="button">Plan Formats <span>Admin</span></button>
+            </nav>
+
+            <div class="teacher-card">
+              <div class="avatar">MS</div>
+              <div>
+                <strong id="teacher-label"></strong>
+                <span>Shared kiosk session</span>
+              </div>
+            </div>
+          </aside>
+
+          <section class="document-workspace">
+            <header class="document-head">
+              <div>
+                <div class="breadcrumb">Workspace / Current Draft</div>
+                <h1 id="document-title">Untitled Lesson Plan</h1>
+                <p id="document-meta">Choose details in the right panel, then generate a draft.</p>
+              </div>
+              <button id="logout-button" class="ghost" type="button">Log out</button>
+            </header>
+
+            <div id="document-tabs" class="tabs">
+              <button id="preview-tab" class="tab tab--on" type="button">Preview</button>
+              <button id="edit-tab" class="tab" type="button">Edit source</button>
+              <button id="print-button" class="tab" type="button">Print</button>
+              <button id="share-button" class="tab" type="button">Share</button>
+            </div>
+
+            <section id="draft-panel" class="paper-panel">
+              <div class="format-banner">
+                <div class="format-badge" id="format-badge">DLP</div>
+                <div>
+                  <strong id="format-title">Detailed Lesson Plan</strong>
+                  <span>Teacher-ready preview with editable source available when needed.</span>
+                </div>
+              </div>
+
+              <div class="editor-toolbar">
+                <h2 id="draft-view-title">Preview</h2>
+                <div class="button-row">
+                  <button id="save-button" class="primary compact" type="button">Save</button>
+                </div>
+              </div>
+              <article id="draft-preview" class="draft-preview" aria-live="polite"></article>
+              <textarea id="editor" class="hidden" spellcheck="true" placeholder="Generated draft appears here. You can edit before saving or printing."></textarea>
+              <div id="share-panel" class="share-panel hidden" aria-live="polite">
+                <div>
+                  <h3>Send to teacher device</h3>
+                  <p>Scan this on a phone or open the link while connected to the same Wi-Fi.</p>
+                </div>
+                <img id="share-qr" alt="QR code for shared PDF" />
+                <a id="share-link" href="#" target="_blank" rel="noopener"></a>
+                <p id="share-expiry" class="microcopy"></p>
+              </div>
+              <section id="teaching-aids-panel" class="teaching-aids-panel">
+                <div class="teaching-aids-head">
+                  <div>
+                    <h3>Teaching Aids</h3>
+                    <p id="teaching-aids-status" class="microcopy">Save the lesson plan to generate attached classroom materials.</p>
+                  </div>
+                </div>
+                <div class="teaching-aid-actions">
+                  <button class="secondary compact" data-aid-type="worked_example" type="button">Worked Example</button>
+                  <button class="secondary compact" data-aid-type="guided_practice" type="button">Guided Practice</button>
+                  <button class="secondary compact" data-aid-type="answer_key" type="button">Answer Key</button>
+                  <button class="secondary compact" data-aid-type="board_notes" type="button">Board Notes</button>
+                  <button class="secondary compact" data-aid-type="remediation" type="button">Remediation</button>
+                </div>
+                <label class="teaching-aid-request">
+                  Custom request
+                  <input id="teaching-aid-request" type="text" placeholder="Optional: focus on AA similarity, use bottle caps, make easier examples" />
+                </label>
+                <div id="teaching-aids-list" class="teaching-aids-list"></div>
+                <div id="teaching-aid-editor-panel" class="teaching-aid-editor-panel hidden">
+                  <div class="teaching-aid-editor-head">
+                    <input id="teaching-aid-title" type="text" aria-label="Teaching Aid title" />
+                    <div class="button-row">
+                      <button id="save-teaching-aid" class="primary compact" type="button">Save Aid</button>
+                      <button id="print-teaching-aid" class="secondary compact" type="button">Print Aid</button>
+                      <button id="share-teaching-aid" class="secondary compact" type="button">Share Aid</button>
+                      <button id="copy-teaching-aid" class="secondary compact" type="button">Copy Into Lesson</button>
+                      <button id="delete-teaching-aid" class="ghost compact" type="button">Delete</button>
+                    </div>
+                  </div>
+                  <textarea id="teaching-aid-editor" spellcheck="true"></textarea>
+                  <article id="teaching-aid-preview" class="draft-preview"></article>
+                </div>
+              </section>
+              <p id="status-line" class="status-line" role="status"></p>
+            </section>
+
+            <section id="library-panel" class="library-panel hidden">
+              <div class="library-toolbar">
+                <div class="library-toolbar__search-row">
+                  <label class="library-search">
+                    Search
+                    <input id="library-search" type="search" placeholder="Search topic, subject, grade, type, or date" />
+                  </label>
+                  <button
+                    id="library-filters-toggle"
+                    class="ghost compact library-filters-toggle"
+                    type="button"
+                    aria-expanded="true"
+                    aria-controls="library-filter-row"
+                  >Hide filters</button>
+                </div>
+                <div id="library-filter-row" class="library-filter-row">
+                  <label>
+                    Type
+                    <select id="library-type-filter">
+                      <option value="">All</option>
+                      <option value="lesson_plan">Lesson Plans</option>
+                      <option value="quiz">Quizzes</option>
+                      <option value="exam">Exams</option>
+                    </select>
+                  </label>
+                  <label>
+                    Subject
+                    <select id="library-subject-filter"></select>
+                  </label>
+                  <label>
+                    Grade
+                    <select id="library-grade-filter"></select>
+                  </label>
+                  <label>
+                    Format
+                    <select id="library-format-filter"></select>
+                  </label>
+                  <label>
+                    Sort
+                    <select id="library-sort">
+                      <option value="updated_desc">Recently updated</option>
+                      <option value="created_desc">Recently created</option>
+                      <option value="topic_asc">Topic A-Z</option>
+                    </select>
+                  </label>
+                  <button id="refresh-library" class="ghost compact" type="button">Refresh</button>
+                </div>
+              </div>
+              <p id="library-summary" class="library-summary"></p>
+              <div id="library-list" class="library-results"></div>
+            </section>
+
+            <section id="admin-panel" class="workspace-panel hidden">
+              <div class="workspace-panel__head">
+                <div>
+                  <h2>Teacher Admin</h2>
+                  <p>Add teacher accounts and reset kiosk PINs.</p>
+                </div>
+                <button id="refresh-teachers" class="ghost compact" type="button">Refresh</button>
+              </div>
+              <form id="teacher-form" class="admin-form workspace-form">
+                <label>
+                  Name
+                  <input id="teacher-name" type="text" required />
+                </label>
+                <label>
+                  PIN
+                  <input id="teacher-pin" type="text" inputmode="numeric" required />
+                </label>
+                <label class="checkbox">
+                  <input id="teacher-admin" type="checkbox" />
+                  Admin
+                </label>
+                <button type="submit" class="primary">Add teacher</button>
+              </form>
+              <div id="teacher-list" class="workspace-list list"></div>
+            </section>
+
+            <section id="curriculum-panel" class="workspace-panel hidden">
+              <div class="workspace-panel__head">
+                <div>
+                  <h2>Curriculum</h2>
+                  <p>Upload curriculum PDFs and manage active curriculum sources.</p>
+                </div>
+                <button id="refresh-curriculum" class="ghost compact" type="button">Refresh</button>
+              </div>
+              <form id="curriculum-upload-form" class="admin-form workspace-form">
+                <label>
+                  PDF
+                  <input id="curriculum-file" type="file" accept="application/pdf" required />
+                </label>
+                <label>
+                  Subject override
+                  <input id="curriculum-subject" type="text" placeholder="Leave blank to infer from filename" />
+                </label>
+                <label>
+                  Version label
+                  <input id="curriculum-version" type="text" placeholder="MATATAG 2023" />
+                </label>
+                <button type="submit" class="primary">Upload curriculum</button>
+              </form>
+              <div id="curriculum-list" class="workspace-list list"></div>
+              <section id="pacing-editor" class="workspace-panel__sub hidden">
+                <div class="workspace-panel__head">
+                  <div>
+                    <h3>Weekly Pacing</h3>
+                    <p id="pacing-editor-meta">Choose a curriculum topic in Generate Draft to edit its 10-week pacing.</p>
+                  </div>
+                  <button id="reset-pacing" class="ghost compact" type="button">Reset pacing</button>
+                </div>
+                <form id="pacing-form" class="admin-form"></form>
+              </section>
+            </section>
+
+            <section id="format-admin-panel" class="workspace-panel hidden">
+              <div class="workspace-panel__head">
+                <div>
+                  <h2>Plan Formats</h2>
+                  <p>Edit the visible markdown structure for DLP, SDLP, and DLL outputs.</p>
+                </div>
+                <button id="refresh-formats" class="ghost compact" type="button">Refresh</button>
+              </div>
+              <p class="microcopy">Only the structure below is editable here. KlasBot adds teacher inputs, curriculum context, and generation instructions automatically.</p>
+              <p id="format-admin-message" class="error-text"></p>
+              <label>
+                Format
+                <select id="format-admin-select"></select>
+              </label>
+              <form id="format-admin-form" class="admin-form">
+                <label>
+                  Title
+                  <input id="format-admin-title" type="text" required />
+                </label>
+                <label>
+                  Required structure
+                  <textarea id="format-admin-requirements" class="admin-textarea" spellcheck="true" required></textarea>
+                </label>
+                <div class="button-row">
+                  <button type="submit" class="primary compact">Save format</button>
+                  <button id="reset-format" class="ghost compact" type="button">Reset</button>
+                </div>
+              </form>
+            </section>
+          </section>
+
+          <aside class="inspector">
+            <section class="inspector-group inspector-group--accent">
+              <h2>Generate Draft</h2>
+              <form id="generate-form" class="generation-form">
+                <label>
+                  Output
+                  <select id="kind">
+                    <option value="lesson_plan">Lesson plan</option>
+                    <option value="assessment">Assessment</option>
+                  </select>
+                </label>
+                <label>
+                  Format
+                  <select id="format"></select>
+                </label>
+                <label>
+                  Grade
+                  <select id="grade-level" required></select>
+                </label>
+                <label>
+                  Subject
+                  <select id="subject" required></select>
+                </label>
+                <label>
+                  Quarter
+                  <select id="quarter" required></select>
+                </label>
+                <label>
+                  Topic / Domain
+                  <select id="topic" required></select>
+                </label>
+                <label>
+                  Week
+                  <select id="week-number" required>
+                    <option value="">Choose week</option>
+                  </select>
+                </label>
+                <label>
+                  Resources
+                  <input id="resources" type="text" placeholder="paper, stones, bottle caps" />
+                </label>
+                <p id="curriculum-match" class="microcopy">Upload and activate curriculum to enable guided selections.</p>
+                <button id="preview-prompt-button" class="ghost hidden" type="button">Preview prompt</button>
+                <textarea id="prompt-preview" class="prompt-preview hidden" readonly spellcheck="false"></textarea>
+                <button type="submit" class="primary">Generate draft</button>
+              </form>
+            </section>
+
+            <section class="inspector-group">
+              <div class="section-head">
+                <h2>Ollama Status</h2>
+                <button id="check-ollama-button" class="ghost small" type="button" onclick="window.checkOllamaStatus && window.checkOllamaStatus()">Check</button>
+              </div>
+              <div class="ollama-state" id="ollama-state">
+                <span class="status-dot status-dot--unknown"></span>
+                <strong>Not checked</strong>
+              </div>
+              <p class="microcopy" id="ollama-detail">Checks local Ollama at the configured URL.</p>
+            </section>
+
+            <section class="inspector-group">
+              <h2>Mobile Access</h2>
+              <p class="microcopy">Create a short-lived QR code for this teacher to use KlasBot on a phone.</p>
+              <button id="mobile-pair-button" class="ghost compact" type="button">Create mobile QR</button>
+              <div id="mobile-pair-panel" class="mobile-pair-panel hidden" aria-live="polite">
+                <img id="mobile-pair-qr" alt="QR code for mobile pairing" />
+                <a id="mobile-pair-link" href="#" target="_blank" rel="noopener"></a>
+                <p id="mobile-pair-expiry" class="microcopy"></p>
+              </div>
+            </section>
+
+            <section class="inspector-group">
+              <h2>System Details</h2>
+              <div class="detail-row"><span>Model</span><strong id="system-model">Not checked</strong></div>
+              <div class="detail-row"><span>Storage</span><strong>SQLite</strong></div>
+              <div class="detail-row"><span>Print</span><strong>CUPS + fallback</strong></div>
+            </section>
+
+          </aside>
+        </div>
+
+        <footer class="statusbar">
+          <span><i id="statusbar-ollama-dot"></i><span id="statusbar-ollama">Ollama · not checked</span></span>
+          <span>SQLite · local</span>
+          <span>Offline mode</span>
+          <span class="statusbar-right">Manual save · Week 3 MVP</span>
+        </footer>
+      </section>
     </main>
 
-    <script src="/static/app.js"></script>
+    <script src="/static/vendor/katex/katex.min.js"></script>
+    <script src="/static/app.js?v=20260512-katex"></script>
   </body>
 </html>

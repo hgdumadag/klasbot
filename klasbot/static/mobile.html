@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KlasBot Mobile</title>
+    <link rel="stylesheet" href="/static/vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="/static/mobile.css" />
+  </head>
+  <body>
+    <main class="mb-shell">
+      <section id="pair-view" class="mb-pair-state hidden">
+        <section>
+          <div class="mb-brand">
+            <div class="mb-brand-mark">K</div>
+            <div>
+              <h1>KlasBot Mobile</h1>
+              <p>Scan a mobile QR from the kiosk to continue.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="app-view" class="mb-app hidden">
+        <header class="mb-topbar">
+          <div class="mb-brand">
+            <div class="mb-brand-mark">K</div>
+            <div>
+              <h1>KlasBot</h1>
+              <p id="teacher-label">Teacher workspace</p>
+            </div>
+          </div>
+          <button id="logout-button" class="mb-icon-button" type="button" aria-label="Log out">Out</button>
+        </header>
+
+        <nav class="mb-tabs" aria-label="Mobile workspace">
+          <button id="draft-tab" class="mb-tab mb-tab--on" type="button">Draft</button>
+          <button id="library-tab" class="mb-tab" type="button">Library</button>
+          <button id="generate-tab" class="mb-tab" type="button">Generate</button>
+        </nav>
+
+        <section class="mb-status-card">
+          <div>
+            <span id="connection-dot" class="mb-dot mb-dot--unknown"></span>
+            <strong id="connection-text">Checking kiosk</strong>
+          </div>
+          <button id="refresh-button" class="mb-secondary" type="button">Refresh</button>
+        </section>
+
+        <section id="generate-panel" class="mb-panel hidden">
+          <h2>Generate</h2>
+          <form id="generate-form" class="mb-form">
+            <label>
+              Output
+              <select id="kind">
+                <option value="lesson_plan">Lesson plan</option>
+                <option value="assessment">Assessment</option>
+              </select>
+            </label>
+            <label>
+              Format
+              <select id="format"></select>
+            </label>
+            <label>
+              Grade
+              <input id="grade-level" type="text" placeholder="Grade 4" required />
+            </label>
+            <label>
+              Subject
+              <input id="subject" type="text" placeholder="Science" required />
+            </label>
+            <label>
+              Quarter
+              <select id="quarter">
+                <option value="">No quarter</option>
+                <option value="1">Quarter 1</option>
+                <option value="2">Quarter 2</option>
+                <option value="3">Quarter 3</option>
+                <option value="4">Quarter 4</option>
+              </select>
+            </label>
+            <label>
+              Topic / Domain
+              <input id="topic" type="text" placeholder="Materials around us" required />
+            </label>
+            <label>
+              Week
+              <select id="week-number" required>
+                <option value="">Choose week</option>
+                <option value="1">Week 1</option>
+                <option value="2">Week 2</option>
+                <option value="3">Week 3</option>
+                <option value="4">Week 4</option>
+                <option value="5">Week 5</option>
+                <option value="6">Week 6</option>
+                <option value="7">Week 7</option>
+                <option value="8">Week 8</option>
+                <option value="9">Week 9</option>
+                <option value="10">Week 10</option>
+              </select>
+            </label>
+            <label>
+              Resources
+              <input id="resources" type="text" placeholder="paper, stones, bottle caps" />
+            </label>
+            <button class="mb-primary" type="submit">Generate draft</button>
+          </form>
+        </section>
+
+        <section id="draft-panel" class="mb-panel">
+          <div class="mb-panel-head">
+            <div>
+              <h2 id="draft-title">Current Draft</h2>
+              <p id="draft-meta">Generate or open a saved output.</p>
+            </div>
+            <button id="edit-toggle" class="mb-secondary" type="button">Edit</button>
+          </div>
+          <article id="draft-preview" class="mb-paper"></article>
+          <textarea id="editor" class="mb-editor hidden" spellcheck="true"></textarea>
+          <div id="conflict-panel" class="mb-conflict hidden">
+            <strong>Changed on another device</strong>
+            <p>Reload the latest saved version or overwrite it with this phone draft.</p>
+            <div class="mb-row">
+              <button id="reload-conflict" class="mb-secondary" type="button">Reload</button>
+              <button id="overwrite-conflict" class="mb-primary" type="button">Overwrite</button>
+            </div>
+          </div>
+          <div class="mb-actions">
+            <button id="save-button" class="mb-primary" type="button">Save</button>
+            <button id="share-button" class="mb-secondary" type="button">Share PDF</button>
+            <button id="new-button" class="mb-secondary" type="button">New</button>
+          </div>
+          <section id="teaching-aids-panel" class="mb-aids">
+            <div class="mb-panel-head">
+              <div>
+                <h2>Teaching Aids</h2>
+                <p id="teaching-aids-status">Save the lesson to generate aids.</p>
+              </div>
+            </div>
+            <div class="mb-aid-actions">
+              <button data-aid-type="worked_example" class="mb-secondary" type="button">Worked Example</button>
+              <button data-aid-type="guided_practice" class="mb-secondary" type="button">Guided Practice</button>
+              <button data-aid-type="answer_key" class="mb-secondary" type="button">Answer Key</button>
+              <button data-aid-type="board_notes" class="mb-secondary" type="button">Board Notes</button>
+              <button data-aid-type="remediation" class="mb-secondary" type="button">Remediation</button>
+            </div>
+            <input id="teaching-aid-request" class="mb-search" type="text" placeholder="Optional request for the aid" />
+            <div id="teaching-aids-list" class="mb-library"></div>
+            <div id="teaching-aid-editor-panel" class="mb-aid-editor hidden">
+              <input id="teaching-aid-title" class="mb-search" type="text" aria-label="Teaching Aid title" />
+              <textarea id="teaching-aid-editor" class="mb-editor" spellcheck="true"></textarea>
+              <article id="teaching-aid-preview" class="mb-paper"></article>
+              <div class="mb-actions">
+                <button id="save-teaching-aid" class="mb-primary" type="button">Save Aid</button>
+                <button id="share-teaching-aid" class="mb-secondary" type="button">Share Aid</button>
+                <button id="delete-teaching-aid" class="mb-secondary" type="button">Delete</button>
+              </div>
+            </div>
+          </section>
+          <div id="share-panel" class="mb-share hidden">
+            <img id="share-qr" alt="QR code for shared PDF" />
+            <a id="share-link" href="#" target="_blank" rel="noopener"></a>
+            <p id="share-expiry"></p>
+          </div>
+        </section>
+
+        <section id="library-panel" class="mb-panel hidden">
+          <div class="mb-panel-head">
+            <div>
+              <h2>Library</h2>
+              <p id="library-summary">Saved outputs sync with the kiosk.</p>
+            </div>
+          </div>
+          <input id="library-search" class="mb-search" type="search" placeholder="Search saved work" />
+          <div id="library-list" class="mb-library"></div>
+        </section>
+
+        <p id="status-line" class="mb-status-line" role="status"></p>
+      </section>
+    </main>
+    <script src="/static/vendor/katex/katex.min.js"></script>
+    <script src="/static/mobile.js?v=20260512-katex"></script>
+  </body>
+</html>

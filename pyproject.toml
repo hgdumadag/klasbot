@@ -2,16 +2,21 @@
 name = "klasbot"
 version = "0.1.0"
 description = "Offline-first AI teaching assistant MVP skeleton"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
   "fastapi>=0.115.0",
   "uvicorn[standard]>=0.30.0",
   "httpx>=0.27.0",
+  "passlib[argon2]>=1.7.4",
+  "python-multipart>=0.0.9",
+  "pypdf>=5.0.0",
+  "qrcode[pil]>=8.0",
+  "reportlab>=4.0.0",
 ]
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["klasbot"]
+[tool.setuptools.packages.find]
+include = ["klasbot*"]

@@ -1,0 +1,21 @@
+[Unit]
+Description=Klasbot FastAPI service
+After=network-online.target ollama.service
+Wants=network-online.target ollama.service
+
+[Service]
+Type=simple
+User=klasbot
+Group=klasbot
+WorkingDirectory=/opt/klasbot
+Environment=KLASBOT_DB_PATH=/var/lib/klasbot/klasbot.db
+Environment=KLASBOT_SCHOOL_NAME=Klasbot School
+Environment=OLLAMA_BASE_URL=http://127.0.0.1:11434
+Environment=OLLAMA_MODEL=gemma4:e2b
+Environment=KLASBOT_PRINT_COMMAND=lp
+ExecStart=/opt/klasbot/.venv/bin/python -m uvicorn klasbot.main:app --host 0.0.0.0 --port 8000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

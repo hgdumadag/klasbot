@@ -17,6 +17,8 @@ class OllamaClient:
 
         async with httpx.AsyncClient(timeout=self.timeout) as client:
             async with client.stream("POST", url, json=payload) as response:
+                if response.is_error:
+                    await response.aread()
                 response.raise_for_status()
                 async for line in response.aiter_lines():
                     if not line:
@@ -27,3 +29,22 @@ class OllamaClient:
                         yield token
                     if data.get("done"):
                         break
+
+    async def status(self, model: str) -> dict:
+        url = f"{self.base_url}/api/tags"
+        async with httpx.AsyncClient(timeout=5) as client:
+            response = await client.get(url)
+            response.raise_for_status()
+            data = response.json()
+
+        models = data.get("models", [])
+        names = {item.get("name", "") for item in models}
+        short_names = {name.split(":")[0] for name in names}
+        model_available = model in names or model.split(":")[0] in short_names
+        return {
+            "ok": True,
+            "base_url": self.base_url,
+            "model": model,
+            "model_available": model_available,
+            "models": sorted(name for name in names if name),
+        }

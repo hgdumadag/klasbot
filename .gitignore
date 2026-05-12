@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+.tmp-dev/
+data/
+.pytest_cache/
+.venv/
+*.egg-info/
+test-results/
