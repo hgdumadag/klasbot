@@ -51,4 +51,4 @@ python scripts\smoke_api.py --pin 1111
 
 The smoke test also calls `/api/ollama/status`, which reports whether Ollama is reachable and whether the configured model is installed.
 
-See `docs/ADMIN_GUIDE.md` and `docs/PILOT_QA.md` for pilot operation.
+See `docs/ADMIN_GUIDE.md` and `docs/PILOT_QA.md` for pilot operation. The student records roadmap is documented in `docs/STUDENT_MANAGEMENT_PLAN.md`.
