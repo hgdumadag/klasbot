@@ -1,0 +1,1 @@
+"""Quiz photo grading support."""

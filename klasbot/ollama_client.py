@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from typing import AsyncIterator
+from typing import Any
 
 import httpx
 
@@ -29,6 +30,25 @@ class OllamaClient:
                         yield token
                     if data.get("done"):
                         break
+
+    async def chat(
+        self,
+        model: str,
+        messages: list[dict[str, Any]],
+        *,
+        format: str | None = None,
+    ) -> str:
+        url = f"{self.base_url}/api/chat"
+        payload: dict[str, Any] = {"model": model, "messages": messages, "stream": False}
+        if format:
+            payload["format"] = format
+
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            response = await client.post(url, json=payload)
+            response.raise_for_status()
+            data = response.json()
+        message = data.get("message") or {}
+        return str(message.get("content") or data.get("response") or "")
 
     async def status(self, model: str) -> dict:
         url = f"{self.base_url}/api/tags"

@@ -51,6 +51,8 @@
               <h2>Workspace</h2>
               <button id="current-draft-button" class="rail-item rail-item--on" type="button">Current Draft <span>*</span></button>
               <button id="library-button" class="rail-item" type="button">My Library <span>Open</span></button>
+              <button id="grading-button" class="rail-item" type="button">Grade Quiz Photo <span>Batch</span></button>
+              <button id="class-records-button" class="rail-item" type="button">Class Records <span>New</span></button>
               <button id="admin-toggle" class="rail-item hidden" type="button">Teacher Admin <span>Admin</span></button>
               <button id="curriculum-toggle" class="rail-item hidden" type="button">Curriculum <span>Upload</span></button>
               <button id="format-admin-toggle" class="rail-item hidden" type="button">Plan Formats <span>Admin</span></button>
@@ -114,13 +116,18 @@
                     <h3>Teaching Aids</h3>
                     <p id="teaching-aids-status" class="microcopy">Save the lesson plan to generate attached classroom materials.</p>
                   </div>
+                  <div class="teaching-aids-flow" aria-label="Teaching Aids workflow">
+                    <span>Generate</span>
+                    <span>Edit</span>
+                    <span>Print or share</span>
+                  </div>
                 </div>
                 <div class="teaching-aid-actions">
-                  <button class="secondary compact" data-aid-type="worked_example" type="button">Worked Example</button>
-                  <button class="secondary compact" data-aid-type="guided_practice" type="button">Guided Practice</button>
-                  <button class="secondary compact" data-aid-type="answer_key" type="button">Answer Key</button>
-                  <button class="secondary compact" data-aid-type="board_notes" type="button">Board Notes</button>
-                  <button class="secondary compact" data-aid-type="remediation" type="button">Remediation</button>
+                  <button class="teaching-aid-action" data-aid-type="worked_example" type="button"><strong>Worked Example</strong><span>Teacher-led model with steps</span></button>
+                  <button class="teaching-aid-action" data-aid-type="guided_practice" type="button"><strong>Guided Practice</strong><span>Board-ready student tasks</span></button>
+                  <button class="teaching-aid-action" data-aid-type="answer_key" type="button"><strong>Answer Key</strong><span>Answers and scoring notes</span></button>
+                  <button class="teaching-aid-action" data-aid-type="board_notes" type="button"><strong>Board Notes</strong><span>Chalkboard sequence</span></button>
+                  <button class="teaching-aid-action" data-aid-type="remediation" type="button"><strong>Remediation</strong><span>Simpler reteaching support</span></button>
                 </div>
                 <label class="teaching-aid-request">
                   Custom request
@@ -129,16 +136,17 @@
                 <div id="teaching-aids-list" class="teaching-aids-list"></div>
                 <div id="teaching-aid-editor-panel" class="teaching-aid-editor-panel hidden">
                   <div class="teaching-aid-editor-head">
-                    <input id="teaching-aid-title" type="text" aria-label="Teaching Aid title" />
+                    <input id="teaching-aid-title" class="hidden" type="text" aria-label="Teaching Aid title" />
                     <div class="button-row">
-                      <button id="save-teaching-aid" class="primary compact" type="button">Save Aid</button>
+                      <button id="edit-teaching-aid" class="secondary compact" type="button">Edit</button>
+                      <button id="save-teaching-aid" class="primary compact hidden" type="button">Save Aid</button>
                       <button id="print-teaching-aid" class="secondary compact" type="button">Print Aid</button>
                       <button id="share-teaching-aid" class="secondary compact" type="button">Share Aid</button>
                       <button id="copy-teaching-aid" class="secondary compact" type="button">Copy Into Lesson</button>
                       <button id="delete-teaching-aid" class="ghost compact" type="button">Delete</button>
                     </div>
                   </div>
-                  <textarea id="teaching-aid-editor" spellcheck="true"></textarea>
+                  <textarea id="teaching-aid-editor" class="hidden" spellcheck="true"></textarea>
                   <article id="teaching-aid-preview" class="draft-preview"></article>
                 </div>
               </section>
@@ -195,6 +203,135 @@
               </div>
               <p id="library-summary" class="library-summary"></p>
               <div id="library-list" class="library-results"></div>
+            </section>
+            <section id="class-records-panel" class="workspace-panel hidden">
+              <div class="workspace-panel__head">
+                <div>
+                  <h2>Class Records</h2>
+                  <p>Create classes, manage rosters, enter assessment scores, and review simple performance dashboards.</p>
+                </div>
+                <button id="refresh-class-records" class="ghost compact" type="button">Refresh</button>
+              </div>
+              <section class="class-record-create-panel">
+                <h3>Create Class</h3>
+                <form id="class-record-form" class="admin-form class-record-create-form">
+                  <label>
+                    Class name
+                    <input id="class-record-name" type="text" placeholder="Grade 6A Science" required />
+                  </label>
+                  <label>
+                    Grade
+                    <input id="class-record-grade" type="text" placeholder="6" required />
+                  </label>
+                  <label>
+                    Section
+                    <input id="class-record-section" type="text" placeholder="A" />
+                  </label>
+                  <label>
+                    Subject
+                    <input id="class-record-subject" type="text" placeholder="Science" required />
+                  </label>
+                  <label>
+                    School year
+                    <input id="class-record-school-year" type="text" placeholder="2026-2027" />
+                  </label>
+                  <button class="primary compact" type="submit">Create class</button>
+                </form>
+              </section>
+              <div class="class-records-layout">
+                <aside class="class-records-sidebar">
+                  <h3>Classes</h3>
+                  <div id="class-records-list" class="class-records-list"></div>
+                </aside>
+                <section id="class-record-detail" class="class-record-detail">
+                  <div class="empty-state">Select or create a class to manage students and scores.</div>
+                </section>
+              </div>
+            </section>
+
+            <section id="grading-panel" class="workspace-panel hidden">
+              <div class="workspace-panel__head">
+                <div>
+                  <h2>Grade Quiz Photo</h2>
+                  <p>Create a batch, upload quiz photos, confirm detected submissions, then review scores.</p>
+                </div>
+                <button id="refresh-grading" class="ghost compact" type="button">Refresh</button>
+              </div>
+              <div class="grading-steps" aria-label="Quiz photo grading workflow">
+                <div class="grading-step grading-step--on" data-grading-step="setup"><strong>1</strong><span>Set up batch</span></div>
+                <div class="grading-step" data-grading-step="upload"><strong>2</strong><span>Upload photos</span></div>
+                <div class="grading-step" data-grading-step="detect"><strong>3</strong><span>Detect submissions</span></div>
+                <div class="grading-step" data-grading-step="review"><strong>4</strong><span>Review scores</span></div>
+              </div>
+              <form id="grading-batch-form" class="admin-form workspace-form">
+                <label>
+                  Grade
+                  <select id="grading-grade" required></select>
+                </label>
+                <label>
+                  Subject
+                  <select id="grading-subject" required></select>
+                </label>
+                <label>
+                  Topic
+                  <select id="grading-topic" required></select>
+                </label>
+                <label>
+                  Week topic
+                  <select id="grading-week-topic" required></select>
+                </label>
+                <label>
+                  Total points
+                  <input id="grading-points" type="number" min="1" step="0.5" value="10" required />
+                </label>
+                <label>
+                  Style
+                  <select id="grading-style">
+                    <option value="exact">Exact answer</option>
+                    <option value="partial">Partial credit</option>
+                    <option value="rubric">Rubric based</option>
+                    <option value="review_only">Teacher review only</option>
+                  </select>
+                </label>
+                <label class="grading-wide-field">
+                  Questions / answer sheet
+                  <textarea id="grading-questions" class="admin-textarea" placeholder="Paste quiz questions, directions, or the answer sheet text"></textarea>
+                </label>
+                <label class="grading-wide-field">
+                  Answer key
+                  <textarea id="grading-answer-key" class="admin-textarea" placeholder="1. A&#10;2. Photosynthesis"></textarea>
+                </label>
+                <label class="grading-wide-field">
+                  Rubric
+                  <textarea id="grading-rubric" class="admin-textarea" placeholder="Optional criteria or scoring notes"></textarea>
+                </label>
+                <button type="submit" class="primary">Create batch</button>
+              </form>
+              <div id="grading-active" class="grading-active hidden">
+                <div class="workspace-panel__head">
+                  <div>
+                    <h3 id="grading-active-title">No batch selected</h3>
+                    <p id="grading-active-meta"></p>
+                  </div>
+                  <div class="button-row">
+                    <button id="detect-submissions" class="secondary compact" type="button">Detect</button>
+                    <button id="grade-submissions" class="secondary compact" type="button">Grade</button>
+                    <button id="print-grading" class="secondary compact" type="button">Print</button>
+                    <button id="delete-grading-batch" class="ghost compact" type="button">Delete</button>
+                  </div>
+                </div>
+                <form id="grading-upload-form" class="admin-form workspace-form">
+                  <label>
+                    Quiz files
+                    <input id="grading-files" type="file" accept="image/png,image/jpeg,application/pdf,.pdf" multiple />
+                  </label>
+                  <button id="grading-upload-button" type="submit" class="primary">Upload files</button>
+                </form>
+                <p id="grading-status" class="status-line grading-status" role="status"></p>
+                <div id="grading-images" class="grading-grid"></div>
+                <div id="grading-submissions" class="grading-submissions"></div>
+              </div>
+              <div id="grading-batches" class="workspace-list list"></div>
             </section>
 
             <section id="admin-panel" class="workspace-panel hidden">
@@ -381,6 +518,6 @@
     </main>
 
     <script src="/static/vendor/katex/katex.min.js"></script>
-    <script src="/static/app.js?v=20260512-katex"></script>
+    <script src="/static/app.js?v=20260513-teaching-aids-print-preview"></script>
   </body>
 </html>

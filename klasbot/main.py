@@ -35,6 +35,7 @@ from klasbot.auth import (
 )
 from klasbot.config import (
     OLLAMA_BASE_URL,
+    OLLAMA_GRADING_TIMEOUT_SECONDS,
     OLLAMA_MODEL,
     OLLAMA_TIMEOUT_SECONDS,
     PROMPT_PREVIEW_ENABLED,
@@ -43,6 +44,11 @@ from klasbot.config import (
     SHARE_TOKEN_MINUTES,
     get_share_dir,
 )
+from klasbot.grading import detection as grading_detection
+from klasbot.grading import extraction as grading_extraction
+from klasbot.grading import images as grading_images
+from klasbot.grading import reports as grading_reports
+from klasbot.grading import scoring as grading_scoring
 from klasbot.ollama_client import OllamaClient
 from klasbot.print_utils import export_pdf, print_html, render_print_html
 from klasbot.prompts import build_prompt
@@ -157,6 +163,78 @@ class PacingUpdateRequest(BaseModel):
     weeks: list[PacingWeekUpdate] = Field(min_length=10, max_length=10)
 
 
+class GradingBatchCreateRequest(BaseModel):
+    subject: str = Field(default="", max_length=120)
+    grade_level: str = Field(default="", max_length=32)
+    topic: str = Field(default="", max_length=200)
+    quarter: Optional[int] = Field(default=None, ge=1, le=4)
+    week_number: Optional[int] = Field(default=None, ge=1, le=10)
+    week_topic: str = Field(default="", max_length=500)
+    total_points: float = Field(gt=0, le=1000)
+    grading_style: Literal["exact", "partial", "rubric", "review_only"] = "exact"
+    questions: str = Field(default="", max_length=20000)
+    answer_key: Any = Field(default_factory=dict)
+    rubric: Any = Field(default_factory=dict)
+
+
+class GradingSubmissionUpdateRequest(BaseModel):
+    student_name: str = Field(default="", max_length=160)
+    student_identifier: str = Field(default="", max_length=80)
+    extracted_answers: dict[str, Any] = Field(default_factory=dict)
+    grading_result: dict[str, Any] = Field(default_factory=dict)
+    score: Optional[float] = None
+    max_score: Optional[float] = None
+    confidence: Optional[float] = Field(default=None, ge=0, le=1)
+    teacher_reviewed: bool = False
+
+
+class ClassRecordRequest(BaseModel):
+    name: str = Field(min_length=1, max_length=160)
+    grade_level: str = Field(min_length=1, max_length=32)
+    section: str = Field(default="", max_length=80)
+    subject: str = Field(min_length=1, max_length=120)
+    school_year: str = Field(default="", max_length=32)
+
+
+class StudentCreateRequest(BaseModel):
+    student_id: Optional[int] = None
+    learner_reference_number: str = Field(default="", max_length=80)
+    first_name: str = Field(default="", max_length=80)
+    middle_name: str = Field(default="", max_length=80)
+    last_name: str = Field(default="", max_length=80)
+    display_name: str = Field(default="", max_length=180)
+    status: Literal["active", "inactive", "transferred"] = "active"
+
+
+class StudentUpdateRequest(BaseModel):
+    learner_reference_number: str = Field(default="", max_length=80)
+    first_name: str = Field(min_length=1, max_length=80)
+    middle_name: str = Field(default="", max_length=80)
+    last_name: str = Field(min_length=1, max_length=80)
+    display_name: str = Field(default="", max_length=180)
+    status: Literal["active", "inactive", "transferred"] = "active"
+
+
+class AssessmentRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=180)
+    assessment_type: Literal["exam", "quiz", "project", "performance_task", "assignment", "other"]
+    assessment_date: str = Field(min_length=1, max_length=32)
+    max_score: float = Field(gt=0, le=10000)
+    weight: Optional[float] = Field(default=None, ge=0, le=100)
+    notes: str = Field(default="", max_length=1000)
+
+
+class ScoreEntryRequest(BaseModel):
+    student_id: int
+    score: Optional[float] = Field(default=None, ge=0)
+    is_absent: bool = False
+    notes: str = Field(default="", max_length=500)
+
+
+class ScoreGridRequest(BaseModel):
+    scores: list[ScoreEntryRequest] = Field(default_factory=list)
+
+
 LOCAL_CLIENT_HOSTS = {"127.0.0.1", "::1", "localhost", "testclient"}
 REMOTE_PUBLIC_PREFIXES = ("/share/", "/mobile/pair/")
 REMOTE_STATIC_PREFIXES = ("/static/mobile",)
@@ -165,6 +243,8 @@ REMOTE_SESSION_PREFIXES = (
     "/api/generate/stream",
     "/api/curriculum/",
     "/api/library",
+    "/api/grading/",
+    "/api/class-records/",
     "/api/print/preview",
 )
 REMOTE_MUTATING_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
@@ -1160,6 +1240,353 @@ async def library_delete(
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Output not found")
     return {"ok": True}
+
+
+@app.get("/api/class-records/classes")
+async def class_records_list(teacher: Annotated[dict, Depends(get_current_teacher)]) -> dict:
+    return {"classes": db.list_class_records(teacher["id"])}
+
+
+@app.post("/api/class-records/classes", status_code=status.HTTP_201_CREATED)
+async def class_records_create(
+    payload: ClassRecordRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    return {"class": db.create_class_record(teacher["id"], payload.model_dump() if hasattr(payload, "model_dump") else payload.dict())}
+
+
+@app.get("/api/class-records/classes/{class_id}")
+async def class_records_get(
+    class_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    class_record = db.get_class_record(teacher["id"], class_id)
+    if not class_record:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return {"class": class_record, "dashboard": db.get_class_dashboard(teacher["id"], class_id)}
+
+
+@app.patch("/api/class-records/classes/{class_id}")
+async def class_records_update(
+    class_id: int,
+    payload: ClassRecordRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    class_record = db.update_class_record(
+        teacher["id"],
+        class_id,
+        payload.model_dump() if hasattr(payload, "model_dump") else payload.dict(),
+    )
+    if not class_record:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return {"class": class_record}
+
+
+@app.get("/api/class-records/classes/{class_id}/students")
+async def class_records_students_list(
+    class_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    students = db.list_class_students(teacher["id"], class_id)
+    if students is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return {"students": students}
+
+
+@app.post("/api/class-records/classes/{class_id}/students", status_code=status.HTTP_201_CREATED)
+async def class_records_students_create(
+    class_id: int,
+    payload: StudentCreateRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    payload_dict = (
+        payload.model_dump(exclude_unset=True)
+        if hasattr(payload, "model_dump")
+        else payload.dict(exclude_unset=True)
+    )
+    if not payload_dict.get("student_id") and (not payload.first_name.strip() or not payload.last_name.strip()):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student first and last name are required")
+    student = db.create_or_enroll_student(teacher["id"], class_id, payload_dict)
+    if not student:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class or student not found")
+    return {"student": student}
+
+
+@app.patch("/api/class-records/students/{student_id}")
+async def class_records_students_update(
+    student_id: int,
+    payload: StudentUpdateRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    student = db.update_student(
+        teacher["id"],
+        student_id,
+        payload.model_dump() if hasattr(payload, "model_dump") else payload.dict(),
+    )
+    if not student:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+    return {"student": student}
+
+
+@app.get("/api/class-records/classes/{class_id}/assessments")
+async def class_records_assessments_list(
+    class_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    assessments = db.list_class_assessments(teacher["id"], class_id)
+    if assessments is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return {"assessments": assessments}
+
+
+@app.post("/api/class-records/classes/{class_id}/assessments", status_code=status.HTTP_201_CREATED)
+async def class_records_assessments_create(
+    class_id: int,
+    payload: AssessmentRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    assessment = db.create_assessment(
+        teacher["id"],
+        class_id,
+        payload.model_dump() if hasattr(payload, "model_dump") else payload.dict(),
+    )
+    if not assessment:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return {"assessment": assessment}
+
+
+@app.patch("/api/class-records/assessments/{assessment_id}")
+async def class_records_assessments_update(
+    assessment_id: int,
+    payload: AssessmentRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    try:
+        assessment = db.update_assessment(
+            teacher["id"],
+            assessment_id,
+            payload.model_dump() if hasattr(payload, "model_dump") else payload.dict(),
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    if not assessment:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
+    return {"assessment": assessment}
+
+
+@app.get("/api/class-records/assessments/{assessment_id}/scores")
+async def class_records_scores_get(
+    assessment_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    grid = db.get_score_grid(teacher["id"], assessment_id)
+    if not grid:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
+    return grid
+
+
+@app.put("/api/class-records/assessments/{assessment_id}/scores")
+async def class_records_scores_save(
+    assessment_id: int,
+    payload: ScoreGridRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    try:
+        grid = db.save_score_grid(
+            teacher["id"],
+            assessment_id,
+            [item.model_dump() if hasattr(item, "model_dump") else item.dict() for item in payload.scores],
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    if not grid:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
+    return grid
+
+
+@app.get("/api/class-records/classes/{class_id}/dashboard")
+async def class_records_dashboard(
+    class_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    dashboard = db.get_class_dashboard(teacher["id"], class_id)
+    if not dashboard:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return {"dashboard": dashboard}
+
+
+@app.get("/api/class-records/assessments/{assessment_id}/dashboard")
+async def class_records_assessment_dashboard(
+    assessment_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    dashboard = db.get_assessment_dashboard(teacher["id"], assessment_id)
+    if not dashboard:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
+    return {"dashboard": dashboard}
+
+
+@app.get("/api/grading/batches")
+async def grading_batches_list(teacher: Annotated[dict, Depends(get_current_teacher)]) -> dict:
+    return {"batches": db.list_grading_batches(teacher["id"])}
+
+
+@app.post("/api/grading/batches", status_code=status.HTTP_201_CREATED)
+async def grading_batches_create(
+    payload: GradingBatchCreateRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    payload_dict = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
+    if payload.grading_style == "exact" and not grading_scoring.parse_answer_key(payload.answer_key, payload.total_points):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Exact-answer grading needs an answer key")
+    batch = db.create_grading_batch(teacher["id"], payload_dict)
+    return {"batch": batch}
+
+
+@app.get("/api/grading/batches/{batch_id}")
+async def grading_batches_get(
+    batch_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    batch = db.get_grading_batch(teacher["id"], batch_id)
+    if not batch:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading batch not found")
+    return {"batch": batch}
+
+
+@app.post("/api/grading/batches/{batch_id}/images", status_code=status.HTTP_201_CREATED)
+async def grading_batch_upload_image(
+    batch_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+    file: UploadFile = File(...),
+) -> dict:
+    if not db.get_grading_batch(teacher["id"], batch_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading batch not found")
+    data = await file.read()
+    try:
+        payload = grading_images.save_uploaded_image(
+            teacher_id=teacher["id"],
+            batch_id=batch_id,
+            filename=file.filename or "worksheet",
+            mime_type=file.content_type or "",
+            data=data,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    image = db.create_grading_image(teacher["id"], batch_id, payload)
+    if not image:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading batch not found")
+    return {"image": image}
+
+
+@app.get("/api/grading/images/{image_id}/thumbnail")
+async def grading_image_thumbnail(
+    image_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> FileResponse:
+    image = db.get_grading_image(teacher["id"], image_id)
+    if not image or not image.get("thumbnail_path"):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Image not found")
+    path = Path(image["thumbnail_path"])
+    if not path.exists():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Thumbnail not found")
+    return FileResponse(path, media_type="image/jpeg")
+
+
+@app.post("/api/grading/batches/{batch_id}/detect-submissions")
+async def grading_batch_detect_submissions(
+    batch_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    batch = db.get_grading_batch(teacher["id"], batch_id)
+    if not batch:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading batch not found")
+    images = batch.get("images") or []
+    if not images:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Upload at least one image first")
+    submissions = []
+    for image in images:
+        submissions.extend(grading_detection.detect_submission_regions(image))
+    saved = db.replace_grading_submissions(teacher["id"], batch_id, submissions)
+    return {"submissions": saved or []}
+
+
+@app.post("/api/grading/batches/{batch_id}/grade")
+async def grading_batch_grade(
+    batch_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    batch = db.get_grading_batch(teacher["id"], batch_id)
+    if not batch:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading batch not found")
+    submissions = batch.get("submissions") or []
+    if not submissions:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Detect submissions before grading")
+    images_by_id = {image["id"]: image for image in (batch.get("images") or [])}
+    graded = []
+    for submission in submissions:
+        try:
+            result = await asyncio.wait_for(
+                grading_extraction.extract_and_grade_submission(
+                    ollama_client=ollama_client,
+                    model=OLLAMA_MODEL,
+                    batch=batch,
+                    submission=submission,
+                    image=images_by_id.get(submission.get("image_id")),
+                ),
+                timeout=OLLAMA_GRADING_TIMEOUT_SECONDS,
+            )
+        except asyncio.TimeoutError:
+            result = grading_scoring.build_review_grading_result(submission=submission, batch=batch)
+            result["grading_result"]["warnings"].append(
+                f"Ollama grading timed out after {int(OLLAMA_GRADING_TIMEOUT_SECONDS)} seconds. "
+                "Review the worksheet manually or try a smaller crop/file."
+            )
+            result["grading_result"]["overall_feedback"] = (
+                "Ollama did not return a grading result in time. Review the worksheet manually."
+            )
+        graded.append({**submission, **result})
+    saved = db.save_grading_results(teacher["id"], batch_id, graded)
+    return {"submissions": saved or []}
+
+
+@app.patch("/api/grading/submissions/{submission_id}")
+async def grading_submission_update(
+    submission_id: int,
+    payload: GradingSubmissionUpdateRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    payload_dict = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
+    submission = db.update_grading_submission(teacher["id"], submission_id, payload_dict)
+    if not submission:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading submission not found")
+    return {"submission": submission}
+
+
+@app.delete("/api/grading/batches/{batch_id}")
+async def grading_batch_delete(
+    batch_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    file_paths = db.list_grading_batch_file_paths(teacher["id"], batch_id)
+    deleted = db.delete_grading_batch(teacher["id"], batch_id)
+    if not deleted:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading batch not found")
+    for file_path in file_paths:
+        Path(file_path).unlink(missing_ok=True)
+    return {"ok": True}
+
+
+@app.post("/api/grading/batches/{batch_id}/print", response_class=HTMLResponse)
+async def grading_batch_print_preview(
+    batch_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> HTMLResponse:
+    batch = db.get_grading_batch(teacher["id"], batch_id)
+    if not batch:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading batch not found")
+    content_md = grading_reports.batch_report_markdown(batch)
+    return HTMLResponse(render_print_html(content_md, {"format": "Quiz Photo Grading"}))
 
 
 @app.post("/api/library/{output_id}/regenerate")

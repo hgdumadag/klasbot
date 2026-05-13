@@ -154,6 +154,112 @@ def init_db(db_path: Path | None = None) -> None:
               updated_at TEXT NOT NULL DEFAULT (datetime('now'))
             );
 
+            CREATE TABLE IF NOT EXISTS grading_batches (
+              id INTEGER PRIMARY KEY,
+              teacher_id INTEGER NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+              subject TEXT,
+              grade_level TEXT,
+              topic TEXT,
+              quarter INTEGER,
+              week_number INTEGER,
+              week_topic TEXT,
+              questions_text TEXT,
+              total_points REAL NOT NULL,
+              grading_style TEXT NOT NULL CHECK (grading_style IN ('exact','partial','rubric','review_only')),
+              answer_key_json TEXT,
+              rubric_json TEXT,
+              status TEXT NOT NULL DEFAULT 'draft',
+              created_at TEXT NOT NULL DEFAULT (datetime('now')),
+              updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS grading_images (
+              id INTEGER PRIMARY KEY,
+              batch_id INTEGER NOT NULL REFERENCES grading_batches(id) ON DELETE CASCADE,
+              original_path TEXT NOT NULL,
+              thumbnail_path TEXT,
+              mime_type TEXT NOT NULL,
+              width INTEGER,
+              height INTEGER,
+              quality_warnings_json TEXT,
+              created_at TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS grading_submissions (
+              id INTEGER PRIMARY KEY,
+              batch_id INTEGER NOT NULL REFERENCES grading_batches(id) ON DELETE CASCADE,
+              image_id INTEGER REFERENCES grading_images(id) ON DELETE SET NULL,
+              student_name TEXT,
+              student_identifier TEXT,
+              crop_box_json TEXT,
+              extracted_answers_json TEXT,
+              grading_result_json TEXT,
+              score REAL,
+              max_score REAL,
+              confidence REAL,
+              teacher_reviewed INTEGER NOT NULL DEFAULT 0,
+              created_at TEXT NOT NULL DEFAULT (datetime('now')),
+              updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS classes (
+              id INTEGER PRIMARY KEY,
+              teacher_id INTEGER NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+              name TEXT NOT NULL,
+              grade_level TEXT NOT NULL,
+              section TEXT,
+              subject TEXT NOT NULL,
+              school_year TEXT,
+              created_at TEXT NOT NULL DEFAULT (datetime('now')),
+              updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS students (
+              id INTEGER PRIMARY KEY,
+              teacher_id INTEGER NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+              learner_reference_number TEXT,
+              first_name TEXT NOT NULL,
+              middle_name TEXT,
+              last_name TEXT NOT NULL,
+              display_name TEXT NOT NULL,
+              status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','inactive','transferred')),
+              created_at TEXT NOT NULL DEFAULT (datetime('now')),
+              updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS class_enrollments (
+              id INTEGER PRIMARY KEY,
+              class_id INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+              student_id INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+              enrolled_at TEXT NOT NULL DEFAULT (datetime('now')),
+              UNIQUE (class_id, student_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS assessments (
+              id INTEGER PRIMARY KEY,
+              class_id INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+              title TEXT NOT NULL,
+              assessment_type TEXT NOT NULL CHECK (assessment_type IN ('exam','quiz','project','performance_task','assignment','other')),
+              assessment_date TEXT NOT NULL,
+              max_score REAL NOT NULL CHECK (max_score > 0),
+              weight REAL,
+              notes TEXT,
+              created_at TEXT NOT NULL DEFAULT (datetime('now')),
+              updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS scores (
+              id INTEGER PRIMARY KEY,
+              assessment_id INTEGER NOT NULL REFERENCES assessments(id) ON DELETE CASCADE,
+              student_id INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+              score REAL CHECK (score >= 0),
+              is_absent INTEGER NOT NULL DEFAULT 0,
+              notes TEXT,
+              created_at TEXT NOT NULL DEFAULT (datetime('now')),
+              updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+              UNIQUE (assessment_id, student_id)
+            );
+
             CREATE TABLE IF NOT EXISTS schema_migrations (
               name TEXT PRIMARY KEY,
               applied_at TEXT NOT NULL
@@ -181,6 +287,10 @@ def init_db(db_path: Path | None = None) -> None:
         _ensure_column(connection, "curriculum_units", "warnings_json", "TEXT NOT NULL DEFAULT '[]'")
         _ensure_column(connection, "outputs", "week_number", "INTEGER")
         _ensure_column(connection, "sessions", "csrf_token", "TEXT NOT NULL DEFAULT ''")
+        _ensure_column(connection, "grading_batches", "quarter", "INTEGER")
+        _ensure_column(connection, "grading_batches", "week_number", "INTEGER")
+        _ensure_column(connection, "grading_batches", "week_topic", "TEXT")
+        _ensure_column(connection, "grading_batches", "questions_text", "TEXT")
         _run_weekly_pacing_migration(connection)
         _run_weekly_pacing_focus_migration(connection)
         ensure_all_curriculum_pacing(connection)
@@ -781,6 +891,899 @@ def _decode_teaching_aid(row: sqlite3.Row) -> dict[str, Any]:
     aid = dict(row)
     aid["inputs"] = json.loads(aid.pop("inputs_json") or "{}")
     return aid
+
+
+def create_grading_batch(teacher_id: int, payload: dict[str, Any]) -> dict[str, Any]:
+    now = utc_now()
+    with connect() as connection:
+        cursor = connection.execute(
+            """
+            INSERT INTO grading_batches (
+              teacher_id, subject, grade_level, topic, quarter, week_number, week_topic, questions_text, total_points, grading_style,
+              answer_key_json, rubric_json, status, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?)
+            """,
+            (
+                teacher_id,
+                payload.get("subject", "").strip(),
+                payload.get("grade_level", "").strip(),
+                payload.get("topic", "").strip(),
+                payload.get("quarter"),
+                payload.get("week_number"),
+                payload.get("week_topic", "").strip(),
+                payload.get("questions", "").strip(),
+                float(payload["total_points"]),
+                payload["grading_style"],
+                json.dumps(payload.get("answer_key") or {}),
+                json.dumps(payload.get("rubric") or {}),
+                now,
+                now,
+            ),
+        )
+        batch = get_grading_batch_by_id(connection, teacher_id, int(cursor.lastrowid))
+        assert batch is not None
+        return batch
+
+
+def list_grading_batches(teacher_id: int) -> list[dict[str, Any]]:
+    with connect() as connection:
+        rows = connection.execute(
+            """
+            SELECT grading_batches.*,
+                   COUNT(DISTINCT grading_images.id) AS image_count,
+                   COUNT(DISTINCT grading_submissions.id) AS submission_count
+            FROM grading_batches
+            LEFT JOIN grading_images ON grading_images.batch_id = grading_batches.id
+            LEFT JOIN grading_submissions ON grading_submissions.batch_id = grading_batches.id
+            WHERE grading_batches.teacher_id = ?
+            GROUP BY grading_batches.id
+            ORDER BY grading_batches.updated_at DESC, grading_batches.id DESC
+            """,
+            (teacher_id,),
+        ).fetchall()
+        return [_decode_grading_batch(row) for row in rows]
+
+
+def get_grading_batch(teacher_id: int, batch_id: int) -> dict[str, Any] | None:
+    with connect() as connection:
+        batch = get_grading_batch_by_id(connection, teacher_id, batch_id)
+        if not batch:
+            return None
+        batch["images"] = list_grading_images_by_batch(connection, teacher_id, batch_id)
+        batch["submissions"] = list_grading_submissions_by_batch(connection, teacher_id, batch_id)
+        return batch
+
+
+def get_grading_batch_by_id(
+    connection: sqlite3.Connection, teacher_id: int, batch_id: int
+) -> dict[str, Any] | None:
+    row = connection.execute(
+        """
+        SELECT grading_batches.*,
+               COUNT(DISTINCT grading_images.id) AS image_count,
+               COUNT(DISTINCT grading_submissions.id) AS submission_count
+        FROM grading_batches
+        LEFT JOIN grading_images ON grading_images.batch_id = grading_batches.id
+        LEFT JOIN grading_submissions ON grading_submissions.batch_id = grading_batches.id
+        WHERE grading_batches.teacher_id = ? AND grading_batches.id = ?
+        GROUP BY grading_batches.id
+        """,
+        (teacher_id, batch_id),
+    ).fetchone()
+    return _decode_grading_batch(row) if row else None
+
+
+def update_grading_batch_status(
+    connection: sqlite3.Connection, teacher_id: int, batch_id: int, status_value: str
+) -> None:
+    connection.execute(
+        """
+        UPDATE grading_batches
+        SET status = ?, updated_at = ?
+        WHERE teacher_id = ? AND id = ?
+        """,
+        (status_value, utc_now(), teacher_id, batch_id),
+    )
+
+
+def create_grading_image(teacher_id: int, batch_id: int, payload: dict[str, Any]) -> dict[str, Any] | None:
+    now = utc_now()
+    with connect() as connection:
+        if not get_grading_batch_by_id(connection, teacher_id, batch_id):
+            return None
+        cursor = connection.execute(
+            """
+            INSERT INTO grading_images (
+              batch_id, original_path, thumbnail_path, mime_type, width, height,
+              quality_warnings_json, created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                batch_id,
+                payload["original_path"],
+                payload.get("thumbnail_path"),
+                payload["mime_type"],
+                payload.get("width"),
+                payload.get("height"),
+                json.dumps(payload.get("quality_warnings") or []),
+                now,
+            ),
+        )
+        update_grading_batch_status(connection, teacher_id, batch_id, "uploaded")
+        return get_grading_image_by_id(connection, teacher_id, int(cursor.lastrowid))
+
+
+def get_grading_image(teacher_id: int, image_id: int) -> dict[str, Any] | None:
+    with connect() as connection:
+        return get_grading_image_by_id(connection, teacher_id, image_id)
+
+
+def get_grading_image_by_id(
+    connection: sqlite3.Connection, teacher_id: int, image_id: int
+) -> dict[str, Any] | None:
+    row = connection.execute(
+        """
+        SELECT grading_images.*
+        FROM grading_images
+        JOIN grading_batches ON grading_batches.id = grading_images.batch_id
+        WHERE grading_batches.teacher_id = ? AND grading_images.id = ?
+        """,
+        (teacher_id, image_id),
+    ).fetchone()
+    return _decode_grading_image(row) if row else None
+
+
+def list_grading_images_by_batch(
+    connection: sqlite3.Connection, teacher_id: int, batch_id: int
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT grading_images.*
+        FROM grading_images
+        JOIN grading_batches ON grading_batches.id = grading_images.batch_id
+        WHERE grading_batches.teacher_id = ? AND grading_images.batch_id = ?
+        ORDER BY grading_images.id
+        """,
+        (teacher_id, batch_id),
+    ).fetchall()
+    return [_decode_grading_image(row) for row in rows]
+
+
+def replace_grading_submissions(
+    teacher_id: int, batch_id: int, submissions: list[dict[str, Any]]
+) -> list[dict[str, Any]] | None:
+    now = utc_now()
+    with connect() as connection:
+        if not get_grading_batch_by_id(connection, teacher_id, batch_id):
+            return None
+        connection.execute("DELETE FROM grading_submissions WHERE batch_id = ?", (batch_id,))
+        for submission in submissions:
+            connection.execute(
+                """
+                INSERT INTO grading_submissions (
+                  batch_id, image_id, student_name, student_identifier, crop_box_json,
+                  extracted_answers_json, grading_result_json, score, max_score,
+                  confidence, teacher_reviewed, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    batch_id,
+                    submission.get("image_id"),
+                    submission.get("student_name", "").strip(),
+                    submission.get("student_identifier", "").strip(),
+                    json.dumps(submission.get("crop_box") or {}),
+                    json.dumps(submission.get("extracted_answers") or {}),
+                    json.dumps(submission.get("grading_result") or {}),
+                    submission.get("score"),
+                    submission.get("max_score"),
+                    submission.get("confidence"),
+                    int(bool(submission.get("teacher_reviewed"))),
+                    now,
+                    now,
+                ),
+            )
+        update_grading_batch_status(connection, teacher_id, batch_id, "detected")
+        return list_grading_submissions_by_batch(connection, teacher_id, batch_id)
+
+
+def list_grading_submissions_by_batch(
+    connection: sqlite3.Connection, teacher_id: int, batch_id: int
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT grading_submissions.*
+        FROM grading_submissions
+        JOIN grading_batches ON grading_batches.id = grading_submissions.batch_id
+        WHERE grading_batches.teacher_id = ? AND grading_submissions.batch_id = ?
+        ORDER BY grading_submissions.id
+        """,
+        (teacher_id, batch_id),
+    ).fetchall()
+    return [_decode_grading_submission(row) for row in rows]
+
+
+def get_grading_submission(teacher_id: int, submission_id: int) -> dict[str, Any] | None:
+    with connect() as connection:
+        return get_grading_submission_by_id(connection, teacher_id, submission_id)
+
+
+def get_grading_submission_by_id(
+    connection: sqlite3.Connection, teacher_id: int, submission_id: int
+) -> dict[str, Any] | None:
+    row = connection.execute(
+        """
+        SELECT grading_submissions.*
+        FROM grading_submissions
+        JOIN grading_batches ON grading_batches.id = grading_submissions.batch_id
+        WHERE grading_batches.teacher_id = ? AND grading_submissions.id = ?
+        """,
+        (teacher_id, submission_id),
+    ).fetchone()
+    return _decode_grading_submission(row) if row else None
+
+
+def update_grading_submission(
+    teacher_id: int, submission_id: int, payload: dict[str, Any]
+) -> dict[str, Any] | None:
+    with connect() as connection:
+        current = get_grading_submission_by_id(connection, teacher_id, submission_id)
+        if not current:
+            return None
+        result = payload.get("grading_result", current.get("grading_result") or {})
+        extracted = payload.get("extracted_answers", current.get("extracted_answers") or {})
+        connection.execute(
+            """
+            UPDATE grading_submissions
+            SET student_name = ?, student_identifier = ?, extracted_answers_json = ?,
+                grading_result_json = ?, score = ?, max_score = ?, confidence = ?,
+                teacher_reviewed = ?, updated_at = ?
+            WHERE id = ?
+            """,
+            (
+                payload.get("student_name", current.get("student_name") or "").strip(),
+                payload.get("student_identifier", current.get("student_identifier") or "").strip(),
+                json.dumps(extracted),
+                json.dumps(result),
+                payload.get("score", current.get("score")),
+                payload.get("max_score", current.get("max_score")),
+                payload.get("confidence", current.get("confidence")),
+                int(bool(payload.get("teacher_reviewed", current.get("teacher_reviewed")))),
+                utc_now(),
+                submission_id,
+            ),
+        )
+        update_grading_batch_status(connection, teacher_id, int(current["batch_id"]), "reviewed")
+        return get_grading_submission_by_id(connection, teacher_id, submission_id)
+
+
+def save_grading_results(
+    teacher_id: int, batch_id: int, graded_submissions: list[dict[str, Any]]
+) -> list[dict[str, Any]] | None:
+    now = utc_now()
+    with connect() as connection:
+        if not get_grading_batch_by_id(connection, teacher_id, batch_id):
+            return None
+        for submission in graded_submissions:
+            connection.execute(
+                """
+                UPDATE grading_submissions
+                SET student_name = ?, student_identifier = ?, extracted_answers_json = ?,
+                    grading_result_json = ?, score = ?, max_score = ?, confidence = ?,
+                    updated_at = ?
+                WHERE id = ? AND batch_id = ?
+                """,
+                (
+                    submission.get("student_name", ""),
+                    submission.get("student_identifier", ""),
+                    json.dumps(submission.get("extracted_answers") or {}),
+                    json.dumps(submission.get("grading_result") or {}),
+                    submission.get("score"),
+                    submission.get("max_score"),
+                    submission.get("confidence"),
+                    now,
+                    submission["id"],
+                    batch_id,
+                ),
+            )
+        update_grading_batch_status(connection, teacher_id, batch_id, "graded")
+        return list_grading_submissions_by_batch(connection, teacher_id, batch_id)
+
+
+def list_grading_batch_file_paths(teacher_id: int, batch_id: int) -> list[str]:
+    with connect() as connection:
+        rows = connection.execute(
+            """
+            SELECT grading_images.original_path, grading_images.thumbnail_path
+            FROM grading_images
+            JOIN grading_batches ON grading_batches.id = grading_images.batch_id
+            WHERE grading_batches.teacher_id = ? AND grading_images.batch_id = ?
+            """,
+            (teacher_id, batch_id),
+        ).fetchall()
+        paths: list[str] = []
+        for row in rows:
+            paths.extend([path for path in (row["original_path"], row["thumbnail_path"]) if path])
+        return paths
+
+
+def delete_grading_batch(teacher_id: int, batch_id: int) -> bool:
+    with connect() as connection:
+        cursor = connection.execute(
+            "DELETE FROM grading_batches WHERE teacher_id = ? AND id = ?",
+            (teacher_id, batch_id),
+        )
+        return cursor.rowcount > 0
+
+
+def _decode_grading_batch(row: sqlite3.Row) -> dict[str, Any]:
+    batch = dict(row)
+    batch["answer_key"] = json.loads(batch.pop("answer_key_json") or "{}")
+    batch["rubric"] = json.loads(batch.pop("rubric_json") or "{}")
+    batch["questions"] = batch.pop("questions_text", "") or ""
+    batch["image_count"] = int(batch.get("image_count") or 0)
+    batch["submission_count"] = int(batch.get("submission_count") or 0)
+    return batch
+
+
+def _decode_grading_image(row: sqlite3.Row) -> dict[str, Any]:
+    image = dict(row)
+    image["quality_warnings"] = json.loads(image.pop("quality_warnings_json") or "[]")
+    return image
+
+
+def _decode_grading_submission(row: sqlite3.Row) -> dict[str, Any]:
+    submission = dict(row)
+    submission["crop_box"] = json.loads(submission.pop("crop_box_json") or "{}")
+    submission["extracted_answers"] = json.loads(submission.pop("extracted_answers_json") or "{}")
+    submission["grading_result"] = json.loads(submission.pop("grading_result_json") or "{}")
+    submission["teacher_reviewed"] = bool(submission["teacher_reviewed"])
+    return submission
+
+
+def _student_display_name(payload: dict[str, Any]) -> str:
+    provided = str(payload.get("display_name") or "").strip()
+    if provided:
+        return provided
+    parts = [
+        str(payload.get("first_name") or "").strip(),
+        str(payload.get("middle_name") or "").strip(),
+        str(payload.get("last_name") or "").strip(),
+    ]
+    return " ".join(part for part in parts if part)
+
+
+def create_class_record(teacher_id: int, payload: dict[str, Any]) -> dict[str, Any]:
+    now = utc_now()
+    with connect() as connection:
+        cursor = connection.execute(
+            """
+            INSERT INTO classes (
+              teacher_id, name, grade_level, section, subject, school_year, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                teacher_id,
+                payload["name"].strip(),
+                payload["grade_level"].strip(),
+                (payload.get("section") or "").strip(),
+                payload["subject"].strip(),
+                (payload.get("school_year") or "").strip(),
+                now,
+                now,
+            ),
+        )
+        class_record = get_class_record_by_id(connection, teacher_id, int(cursor.lastrowid))
+        assert class_record is not None
+        return class_record
+
+
+def list_class_records(teacher_id: int) -> list[dict[str, Any]]:
+    with connect() as connection:
+        rows = connection.execute(
+            """
+            SELECT classes.*,
+                   COUNT(DISTINCT class_enrollments.student_id) AS student_count,
+                   MAX(assessments.assessment_date) AS latest_assessment_date
+            FROM classes
+            LEFT JOIN class_enrollments ON class_enrollments.class_id = classes.id
+            LEFT JOIN assessments ON assessments.class_id = classes.id
+            WHERE classes.teacher_id = ?
+            GROUP BY classes.id
+            ORDER BY classes.updated_at DESC, classes.id DESC
+            """,
+            (teacher_id,),
+        ).fetchall()
+        records = [dict(row) for row in rows]
+        for record in records:
+            record["student_count"] = int(record.get("student_count") or 0)
+            record["latest_average"] = _class_average(connection, int(record["id"]))
+        return records
+
+
+def get_class_record(teacher_id: int, class_id: int) -> dict[str, Any] | None:
+    with connect() as connection:
+        return get_class_record_by_id(connection, teacher_id, class_id)
+
+
+def get_class_record_by_id(
+    connection: sqlite3.Connection, teacher_id: int, class_id: int
+) -> dict[str, Any] | None:
+    row = connection.execute(
+        """
+        SELECT classes.*,
+               COUNT(DISTINCT class_enrollments.student_id) AS student_count
+        FROM classes
+        LEFT JOIN class_enrollments ON class_enrollments.class_id = classes.id
+        WHERE classes.teacher_id = ? AND classes.id = ?
+        GROUP BY classes.id
+        """,
+        (teacher_id, class_id),
+    ).fetchone()
+    if not row:
+        return None
+    record = dict(row)
+    record["student_count"] = int(record.get("student_count") or 0)
+    return record
+
+
+def update_class_record(teacher_id: int, class_id: int, payload: dict[str, Any]) -> dict[str, Any] | None:
+    with connect() as connection:
+        current = get_class_record_by_id(connection, teacher_id, class_id)
+        if not current:
+            return None
+        connection.execute(
+            """
+            UPDATE classes
+            SET name = ?, grade_level = ?, section = ?, subject = ?, school_year = ?, updated_at = ?
+            WHERE teacher_id = ? AND id = ?
+            """,
+            (
+                payload.get("name", current["name"]).strip(),
+                payload.get("grade_level", current["grade_level"]).strip(),
+                (payload.get("section", current.get("section")) or "").strip(),
+                payload.get("subject", current["subject"]).strip(),
+                (payload.get("school_year", current.get("school_year")) or "").strip(),
+                utc_now(),
+                teacher_id,
+                class_id,
+            ),
+        )
+        return get_class_record_by_id(connection, teacher_id, class_id)
+
+
+def list_class_students(teacher_id: int, class_id: int) -> list[dict[str, Any]] | None:
+    with connect() as connection:
+        if not get_class_record_by_id(connection, teacher_id, class_id):
+            return None
+        rows = connection.execute(
+            """
+            SELECT students.*, class_enrollments.enrolled_at
+            FROM class_enrollments
+            JOIN students ON students.id = class_enrollments.student_id
+            WHERE class_enrollments.class_id = ? AND students.teacher_id = ?
+            ORDER BY students.last_name COLLATE NOCASE, students.first_name COLLATE NOCASE
+            """,
+            (class_id, teacher_id),
+        ).fetchall()
+        students = [dict(row) for row in rows]
+        for student in students:
+            summary = _student_summary(connection, class_id, int(student["id"]))
+            student.update(summary)
+        return students
+
+
+def create_or_enroll_student(teacher_id: int, class_id: int, payload: dict[str, Any]) -> dict[str, Any] | None:
+    now = utc_now()
+    with connect() as connection:
+        if not get_class_record_by_id(connection, teacher_id, class_id):
+            return None
+        student_id = payload.get("student_id")
+        if student_id:
+            row = connection.execute(
+                "SELECT id FROM students WHERE teacher_id = ? AND id = ?",
+                (teacher_id, int(student_id)),
+            ).fetchone()
+            if not row:
+                return None
+            clean_student_id = int(student_id)
+        else:
+            display_name = _student_display_name(payload)
+            cursor = connection.execute(
+                """
+                INSERT INTO students (
+                  teacher_id, learner_reference_number, first_name, middle_name,
+                  last_name, display_name, status, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    teacher_id,
+                    (payload.get("learner_reference_number") or "").strip(),
+                    payload["first_name"].strip(),
+                    (payload.get("middle_name") or "").strip(),
+                    payload["last_name"].strip(),
+                    display_name,
+                    payload.get("status") or "active",
+                    now,
+                    now,
+                ),
+            )
+            clean_student_id = int(cursor.lastrowid)
+        connection.execute(
+            "INSERT OR IGNORE INTO class_enrollments (class_id, student_id, enrolled_at) VALUES (?, ?, ?)",
+            (class_id, clean_student_id, now),
+        )
+        return get_student_by_id(connection, teacher_id, clean_student_id)
+
+
+def get_student_by_id(connection: sqlite3.Connection, teacher_id: int, student_id: int) -> dict[str, Any] | None:
+    row = connection.execute(
+        "SELECT * FROM students WHERE teacher_id = ? AND id = ?",
+        (teacher_id, student_id),
+    ).fetchone()
+    return dict(row) if row else None
+
+
+def update_student(teacher_id: int, student_id: int, payload: dict[str, Any]) -> dict[str, Any] | None:
+    with connect() as connection:
+        current = get_student_by_id(connection, teacher_id, student_id)
+        if not current:
+            return None
+        next_payload = {**current, **payload}
+        connection.execute(
+            """
+            UPDATE students
+            SET learner_reference_number = ?, first_name = ?, middle_name = ?, last_name = ?,
+                display_name = ?, status = ?, updated_at = ?
+            WHERE teacher_id = ? AND id = ?
+            """,
+            (
+                (next_payload.get("learner_reference_number") or "").strip(),
+                next_payload["first_name"].strip(),
+                (next_payload.get("middle_name") or "").strip(),
+                next_payload["last_name"].strip(),
+                _student_display_name(next_payload),
+                next_payload.get("status") or "active",
+                utc_now(),
+                teacher_id,
+                student_id,
+            ),
+        )
+        return get_student_by_id(connection, teacher_id, student_id)
+
+
+def list_class_assessments(teacher_id: int, class_id: int) -> list[dict[str, Any]] | None:
+    with connect() as connection:
+        if not get_class_record_by_id(connection, teacher_id, class_id):
+            return None
+        rows = connection.execute(
+            """
+            SELECT assessments.*
+            FROM assessments
+            WHERE assessments.class_id = ?
+            ORDER BY assessments.assessment_date DESC, assessments.id DESC
+            """,
+            (class_id,),
+        ).fetchall()
+        assessments = [dict(row) for row in rows]
+        for assessment in assessments:
+            summary = _assessment_stats(connection, int(assessment["id"]))
+            assessment.update(summary)
+        return assessments
+
+
+def create_assessment(teacher_id: int, class_id: int, payload: dict[str, Any]) -> dict[str, Any] | None:
+    now = utc_now()
+    with connect() as connection:
+        if not get_class_record_by_id(connection, teacher_id, class_id):
+            return None
+        cursor = connection.execute(
+            """
+            INSERT INTO assessments (
+              class_id, title, assessment_type, assessment_date, max_score,
+              weight, notes, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                class_id,
+                payload["title"].strip(),
+                payload["assessment_type"],
+                payload["assessment_date"],
+                float(payload["max_score"]),
+                payload.get("weight"),
+                (payload.get("notes") or "").strip(),
+                now,
+                now,
+            ),
+        )
+        return get_assessment_by_id(connection, teacher_id, int(cursor.lastrowid))
+
+
+def get_assessment_by_id(
+    connection: sqlite3.Connection, teacher_id: int, assessment_id: int
+) -> dict[str, Any] | None:
+    row = connection.execute(
+        """
+        SELECT assessments.*, classes.teacher_id
+        FROM assessments
+        JOIN classes ON classes.id = assessments.class_id
+        WHERE classes.teacher_id = ? AND assessments.id = ?
+        """,
+        (teacher_id, assessment_id),
+    ).fetchone()
+    return dict(row) if row else None
+
+
+def update_assessment(teacher_id: int, assessment_id: int, payload: dict[str, Any]) -> dict[str, Any] | None:
+    with connect() as connection:
+        current = get_assessment_by_id(connection, teacher_id, assessment_id)
+        if not current:
+            return None
+        max_score = float(payload.get("max_score", current["max_score"]))
+        row = connection.execute(
+            """
+            SELECT MAX(score) AS max_entered
+            FROM scores
+            WHERE assessment_id = ? AND is_absent = 0
+            """,
+            (assessment_id,),
+        ).fetchone()
+        if row and row["max_entered"] is not None and float(row["max_entered"]) > max_score:
+            raise ValueError("Maximum score is below an existing score")
+        connection.execute(
+            """
+            UPDATE assessments
+            SET title = ?, assessment_type = ?, assessment_date = ?, max_score = ?,
+                weight = ?, notes = ?, updated_at = ?
+            WHERE id = ?
+            """,
+            (
+                payload.get("title", current["title"]).strip(),
+                payload.get("assessment_type", current["assessment_type"]),
+                payload.get("assessment_date", current["assessment_date"]),
+                max_score,
+                payload.get("weight", current.get("weight")),
+                (payload.get("notes", current.get("notes")) or "").strip(),
+                utc_now(),
+                assessment_id,
+            ),
+        )
+        return get_assessment_by_id(connection, teacher_id, assessment_id)
+
+
+def get_score_grid(teacher_id: int, assessment_id: int) -> dict[str, Any] | None:
+    with connect() as connection:
+        return get_score_grid_by_id(connection, teacher_id, assessment_id)
+
+
+def get_score_grid_by_id(
+    connection: sqlite3.Connection, teacher_id: int, assessment_id: int
+) -> dict[str, Any] | None:
+    assessment = get_assessment_by_id(connection, teacher_id, assessment_id)
+    if not assessment:
+        return None
+    student_rows = connection.execute(
+        """
+        SELECT students.*, class_enrollments.enrolled_at
+        FROM class_enrollments
+        JOIN students ON students.id = class_enrollments.student_id
+        WHERE class_enrollments.class_id = ? AND students.teacher_id = ?
+        ORDER BY students.last_name COLLATE NOCASE, students.first_name COLLATE NOCASE
+        """,
+        (assessment["class_id"], teacher_id),
+    ).fetchall()
+    students = [dict(row) for row in student_rows]
+    for student in students:
+        student.update(_student_summary(connection, int(assessment["class_id"]), int(student["id"])))
+    score_rows = connection.execute(
+        "SELECT * FROM scores WHERE assessment_id = ?",
+        (assessment_id,),
+    ).fetchall()
+    score_by_student = {int(row["student_id"]): dict(row) for row in score_rows}
+    rows = []
+    for student in students:
+        score = score_by_student.get(int(student["id"]))
+        rows.append(
+            {
+                "student": student,
+                "score": score["score"] if score else None,
+                "is_absent": bool(score["is_absent"]) if score else False,
+                "notes": score["notes"] if score else "",
+                "score_id": score["id"] if score else None,
+            }
+        )
+    return {"assessment": assessment, "rows": rows}
+
+
+def save_score_grid(teacher_id: int, assessment_id: int, rows: list[dict[str, Any]]) -> dict[str, Any] | None:
+    now = utc_now()
+    with connect() as connection:
+        assessment = get_assessment_by_id(connection, teacher_id, assessment_id)
+        if not assessment:
+            return None
+        enrolled_ids = {
+            int(row["student_id"])
+            for row in connection.execute(
+                "SELECT student_id FROM class_enrollments WHERE class_id = ?",
+                (assessment["class_id"],),
+            ).fetchall()
+        }
+        for item in rows:
+            student_id = int(item["student_id"])
+            if student_id not in enrolled_ids:
+                raise ValueError("Score includes a student outside this class")
+            is_absent = bool(item.get("is_absent"))
+            raw_score = item.get("score")
+            score = None if raw_score in (None, "") or is_absent else float(raw_score)
+            if score is not None and score > float(assessment["max_score"]):
+                raise ValueError("Score cannot exceed the assessment maximum")
+            connection.execute(
+                """
+                INSERT INTO scores (
+                  assessment_id, student_id, score, is_absent, notes, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(assessment_id, student_id) DO UPDATE SET
+                  score = excluded.score,
+                  is_absent = excluded.is_absent,
+                  notes = excluded.notes,
+                  updated_at = excluded.updated_at
+                """,
+                (
+                    assessment_id,
+                    student_id,
+                    score,
+                    int(is_absent),
+                    (item.get("notes") or "").strip(),
+                    now,
+                    now,
+                ),
+            )
+        return get_score_grid_by_id(connection, teacher_id, assessment_id)
+
+
+def get_class_dashboard(teacher_id: int, class_id: int, target: float = 75.0) -> dict[str, Any] | None:
+    with connect() as connection:
+        class_record = get_class_record_by_id(connection, teacher_id, class_id)
+        if not class_record:
+            return None
+        students = list_class_students(teacher_id, class_id) or []
+        assessments = list_class_assessments(teacher_id, class_id) or []
+        student_rows = []
+        for student in students:
+            average = student.get("average_percentage")
+            missing_absent = int(student.get("missing_count") or 0) + int(student.get("absent_count") or 0)
+            status_label = "No Data" if average is None else "Watch" if average < target or missing_absent >= 2 else "On Track"
+            student_rows.append({**student, "status_indicator": status_label})
+        assessment_averages = [
+            assessment["average_percentage"]
+            for assessment in assessments
+            if assessment.get("average_percentage") is not None
+        ]
+        class_average = _class_average(connection, class_id)
+        return {
+            "class": class_record,
+            "student_count": len(students),
+            "assessment_count": len(assessments),
+            "class_average": class_average,
+            "highest_assessment_average": max(assessment_averages) if assessment_averages else None,
+            "lowest_assessment_average": min(assessment_averages) if assessment_averages else None,
+            "missing_or_absent_count": sum(int(student.get("missing_count") or 0) + int(student.get("absent_count") or 0) for student in students),
+            "recent_assessments": assessments[:5],
+            "students": student_rows,
+        }
+
+
+def get_assessment_dashboard(teacher_id: int, assessment_id: int) -> dict[str, Any] | None:
+    with connect() as connection:
+        assessment = get_assessment_by_id(connection, teacher_id, assessment_id)
+        if not assessment:
+            return None
+        grid = get_score_grid(teacher_id, assessment_id)
+        rows = grid["rows"] if grid else []
+        percentages = []
+        absent_or_missing = []
+        buckets = {"0-59%": 0, "60-74%": 0, "75-89%": 0, "90-100%": 0}
+        max_score = float(assessment["max_score"])
+        for row in rows:
+            score = row.get("score")
+            if row.get("is_absent") or score is None:
+                absent_or_missing.append(row["student"])
+                continue
+            percentage = float(score) / max_score * 100
+            percentages.append(percentage)
+            if percentage < 60:
+                buckets["0-59%"] += 1
+            elif percentage < 75:
+                buckets["60-74%"] += 1
+            elif percentage < 90:
+                buckets["75-89%"] += 1
+            else:
+                buckets["90-100%"] += 1
+        return {
+            "assessment": assessment,
+            "average_percentage": round(sum(percentages) / len(percentages), 2) if percentages else None,
+            "highest_score": round(max(percentages) * max_score / 100, 2) if percentages else None,
+            "lowest_score": round(min(percentages) * max_score / 100, 2) if percentages else None,
+            "distribution": buckets,
+            "absent_or_missing_students": absent_or_missing,
+        }
+
+
+def _assessment_stats(connection: sqlite3.Connection, assessment_id: int) -> dict[str, Any]:
+    assessment = connection.execute("SELECT max_score, class_id FROM assessments WHERE id = ?", (assessment_id,)).fetchone()
+    if not assessment:
+        return {}
+    enrolled_count = connection.execute(
+        "SELECT COUNT(*) AS count FROM class_enrollments WHERE class_id = ?",
+        (assessment["class_id"],),
+    ).fetchone()["count"]
+    rows = connection.execute(
+        "SELECT score, is_absent FROM scores WHERE assessment_id = ?",
+        (assessment_id,),
+    ).fetchall()
+    percentages = [
+        float(row["score"]) / float(assessment["max_score"]) * 100
+        for row in rows
+        if not row["is_absent"] and row["score"] is not None
+    ]
+    present_scores = [float(row["score"]) for row in rows if not row["is_absent"] and row["score"] is not None]
+    absent_count = sum(1 for row in rows if row["is_absent"])
+    missing_count = max(0, int(enrolled_count) - len(rows))
+    return {
+        "average_percentage": round(sum(percentages) / len(percentages), 2) if percentages else None,
+        "highest_score": max(present_scores) if present_scores else None,
+        "lowest_score": min(present_scores) if present_scores else None,
+        "completion_count": len(present_scores),
+        "missing_count": missing_count,
+        "absent_count": absent_count,
+    }
+
+
+def _student_summary(connection: sqlite3.Connection, class_id: int, student_id: int) -> dict[str, Any]:
+    rows = connection.execute(
+        """
+        SELECT assessments.max_score, scores.score, scores.is_absent
+        FROM assessments
+        LEFT JOIN scores
+          ON scores.assessment_id = assessments.id AND scores.student_id = ?
+        WHERE assessments.class_id = ?
+        """,
+        (student_id, class_id),
+    ).fetchall()
+    percentages = [
+        float(row["score"]) / float(row["max_score"]) * 100
+        for row in rows
+        if row["score"] is not None and not row["is_absent"]
+    ]
+    absent_count = sum(1 for row in rows if row["is_absent"])
+    missing_count = sum(1 for row in rows if row["score"] is None and not row["is_absent"])
+    return {
+        "average_percentage": round(sum(percentages) / len(percentages), 2) if percentages else None,
+        "missing_count": missing_count,
+        "absent_count": absent_count,
+    }
+
+
+def _class_average(connection: sqlite3.Connection, class_id: int) -> float | None:
+    student_ids = [
+        int(row["student_id"])
+        for row in connection.execute(
+            "SELECT student_id FROM class_enrollments WHERE class_id = ?",
+            (class_id,),
+        ).fetchall()
+    ]
+    averages = [
+        summary["average_percentage"]
+        for summary in (_student_summary(connection, class_id, student_id) for student_id in student_ids)
+        if summary["average_percentage"] is not None
+    ]
+    return round(sum(averages) / len(averages), 2) if averages else None
 
 
 def create_curriculum_document(connection: sqlite3.Connection, payload: dict[str, Any]) -> int:
