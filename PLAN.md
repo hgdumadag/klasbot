@@ -229,7 +229,7 @@ These are intentionally **not** implemented in the 2–3 week window. They are l
 - LAN-exposed FastAPI + Android app (Kotlin/Compose or Flutter) that talks to the same API; school Wi-Fi optional.
 
 ### Phase 4 — Assessment lifecycle (~2 months)
-- Camera-based exam photo capture → OCR (Tesseract) + Gemma scoring of free-response answers.
+- Quiz photo grading workflow: teacher uploads or captures student quiz photos, Klasbot detects one or multiple student worksheets, extracts answers, compares them with a teacher-provided answer key or rubric, and returns item-level feedback plus an overall score for teacher review. See `docs/QUIZ_PHOTO_GRADING_PLAN.md` for the detailed implementation plan.
 - Student score tracking, per-class dashboards.
 - Learning-progress insights (which competencies a class is struggling with).
 
