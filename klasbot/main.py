@@ -49,7 +49,7 @@ from klasbot.grading import extraction as grading_extraction
 from klasbot.grading import images as grading_images
 from klasbot.grading import reports as grading_reports
 from klasbot.grading import scoring as grading_scoring
-from klasbot.ollama_client import OllamaClient
+from klasbot.ollama_client import OllamaClient, OllamaStreamError
 from klasbot.print_utils import export_pdf, print_html, render_print_html
 from klasbot.prompts import build_prompt
 from klasbot.prompts.teaching_aid import (
@@ -708,7 +708,7 @@ async def _sse_tokens(inputs: dict[str, Any]):
     try:
         async for token in ollama_client.stream_generate(OLLAMA_MODEL, prompt):
             yield _sse(token)
-    except (httpx.HTTPError, ValueError, KeyError) as exc:
+    except (OllamaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
         reason = _ollama_error_message(exc)
         yield _sse(f"[Ollama generation failed - showing fallback draft]\nReason: {reason}\n\n")
         async for chunk in _placeholder_sse(inputs):
@@ -764,7 +764,7 @@ async def _teaching_aid_sse(output: dict[str, Any], inputs: dict[str, Any]):
     try:
         async for token in ollama_client.stream_generate(OLLAMA_MODEL, prompt):
             yield _sse(token)
-    except (httpx.HTTPError, ValueError, KeyError) as exc:
+    except (OllamaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
         reason = _ollama_error_message(exc)
         label = teaching_aid_label(inputs.get("aid_type") or "")
         yield _sse(f"[Ollama generation failed - showing fallback {label}]\nReason: {reason}\n\n")

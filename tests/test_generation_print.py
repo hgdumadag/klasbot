@@ -178,6 +178,43 @@ def test_ollama_error_message_handles_unread_stream_error():
     assert _ollama_error_message(exc) == "Ollama returned HTTP 500"
 
 
+def test_stream_generate_wraps_http_status_errors(monkeypatch):
+    from klasbot.ollama_client import OllamaClient, OllamaStreamError
+
+    class FakeStream:
+        async def __aenter__(self):
+            request = httpx.Request("POST", "http://ollama.test/api/generate")
+            return httpx.Response(500, json={"error": "model is unavailable"}, request=request)
+
+        async def __aexit__(self, exc_type, exc, traceback):
+            return False
+
+    class FakeAsyncClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, exc_type, exc, traceback):
+            return False
+
+        def stream(self, method, url, json):
+            return FakeStream()
+
+    import pytest
+    import anyio
+
+    monkeypatch.setattr(httpx, "AsyncClient", FakeAsyncClient)
+    client = OllamaClient("http://ollama.test")
+    with pytest.raises(OllamaStreamError, match="model is unavailable"):
+        async def run():
+            async for _ in client.stream_generate("gemma4:e2b", "hello"):
+                pass
+
+        anyio.run(run)
+
+
 def test_print_success_and_fallback(client, monkeypatch):
     from klasbot import main
 
