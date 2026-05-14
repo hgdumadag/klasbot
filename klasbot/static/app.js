@@ -13,7 +13,13 @@ const state = {
   teachingAids: [],
   currentTeachingAid: null,
   teachingAidDraft: null,
+  teachingAidEditing: false,
   csrfToken: '',
+  gradingBatches: [],
+  activeGradingBatch: null,
+  classRecords: [],
+  activeClassRecord: null,
+  activeScoreAssessmentId: null,
 };
 
 const formats = {
@@ -32,6 +38,8 @@ const els = {
   logoutButton: document.getElementById('logout-button'),
   currentDraftButton: document.getElementById('current-draft-button'),
   libraryButton: document.getElementById('library-button'),
+  classRecordsButton: document.getElementById('class-records-button'),
+  gradingButton: document.getElementById('grading-button'),
   adminToggle: document.getElementById('admin-toggle'),
   adminPanel: document.getElementById('admin-panel'),
   curriculumToggle: document.getElementById('curriculum-toggle'),
@@ -83,6 +91,7 @@ const els = {
   teachingAidTitle: document.getElementById('teaching-aid-title'),
   teachingAidEditor: document.getElementById('teaching-aid-editor'),
   teachingAidPreview: document.getElementById('teaching-aid-preview'),
+  editTeachingAid: document.getElementById('edit-teaching-aid'),
   saveTeachingAid: document.getElementById('save-teaching-aid'),
   printTeachingAid: document.getElementById('print-teaching-aid'),
   shareTeachingAid: document.getElementById('share-teaching-aid'),
@@ -107,6 +116,42 @@ const els = {
   librarySummary: document.getElementById('library-summary'),
   libraryList: document.getElementById('library-list'),
   refreshLibrary: document.getElementById('refresh-library'),
+  gradingPanel: document.getElementById('grading-panel'),
+  refreshGrading: document.getElementById('refresh-grading'),
+  gradingBatchForm: document.getElementById('grading-batch-form'),
+  gradingSubject: document.getElementById('grading-subject'),
+  gradingGrade: document.getElementById('grading-grade'),
+  gradingTopic: document.getElementById('grading-topic'),
+  gradingWeekTopic: document.getElementById('grading-week-topic'),
+  gradingPoints: document.getElementById('grading-points'),
+  gradingStyle: document.getElementById('grading-style'),
+  gradingQuestions: document.getElementById('grading-questions'),
+  gradingAnswerKey: document.getElementById('grading-answer-key'),
+  gradingRubric: document.getElementById('grading-rubric'),
+  gradingActive: document.getElementById('grading-active'),
+  gradingActiveTitle: document.getElementById('grading-active-title'),
+  gradingActiveMeta: document.getElementById('grading-active-meta'),
+  gradingUploadForm: document.getElementById('grading-upload-form'),
+  gradingFiles: document.getElementById('grading-files'),
+  gradingUploadButton: document.getElementById('grading-upload-button'),
+  gradingStatus: document.getElementById('grading-status'),
+  gradingImages: document.getElementById('grading-images'),
+  gradingSubmissions: document.getElementById('grading-submissions'),
+  gradingBatches: document.getElementById('grading-batches'),
+  detectSubmissions: document.getElementById('detect-submissions'),
+  gradeSubmissions: document.getElementById('grade-submissions'),
+  printGrading: document.getElementById('print-grading'),
+  deleteGradingBatch: document.getElementById('delete-grading-batch'),
+  classRecordsPanel: document.getElementById('class-records-panel'),
+  refreshClassRecords: document.getElementById('refresh-class-records'),
+  classRecordForm: document.getElementById('class-record-form'),
+  classRecordName: document.getElementById('class-record-name'),
+  classRecordGrade: document.getElementById('class-record-grade'),
+  classRecordSection: document.getElementById('class-record-section'),
+  classRecordSubject: document.getElementById('class-record-subject'),
+  classRecordSchoolYear: document.getElementById('class-record-school-year'),
+  classRecordsList: document.getElementById('class-records-list'),
+  classRecordDetail: document.getElementById('class-record-detail'),
   newLessonButton: document.getElementById('new-lesson-button'),
   documentTitle: document.getElementById('document-title'),
   documentMeta: document.getElementById('document-meta'),
@@ -128,6 +173,75 @@ const els = {
 function setStatus(message, isError = false) {
   els.statusLine.textContent = message;
   els.statusLine.style.color = isError ? 'var(--danger)' : 'var(--accent-strong)';
+}
+
+function actionControlFromEvent(event) {
+  if (!event) return null;
+  if (event.submitter) return event.submitter;
+  if (event.currentTarget?.matches?.('button')) return event.currentTarget;
+  return event.currentTarget?.querySelector?.('button[type="submit"], button:not([type])') || null;
+}
+
+function setActionBusy(control, isBusy, busyText = 'Working...') {
+  if (!control) return;
+  if (isBusy) {
+    if (!control.dataset.readyText) {
+      control.dataset.readyText = control.textContent;
+      control.dataset.readyHtml = control.innerHTML;
+    }
+    control.disabled = true;
+    control.setAttribute('aria-busy', 'true');
+    control.classList.add('is-busy');
+    control.textContent = busyText;
+    return;
+  }
+  control.disabled = false;
+  control.removeAttribute('aria-busy');
+  control.classList.remove('is-busy');
+  if (control.dataset.readyHtml) {
+    control.innerHTML = control.dataset.readyHtml;
+    delete control.dataset.readyHtml;
+    delete control.dataset.readyText;
+  } else if (control.dataset.readyText) {
+    control.textContent = control.dataset.readyText;
+    delete control.dataset.readyText;
+  }
+}
+
+function setRailBadge(button, text) {
+  if (!button) return;
+  let badge = button.querySelector('span');
+  if (!badge) {
+    const label = button.firstChild?.nodeType === Node.TEXT_NODE
+      ? button.firstChild.textContent.trim()
+      : button.textContent.replace(/\s+/g, ' ').trim().replace(/\s+(Open|\d+|New|Batch|Ready|Admin|Upload)$/i, '');
+    button.textContent = label ? `${label} ` : '';
+    badge = document.createElement('span');
+    button.appendChild(badge);
+  }
+  badge.textContent = text;
+}
+
+async function runUserAction(eventOrControl, pendingMessage, action, options = {}) {
+  const control = eventOrControl?.currentTarget ? actionControlFromEvent(eventOrControl) : eventOrControl;
+  const busyText = options.busyText || 'Working...';
+  const report = options.report || setStatus;
+  if (pendingMessage) report(pendingMessage);
+  setActionBusy(control, true, busyText);
+  try {
+    return await action();
+  } catch (error) {
+    report(error.message || 'Action failed.', true);
+    return null;
+  } finally {
+    setActionBusy(control, false);
+  }
+}
+
+function setGradingStatus(message, isError = false) {
+  if (!els.gradingStatus) return;
+  els.gradingStatus.textContent = message;
+  els.gradingStatus.style.color = isError ? 'var(--danger)' : 'var(--accent-strong)';
 }
 
 function normalizeLineEndings(value) {
@@ -272,6 +386,8 @@ async function configurePromptPreview() {
 function showLogin() {
   els.loginView.classList.remove('hidden');
   els.appView.classList.add('hidden');
+  els.gradingPanel.classList.add('hidden');
+  els.classRecordsPanel.classList.add('hidden');
   els.adminPanel.classList.add('hidden');
   els.curriculumPanel.classList.add('hidden');
   els.formatAdminPanel.classList.add('hidden');
@@ -281,6 +397,11 @@ function showLogin() {
   els.teacherList.innerHTML = '';
   els.curriculumList.innerHTML = '';
   state.libraryOutputs = [];
+  state.gradingBatches = [];
+  state.activeGradingBatch = null;
+  state.classRecords = [];
+  state.activeClassRecord = null;
+  state.activeScoreAssessmentId = null;
 }
 
 function showApp() {
@@ -489,6 +610,81 @@ async function loadCurriculumPacing() {
   updateDocumentChrome(collectInputs());
 }
 
+async function loadGradingCurriculumGrades() {
+  try {
+    const data = await cachedApi('/api/curriculum/grades');
+    setSelectOptions(els.gradingGrade, data.grades, data.grades.length ? 'Choose grade' : 'No active curriculum');
+    await loadGradingCurriculumSubjects();
+  } catch (error) {
+    setSelectOptions(els.gradingGrade, [], 'Curriculum unavailable');
+    setSelectOptions(els.gradingSubject, [], 'Choose subject');
+    setSelectOptions(els.gradingTopic, [], 'Choose topic');
+    setSelectOptions(els.gradingWeekTopic, [], 'Choose week topic');
+    setStatus(error.message, true);
+  }
+}
+
+async function loadGradingCurriculumSubjects() {
+  setSelectOptions(els.gradingSubject, [], 'Choose subject');
+  setSelectOptions(els.gradingTopic, [], 'Choose topic');
+  setSelectOptions(els.gradingWeekTopic, [], 'Choose week topic');
+  if (!els.gradingGrade.value) return;
+  const data = await cachedApi(`/api/curriculum/subjects?grade=${encodeURIComponent(els.gradingGrade.value)}`);
+  setSelectOptions(els.gradingSubject, data.subjects, data.subjects.length ? 'Choose subject' : 'No subjects for grade');
+}
+
+async function loadGradingCurriculumTopics() {
+  setSelectOptions(els.gradingTopic, [], 'Choose topic');
+  setSelectOptions(els.gradingWeekTopic, [], 'Choose week topic');
+  if (!els.gradingGrade.value || !els.gradingSubject.value) return;
+  const quarterData = await cachedApi(`/api/curriculum/quarters?${new URLSearchParams({
+    grade: els.gradingGrade.value,
+    subject: els.gradingSubject.value,
+  }).toString()}`);
+  const topicGroups = await Promise.all((quarterData.quarters || []).map(async (quarter) => {
+    const params = new URLSearchParams({
+      grade: els.gradingGrade.value,
+      subject: els.gradingSubject.value,
+      quarter: String(quarter),
+    });
+    const data = await cachedApi(`/api/curriculum/topics?${params.toString()}`);
+    return (data.topics || []).map((topic) => ({
+      ...topic,
+      quarter,
+      value: JSON.stringify({ quarter, topic: topic.domain }),
+    }));
+  }));
+  const topics = topicGroups.flat();
+  setSelectOptions(
+    els.gradingTopic,
+    topics,
+    topics.length ? 'Choose topic' : 'No topics',
+    (topic) => topic.value,
+    (topic) => `Q${topic.quarter} | ${topic.domain} (p. ${topic.source_pages})`,
+  );
+}
+
+async function loadGradingCurriculumWeeks() {
+  setSelectOptions(els.gradingWeekTopic, [], 'Choose week topic');
+  if (!els.gradingGrade.value || !els.gradingSubject.value || !els.gradingTopic.value) return;
+  const selection = JSON.parse(els.gradingTopic.value);
+  const params = new URLSearchParams({
+    grade: els.gradingGrade.value,
+    subject: els.gradingSubject.value,
+    quarter: String(selection.quarter),
+    topic: selection.topic,
+  });
+  const data = await cachedApi(`/api/curriculum/pacing?${params.toString()}`);
+  const weeks = data.pacing?.weeks || [];
+  setSelectOptions(
+    els.gradingWeekTopic,
+    weeks,
+    weeks.length ? 'Choose week topic' : 'No week topics',
+    (week) => JSON.stringify({ week_number: week.week_number, focus: week.focus }),
+    (week) => `Week ${week.week_number}: ${week.focus}`,
+  );
+}
+
 function weekOptionLabel(week) {
   const competencies = week.competencies || [];
   if (!competencies.length) {
@@ -542,6 +738,8 @@ function switchWorkspace(workspace) {
   state.activeWorkspace = workspace;
   const isDraft = workspace === 'draft';
   const isLibrary = workspace === 'library';
+  const isGrading = workspace === 'grading';
+  const isClassRecords = workspace === 'class-records';
   const isTeacherAdmin = workspace === 'teacher-admin';
   const isCurriculum = workspace === 'curriculum';
   const isPlanFormats = workspace === 'plan-formats';
@@ -549,22 +747,37 @@ function switchWorkspace(workspace) {
   els.draftPanel.classList.toggle('hidden', !isDraft);
   els.documentTabs.classList.toggle('hidden', !isDraft);
   els.libraryPanel.classList.toggle('hidden', !isLibrary);
+  els.gradingPanel.classList.toggle('hidden', !isGrading);
+  els.classRecordsPanel.classList.toggle('hidden', !isClassRecords);
   els.adminPanel.classList.toggle('hidden', !isTeacherAdmin);
   els.curriculumPanel.classList.toggle('hidden', !isCurriculum);
   els.formatAdminPanel.classList.toggle('hidden', !isPlanFormats);
 
   els.currentDraftButton.classList.toggle('rail-item--on', isDraft);
   els.libraryButton.classList.toggle('rail-item--on', isLibrary);
+  els.gradingButton.classList.toggle('rail-item--on', isGrading);
+  els.classRecordsButton.classList.toggle('rail-item--on', isClassRecords);
   els.adminToggle.classList.toggle('rail-item--on', isTeacherAdmin);
   els.curriculumToggle.classList.toggle('rail-item--on', isCurriculum);
   els.formatAdminToggle.classList.toggle('rail-item--on', isPlanFormats);
-  els.libraryButton.querySelector('span').textContent = isLibrary ? 'Open' : `${state.libraryOutputs.length}`;
+  setRailBadge(els.libraryButton, isLibrary ? 'Open' : `${state.libraryOutputs.length}`);
+  setRailBadge(els.gradingButton, isGrading ? 'Open' : gradingRailBadge());
 
   if (isLibrary) {
     els.documentTitle.textContent = 'My Library';
     els.documentMeta.textContent = 'Saved lesson plans, quizzes, and exams grouped by subject.';
     document.querySelector('.breadcrumb').textContent = 'Workspace / My Library';
     renderLibraryView();
+  } else if (isGrading) {
+    els.documentTitle.textContent = 'Grade Quiz Photo';
+    els.documentMeta.textContent = 'Upload worksheet photos, confirm submissions, and review item-level scores.';
+    document.querySelector('.breadcrumb').textContent = 'Workspace / Grade Quiz Photo';
+    renderGradingWorkspace();
+  } else if (isClassRecords) {
+    els.documentTitle.textContent = 'Class Records';
+    els.documentMeta.textContent = 'Manage class rosters, assessments, scores, and dashboard summaries.';
+    document.querySelector('.breadcrumb').textContent = 'Workspace / Class Records';
+    renderClassRecordsWorkspace();
   } else if (isTeacherAdmin) {
     els.documentTitle.textContent = 'Teacher Admin';
     els.documentMeta.textContent = 'Add teachers and manage shared kiosk access.';
@@ -596,6 +809,11 @@ function updateDocumentChrome(inputs = state.currentInputs) {
   els.documentMeta.textContent = `${subject} | ${grades} | ${formatLabel(format)}${week}`;
   els.formatBadge.textContent = format.toUpperCase();
   els.formatTitle.textContent = formatLabel(format);
+}
+
+function gradingRailBadge() {
+  if (state.activeGradingBatch) return 'Ready';
+  return state.gradingBatches.length ? `${state.gradingBatches.length}` : 'Batch';
 }
 
 function collectInputs() {
@@ -640,7 +858,7 @@ function updateCurriculumMatch() {
   els.curriculumMatch.textContent = `${els.subject.value} | ${els.gradeLevel.value} | Quarter ${els.quarter.value} | ${els.topic.value} | ${selectedWeek}`;
 }
 
-function streamGenerate(inputs) {
+function streamGenerate(inputs, control = null) {
   switchWorkspace('draft');
   state.generating = true;
   state.currentInputs = inputs;
@@ -651,6 +869,7 @@ function streamGenerate(inputs) {
   setDraftView('preview');
   updateDocumentChrome(inputs);
   setStatus('Generating...');
+  setActionBusy(control, true, 'Generating...');
 
   const params = new URLSearchParams({
     kind: inputs.kind,
@@ -671,11 +890,13 @@ function streamGenerate(inputs) {
   source.addEventListener('done', () => {
     source.close();
     state.generating = false;
+    setActionBusy(control, false);
     setStatus('Draft ready. Edit, save, regenerate, or print.');
   });
   source.onerror = () => {
     source.close();
     state.generating = false;
+    setActionBusy(control, false);
     setStatus('Generation stream closed.', true);
   };
 }
@@ -730,8 +951,648 @@ async function loadLibrary() {
   updateLibraryFilters();
   renderLibraryView();
   if (els.libraryButton) {
-    els.libraryButton.querySelector('span').textContent = state.activeWorkspace === 'library' ? 'Open' : `${data.outputs.length}`;
+    setRailBadge(els.libraryButton, state.activeWorkspace === 'library' ? 'Open' : `${data.outputs.length}`);
   }
+}
+
+async function loadGradingBatches() {
+  const data = await api('/api/grading/batches');
+  state.gradingBatches = data.batches;
+  if (state.activeGradingBatch) {
+    const current = data.batches.find((batch) => batch.id === state.activeGradingBatch.id);
+    if (current) {
+      await selectGradingBatch(current.id);
+    }
+  }
+  renderGradingWorkspace();
+  setRailBadge(els.gradingButton, state.activeWorkspace === 'grading' ? 'Open' : gradingRailBadge());
+}
+
+async function createGradingBatch(event) {
+  event.preventDefault();
+  const answerKey = els.gradingAnswerKey.value.trim();
+  const rubric = els.gradingRubric.value.trim();
+  const questions = els.gradingQuestions.value.trim();
+  const topicSelection = JSON.parse(els.gradingTopic.value);
+  const weekSelection = JSON.parse(els.gradingWeekTopic.value);
+  const data = await api('/api/grading/batches', {
+    method: 'POST',
+    body: JSON.stringify({
+      subject: els.gradingSubject.value.trim(),
+      grade_level: els.gradingGrade.value.trim(),
+      topic: topicSelection.topic,
+      quarter: Number(topicSelection.quarter),
+      week_number: Number(weekSelection.week_number),
+      week_topic: weekSelection.focus,
+      total_points: Number(els.gradingPoints.value),
+      grading_style: els.gradingStyle.value,
+      questions,
+      answer_key: answerKey,
+      rubric,
+    }),
+  });
+  els.gradingBatchForm.reset();
+  state.activeGradingBatch = data.batch;
+  await loadGradingCurriculumGrades();
+  await loadGradingBatches();
+  setGradingStatus('Grading batch created. Choose quiz files and upload them.');
+  setStatus('Grading batch created.');
+}
+
+async function selectGradingBatch(batchId) {
+  const data = await api(`/api/grading/batches/${batchId}`);
+  state.activeGradingBatch = data.batch;
+  renderGradingWorkspace();
+}
+
+async function uploadGradingImages(event) {
+  event.preventDefault();
+  if (!state.activeGradingBatch) return;
+  const files = [...els.gradingFiles.files];
+  if (!files.length) {
+    setGradingStatus('Choose at least one PNG, JPEG, or PDF quiz file.', true);
+    return;
+  }
+  els.gradingUploadButton.disabled = true;
+  els.gradingUploadButton.textContent = `Uploading ${files.length} file${files.length === 1 ? '' : 's'}...`;
+  setGradingStatus(`Uploading ${files.length} quiz file${files.length === 1 ? '' : 's'}...`);
+  try {
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append('file', file);
+      const headers = {};
+      if (state.csrfToken) headers['X-Klasbot-CSRF'] = state.csrfToken;
+      const response = await fetch(`/api/grading/batches/${state.activeGradingBatch.id}/images`, {
+        method: 'POST',
+        body: formData,
+        headers,
+        credentials: 'same-origin',
+      });
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ detail: response.statusText }));
+        throw new Error(error.detail || response.statusText);
+      }
+    }
+    els.gradingFiles.value = '';
+    await selectGradingBatch(state.activeGradingBatch.id);
+    await loadGradingBatches();
+    const imageCount = state.activeGradingBatch?.images?.length || 0;
+    setGradingStatus(`Upload complete. ${imageCount} file${imageCount === 1 ? '' : 's'} attached to this batch.`);
+    setStatus('Quiz file upload complete.');
+  } catch (error) {
+    setGradingStatus(error.message, true);
+    throw error;
+  } finally {
+    els.gradingUploadButton.disabled = false;
+    els.gradingUploadButton.textContent = 'Upload files';
+  }
+}
+
+async function detectGradingSubmissions() {
+  if (!state.activeGradingBatch) return;
+  await api(`/api/grading/batches/${state.activeGradingBatch.id}/detect-submissions`, { method: 'POST' });
+  await selectGradingBatch(state.activeGradingBatch.id);
+  setGradingStatus('Worksheet regions detected. Confirm names before final review.');
+  setStatus('Worksheet regions detected. Confirm names before final review.');
+}
+
+async function gradeGradingSubmissions() {
+  if (!state.activeGradingBatch) return;
+  els.gradeSubmissions.disabled = true;
+  els.gradeSubmissions.textContent = 'Grading...';
+  setGradingStatus('Extracting answers with Ollama and proposing scores...');
+  try {
+    const data = await api(`/api/grading/batches/${state.activeGradingBatch.id}/grade`, { method: 'POST' });
+    await selectGradingBatch(state.activeGradingBatch.id);
+    const warnings = (data.submissions || []).flatMap((submission) => submission.grading_result?.warnings || []);
+    const timeoutWarnings = warnings.filter((warning) => warning.toLowerCase().includes('ollama'));
+    if (timeoutWarnings.length) {
+      setGradingStatus('Ollama did not finish every submission. Manual-review rows were created with warnings.', true);
+      setStatus('Grading finished with Ollama warnings.', true);
+      return;
+    }
+    setGradingStatus('Model-extracted answers and proposed scores are ready for review.');
+    setStatus('Model-extracted answers and proposed scores are ready for review.');
+  } finally {
+    els.gradeSubmissions.disabled = false;
+    els.gradeSubmissions.textContent = 'Grade';
+  }
+}
+
+async function saveGradingSubmission(submissionId) {
+  const card = document.querySelector(`[data-submission-id="${submissionId}"]`);
+  if (!card) return;
+  const result = JSON.parse(card.querySelector('[data-field="grading-result"]').value || '{}');
+  const response = await api(`/api/grading/submissions/${submissionId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      student_name: card.querySelector('[data-field="student-name"]').value.trim(),
+      student_identifier: card.querySelector('[data-field="student-identifier"]').value.trim(),
+      extracted_answers: {},
+      grading_result: result,
+      score: card.querySelector('[data-field="score"]').value ? Number(card.querySelector('[data-field="score"]').value) : null,
+      max_score: card.querySelector('[data-field="max-score"]').value ? Number(card.querySelector('[data-field="max-score"]').value) : null,
+      confidence: card.querySelector('[data-field="confidence"]').value ? Number(card.querySelector('[data-field="confidence"]').value) : null,
+      teacher_reviewed: card.querySelector('[data-field="teacher-reviewed"]').checked,
+    }),
+  });
+  const index = state.activeGradingBatch.submissions.findIndex((item) => item.id === submissionId);
+  if (index >= 0) state.activeGradingBatch.submissions[index] = response.submission;
+  renderGradingWorkspace();
+  setGradingStatus('Submission review saved.');
+  setStatus('Submission review saved.');
+}
+
+async function printGradingBatch() {
+  if (!state.activeGradingBatch) return;
+  const response = await fetch(`/api/grading/batches/${state.activeGradingBatch.id}/print`, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: state.csrfToken ? { 'X-Klasbot-CSRF': state.csrfToken } : {},
+  });
+  if (!response.ok) throw new Error(response.statusText);
+  const html = await response.text();
+  const preview = window.open('', '_blank');
+  preview.document.write(html);
+  preview.document.close();
+}
+
+async function deleteActiveGradingBatch() {
+  if (!state.activeGradingBatch) return;
+  await api(`/api/grading/batches/${state.activeGradingBatch.id}`, { method: 'DELETE' });
+  state.activeGradingBatch = null;
+  await loadGradingBatches();
+  setGradingStatus('Grading batch deleted.');
+  setStatus('Grading batch deleted.');
+}
+
+function renderGradingWorkspace() {
+  renderGradingBatches();
+  renderActiveGradingBatch();
+}
+
+function renderGradingBatches() {
+  if (!els.gradingBatches) return;
+  if (!state.gradingBatches.length) {
+    els.gradingBatches.innerHTML = '<p>No grading batches yet.</p>';
+    return;
+  }
+  els.gradingBatches.innerHTML = state.gradingBatches.map((batch) => `
+    <button class="list-item" type="button" data-batch-id="${batch.id}">
+      <h3>${escapeHtml(batch.topic || 'Untitled quiz')}</h3>
+      <p>${escapeHtml(batch.subject || 'No subject')} | ${escapeHtml(batch.grade_level || 'No grade')} | ${batch.week_number ? `Week ${escapeHtml(batch.week_number)} | ` : ''}${batch.submission_count} submission(s) | ${escapeHtml(batch.status)}</p>
+    </button>
+  `).join('');
+  els.gradingBatches.querySelectorAll('[data-batch-id]').forEach((button) => {
+    button.addEventListener('click', () => runUserAction(
+      button,
+      'Opening grading batch...',
+      () => selectGradingBatch(Number(button.dataset.batchId)),
+      { busyText: 'Opening...', report: setGradingStatus },
+    ));
+  });
+}
+
+function renderActiveGradingBatch() {
+  const batch = state.activeGradingBatch;
+  updateGradingSteps(batch);
+  els.gradingActive.classList.toggle('hidden', !batch);
+  if (!batch) {
+    els.gradingImages.innerHTML = '';
+    els.gradingSubmissions.innerHTML = '';
+    setGradingStatus('');
+    return;
+  }
+  els.gradingActiveTitle.textContent = batch.topic || 'Untitled quiz';
+  const weekLabel = batch.week_number ? ` | Week ${batch.week_number}: ${batch.week_topic || 'No week topic'}` : '';
+  els.gradingActiveMeta.textContent = `${batch.subject || 'No subject'} | ${batch.grade_level || 'No grade'}${weekLabel} | ${batch.total_points} pts | ${batch.grading_style}`;
+  els.gradingImages.innerHTML = (batch.images || []).map((image) => `
+    <article class="grading-image-card">
+      <img src="/api/grading/images/${image.id}/thumbnail" alt="Uploaded quiz worksheet preview" />
+      <p>${image.width || 0} x ${image.height || 0}</p>
+      ${(image.quality_warnings || []).length ? `<ul class="warning-list">${image.quality_warnings.map((warning) => `<li>${escapeHtml(warning)}</li>`).join('')}</ul>` : ''}
+    </article>
+  `).join('');
+  els.gradingSubmissions.innerHTML = (batch.submissions || []).map(renderGradingSubmissionCard).join('');
+  els.gradingSubmissions.querySelectorAll('[data-save-submission]').forEach((button) => {
+    button.addEventListener('click', () => runUserAction(
+      button,
+      'Saving submission review...',
+      () => saveGradingSubmission(Number(button.dataset.saveSubmission)),
+      { busyText: 'Saving...', report: setGradingStatus },
+    ));
+  });
+}
+
+function updateGradingSteps(batch = state.activeGradingBatch) {
+  const uploadedCount = batch?.images?.length || 0;
+  const submissionCount = batch?.submissions?.length || 0;
+  const reviewedCount = (batch?.submissions || []).filter((submission) => submission.teacher_reviewed).length;
+  let activeStep = 'setup';
+  if (batch && !uploadedCount) activeStep = 'upload';
+  if (uploadedCount && !submissionCount) activeStep = 'detect';
+  if (submissionCount) activeStep = 'review';
+  document.querySelectorAll('[data-grading-step]').forEach((step) => {
+    const stepName = step.dataset.gradingStep;
+    const isActive = stepName === activeStep;
+    step.classList.toggle('grading-step--on', isActive);
+  });
+  const reviewStep = document.querySelector('[data-grading-step="review"] span');
+  if (reviewStep && submissionCount) {
+    reviewStep.textContent = reviewedCount
+      ? `Review scores (${reviewedCount}/${submissionCount})`
+      : `Review scores (${submissionCount})`;
+  } else if (reviewStep) {
+    reviewStep.textContent = 'Review scores';
+  }
+}
+
+function renderGradingSubmissionCard(submission) {
+  const result = submission.grading_result || {};
+  const warningItems = (result.warnings || []).map((warning) => `<li>${escapeHtml(warning)}</li>`).join('');
+  return `
+    <article class="grading-submission-card" data-submission-id="${submission.id}">
+      <h4>${escapeHtml(submission.student_name || submission.student_identifier || `Submission ${submission.id}`)}</h4>
+      <div class="workspace-form">
+        <label>Student name <input data-field="student-name" type="text" value="${escapeHtml(submission.student_name || '')}" /></label>
+        <label>Identifier <input data-field="student-identifier" type="text" value="${escapeHtml(submission.student_identifier || '')}" /></label>
+        <label>Score <input data-field="score" type="number" step="0.5" value="${submission.score ?? ''}" /></label>
+        <label>Max <input data-field="max-score" type="number" step="0.5" value="${submission.max_score ?? ''}" /></label>
+        <label>Confidence <input data-field="confidence" type="number" min="0" max="1" step="0.01" value="${submission.confidence ?? ''}" /></label>
+        <label class="checkbox"><input data-field="teacher-reviewed" type="checkbox" ${submission.teacher_reviewed ? 'checked' : ''} /> Teacher reviewed</label>
+      </div>
+      ${renderGradingItems(result.items || [])}
+      ${warningItems ? `<ul class="warning-list">${warningItems}</ul>` : ''}
+      <label>Structured result JSON <textarea data-field="grading-result" spellcheck="false">${escapeHtml(JSON.stringify(result, null, 2))}</textarea></label>
+      <button class="primary compact" type="button" data-save-submission="${submission.id}">Save review</button>
+    </article>
+  `;
+}
+
+function renderGradingItems(items) {
+  if (!items.length) return '<p class="microcopy">No item rows yet.</p>';
+  return `
+    <table class="grading-items">
+      <thead><tr><th>Item</th><th>Student answer</th><th>Correct answer</th><th>Score</th><th>Feedback</th></tr></thead>
+      <tbody>
+        ${items.map((item) => `
+          <tr>
+            <td>${escapeHtml(item.item_number || '')}</td>
+            <td>${escapeHtml(item.student_answer || '')}</td>
+            <td>${escapeHtml(item.correct_answer || '')}</td>
+            <td>${escapeHtml(item.score ?? '')} / ${escapeHtml(item.max_score ?? '')}</td>
+            <td>${escapeHtml(item.feedback || '')}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+async function loadClassRecords() {
+  const data = await api('/api/class-records/classes');
+  state.classRecords = data.classes || [];
+  if (state.activeClassRecord) {
+    const current = state.classRecords.find((record) => record.id === state.activeClassRecord.class.id);
+    if (current) {
+      await selectClassRecord(current.id);
+      return;
+    }
+    state.activeClassRecord = null;
+  }
+  renderClassRecordsWorkspace();
+}
+
+async function createClassRecord(event) {
+  event.preventDefault();
+  const data = await api('/api/class-records/classes', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: els.classRecordName.value.trim(),
+      grade_level: els.classRecordGrade.value.trim(),
+      section: els.classRecordSection.value.trim(),
+      subject: els.classRecordSubject.value.trim(),
+      school_year: els.classRecordSchoolYear.value.trim(),
+    }),
+  });
+  els.classRecordForm.reset();
+  await selectClassRecord(data.class.id);
+  await loadClassRecords();
+  setStatus('Class record created.');
+}
+
+async function selectClassRecord(classId) {
+  const data = await api(`/api/class-records/classes/${classId}`);
+  const [students, assessments] = await Promise.all([
+    api(`/api/class-records/classes/${classId}/students`),
+    api(`/api/class-records/classes/${classId}/assessments`),
+  ]);
+  state.activeClassRecord = {
+    class: data.class,
+    dashboard: data.dashboard,
+    students: students.students || [],
+    assessments: assessments.assessments || [],
+  };
+  renderClassRecordsWorkspace();
+}
+
+async function addClassStudent(event) {
+  event.preventDefault();
+  const classId = state.activeClassRecord?.class?.id;
+  if (!classId) return;
+  const form = event.currentTarget;
+  await api(`/api/class-records/classes/${classId}/students`, {
+    method: 'POST',
+    body: JSON.stringify({
+      learner_reference_number: form.querySelector('[name="lrn"]').value.trim(),
+      first_name: form.querySelector('[name="first_name"]').value.trim(),
+      middle_name: form.querySelector('[name="middle_name"]').value.trim(),
+      last_name: form.querySelector('[name="last_name"]').value.trim(),
+      status: form.querySelector('[name="status"]').value,
+    }),
+  });
+  form.reset();
+  await selectClassRecord(classId);
+  await loadClassRecords();
+  setStatus('Student added.');
+}
+
+async function addClassAssessment(event) {
+  event.preventDefault();
+  const classId = state.activeClassRecord?.class?.id;
+  if (!classId) return;
+  const form = event.currentTarget;
+  await api(`/api/class-records/classes/${classId}/assessments`, {
+    method: 'POST',
+    body: JSON.stringify({
+      title: form.querySelector('[name="title"]').value.trim(),
+      assessment_type: form.querySelector('[name="assessment_type"]').value,
+      assessment_date: form.querySelector('[name="assessment_date"]').value,
+      max_score: Number(form.querySelector('[name="max_score"]').value),
+      weight: form.querySelector('[name="weight"]').value ? Number(form.querySelector('[name="weight"]').value) : null,
+      notes: form.querySelector('[name="notes"]').value.trim(),
+    }),
+  });
+  form.reset();
+  await selectClassRecord(classId);
+  await loadClassRecords();
+  setStatus('Assessment created.');
+}
+
+async function openScoreEntry(assessmentId) {
+  state.activeScoreAssessmentId = assessmentId;
+  const grid = await api(`/api/class-records/assessments/${assessmentId}/scores`);
+  renderScoreEntry(grid);
+}
+
+async function saveScoreEntry(event) {
+  event.preventDefault();
+  const assessmentId = state.activeScoreAssessmentId;
+  if (!assessmentId) return;
+  const scores = [...event.currentTarget.querySelectorAll('[data-score-row]')].map((row) => ({
+    student_id: Number(row.dataset.studentId),
+    score: row.querySelector('[name="score"]').value === '' ? null : Number(row.querySelector('[name="score"]').value),
+    is_absent: row.querySelector('[name="is_absent"]').checked,
+    notes: row.querySelector('[name="notes"]').value.trim(),
+  }));
+  const grid = await api(`/api/class-records/assessments/${assessmentId}/scores`, {
+    method: 'PUT',
+    body: JSON.stringify({ scores }),
+  });
+  await selectClassRecord(state.activeClassRecord.class.id);
+  renderScoreEntry(grid);
+  setStatus('Scores saved.');
+}
+
+function renderClassRecordsWorkspace() {
+  els.classRecordsPanel?.classList.toggle('class-records-panel--detail', Boolean(state.activeClassRecord));
+  renderClassRecordList();
+  renderClassRecordDetail();
+}
+
+function renderClassRecordList() {
+  if (!els.classRecordsList) return;
+  if (!state.classRecords.length) {
+    els.classRecordsList.innerHTML = '<p>No class records yet.</p>';
+    return;
+  }
+  els.classRecordsList.innerHTML = state.classRecords.map((record) => `
+    <button class="list-item class-record-button" type="button" data-class-id="${record.id}">
+      <h3>${escapeHtml(record.name)}</h3>
+      <p>Grade ${escapeHtml(record.grade_level)}${record.section ? `-${escapeHtml(record.section)}` : ''} | ${escapeHtml(record.subject)} | ${record.student_count || 0} students</p>
+      <p>Average ${formatPercent(record.latest_average)}</p>
+    </button>
+  `).join('');
+  els.classRecordsList.querySelectorAll('[data-class-id]').forEach((button) => {
+    button.addEventListener('click', () => runUserAction(
+      button,
+      'Opening class record...',
+      () => selectClassRecord(Number(button.dataset.classId)),
+      { busyText: 'Opening...' },
+    ));
+  });
+}
+
+function renderClassRecordDetail() {
+  const active = state.activeClassRecord;
+  if (!active) {
+    els.classRecordDetail.innerHTML = '<div class="empty-state">Select or create a class to open its workspace.</div>';
+    return;
+  }
+  const dashboard = active.dashboard || {};
+  els.classRecordDetail.innerHTML = `
+    <div class="class-detail-head">
+      <div>
+        <h3>${escapeHtml(active.class.name)}</h3>
+        <p>${escapeHtml(active.class.subject)} | Grade ${escapeHtml(active.class.grade_level)}${active.class.section ? `-${escapeHtml(active.class.section)}` : ''} | ${escapeHtml(active.class.school_year || 'No school year')}</p>
+      </div>
+      <div class="button-row">
+        <button class="ghost compact" type="button" data-close-active-class>Classes</button>
+        <button class="ghost compact" type="button" data-refresh-active>Refresh</button>
+      </div>
+    </div>
+    <div class="metric-grid">
+      <article><span>Class average</span><strong>${formatPercent(dashboard.class_average)}</strong></article>
+      <article><span>Students</span><strong>${dashboard.student_count || 0}</strong></article>
+      <article><span>Assessments</span><strong>${dashboard.assessment_count || 0}</strong></article>
+      <article><span>Missing/absent</span><strong>${dashboard.missing_or_absent_count || 0}</strong></article>
+    </div>
+    <div class="class-record-tabs">
+      <section>
+        <h4>Students</h4>
+        ${renderStudentForm()}
+        ${renderStudentTable(active.students || [])}
+      </section>
+      <section>
+        <h4>Assessments</h4>
+        ${renderAssessmentForm()}
+        ${renderAssessmentTable(active.assessments || [])}
+      </section>
+      <section>
+        <h4>Performance</h4>
+        ${renderPerformanceTable(dashboard.students || [])}
+      </section>
+    </div>
+    <div id="score-entry-host"></div>
+  `;
+  els.classRecordDetail.querySelector('[data-refresh-active]').addEventListener('click', (event) => runUserAction(
+    event,
+    'Refreshing class details...',
+    () => selectClassRecord(active.class.id),
+    { busyText: 'Refreshing...' },
+  ));
+  els.classRecordDetail.querySelector('[data-close-active-class]').addEventListener('click', () => {
+    state.activeClassRecord = null;
+    state.activeScoreAssessmentId = null;
+    renderClassRecordsWorkspace();
+    setStatus('Class workspace closed.');
+  });
+  els.classRecordDetail.querySelector('[data-student-form]').addEventListener('submit', (event) => {
+    event.preventDefault();
+    runUserAction(event, 'Adding student...', () => addClassStudent(event), { busyText: 'Adding...' });
+  });
+  els.classRecordDetail.querySelector('[data-assessment-form]').addEventListener('submit', (event) => {
+    event.preventDefault();
+    runUserAction(event, 'Creating assessment...', () => addClassAssessment(event), { busyText: 'Creating...' });
+  });
+  els.classRecordDetail.querySelectorAll('[data-score-assessment]').forEach((button) => {
+    button.addEventListener('click', () => runUserAction(
+      button,
+      'Opening score entry...',
+      () => openScoreEntry(Number(button.dataset.scoreAssessment)),
+      { busyText: 'Opening...' },
+    ));
+  });
+}
+
+function renderStudentForm() {
+  return `
+    <form class="inline-record-form" data-student-form>
+      <input class="record-field--main" name="first_name" type="text" placeholder="First name" required />
+      <input name="middle_name" type="text" placeholder="Middle" />
+      <input class="record-field--main" name="last_name" type="text" placeholder="Last name" required />
+      <input name="lrn" type="text" placeholder="LRN" />
+      <select name="status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+        <option value="transferred">Transferred</option>
+      </select>
+      <button class="primary compact" type="submit">Add</button>
+    </form>
+  `;
+}
+
+function renderAssessmentForm() {
+  const today = new Date().toISOString().slice(0, 10);
+  return `
+    <form class="inline-record-form assessment-form" data-assessment-form>
+      <input class="record-field--title" name="title" type="text" placeholder="Quiz 1: Human Body Systems" required />
+      <select name="assessment_type">
+        <option value="quiz">Quiz</option>
+        <option value="exam">Exam</option>
+        <option value="project">Project</option>
+        <option value="performance_task">Performance task</option>
+        <option value="assignment">Assignment</option>
+        <option value="other">Other</option>
+      </select>
+      <input name="assessment_date" type="date" value="${today}" required />
+      <input name="max_score" type="text" inputmode="decimal" placeholder="Max" required />
+      <input name="weight" type="text" inputmode="decimal" placeholder="Weight" />
+      <input class="record-field--notes" name="notes" type="text" placeholder="Notes" />
+      <button class="primary compact" type="submit">Create</button>
+    </form>
+  `;
+}
+
+function renderStudentTable(students) {
+  if (!students.length) return '<p class="microcopy">No students yet.</p>';
+  return `
+    <div class="table-scroll"><table class="records-table">
+      <thead><tr><th>Name</th><th>Status</th><th>Average</th><th>Missing</th><th>Absent</th></tr></thead>
+      <tbody>${students.map((student) => `
+        <tr>
+          <td>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</td>
+          <td>${escapeHtml(student.status)}</td>
+          <td>${formatPercent(student.average_percentage)}</td>
+          <td>${student.missing_count || 0}</td>
+          <td>${student.absent_count || 0}</td>
+        </tr>
+      `).join('')}</tbody>
+    </table></div>
+  `;
+}
+
+function renderAssessmentTable(assessments) {
+  if (!assessments.length) return '<p class="microcopy">No assessments yet.</p>';
+  return `
+    <div class="table-scroll"><table class="records-table">
+      <thead><tr><th>Assessment</th><th>Type</th><th>Date</th><th>Average</th><th>Done</th><th></th></tr></thead>
+      <tbody>${assessments.map((assessment) => `
+        <tr>
+          <td>${escapeHtml(assessment.title)}</td>
+          <td>${escapeHtml(assessment.assessment_type)}</td>
+          <td>${escapeHtml(assessment.assessment_date)}</td>
+          <td>${formatPercent(assessment.average_percentage)}</td>
+          <td>${assessment.completion_count || 0}</td>
+          <td><button class="secondary compact" type="button" data-score-assessment="${assessment.id}">Scores</button></td>
+        </tr>
+      `).join('')}</tbody>
+    </table></div>
+  `;
+}
+
+function renderPerformanceTable(students) {
+  if (!students.length) return '<p class="microcopy">Add scores to see performance indicators.</p>';
+  return `
+    <div class="table-scroll"><table class="records-table">
+      <thead><tr><th>Student</th><th>Average</th><th>Indicator</th></tr></thead>
+      <tbody>${students.map((student) => `
+        <tr>
+          <td>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</td>
+          <td>${formatPercent(student.average_percentage)}</td>
+          <td><span class="status-pill">${escapeHtml(student.status_indicator)}</span></td>
+        </tr>
+      `).join('')}</tbody>
+    </table></div>
+  `;
+}
+
+function renderScoreEntry(grid) {
+  const host = document.getElementById('score-entry-host');
+  if (!host) return;
+  host.innerHTML = `
+    <section class="score-entry-panel">
+      <div class="class-detail-head">
+        <div>
+          <h4>Score Entry</h4>
+          <p>${escapeHtml(grid.assessment.title)} | Max ${grid.assessment.max_score}</p>
+        </div>
+      </div>
+      <form data-score-form>
+        <div class="table-scroll"><table class="records-table">
+          <thead><tr><th>Student</th><th>Score</th><th>Absent</th><th>Notes</th></tr></thead>
+          <tbody>${grid.rows.map((row) => `
+            <tr data-score-row data-student-id="${row.student.id}">
+              <td>${escapeHtml(row.student.display_name)}</td>
+              <td><input name="score" type="text" inputmode="decimal" value="${row.score ?? ''}" /></td>
+              <td><input name="is_absent" type="checkbox" ${row.is_absent ? 'checked' : ''} /></td>
+              <td><input name="notes" type="text" value="${escapeHtml(row.notes || '')}" /></td>
+            </tr>
+          `).join('')}</tbody>
+        </table></div>
+        <button class="primary compact" type="submit">Save scores</button>
+      </form>
+    </section>
+  `;
+  host.querySelector('[data-score-form]').addEventListener('submit', (event) => {
+    event.preventDefault();
+    runUserAction(event, 'Saving scores...', () => saveScoreEntry(event), { busyText: 'Saving...' });
+  });
+  host.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function formatPercent(value) {
+  return value === null || value === undefined ? 'No data' : `${Number(value).toFixed(Number(value) % 1 === 0 ? 0 : 1)}%`;
 }
 
 function updateLibraryFilters() {
@@ -1136,32 +1997,29 @@ function createLibraryItem(output) {
       <button class="secondary" data-action="delete">Delete</button>
     </div>
   `;
-  item.querySelector('[data-action="open"]').addEventListener('click', () => openOutput(output).catch((error) => setStatus(error.message, true)));
-  item.querySelector('[data-action="share"]').addEventListener('click', async () => {
-    try {
+  item.querySelector('[data-action="open"]').addEventListener('click', (event) => runUserAction(
+    event,
+    'Opening saved output...',
+    () => openOutput(output),
+    { busyText: 'Opening...' },
+  ));
+  item.querySelector('[data-action="share"]').addEventListener('click', (event) => runUserAction(event, 'Creating share link...', async () => {
       await openOutput(output);
       await shareOutput(output.id);
-    } catch (error) {
-      setStatus(error.message, true);
-    }
-  });
-  item.querySelector('[data-action="regenerate"]').addEventListener('click', async () => {
-    try {
+    }, { busyText: 'Sharing...' }));
+  item.querySelector('[data-action="regenerate"]').addEventListener('click', (event) => runUserAction(event, 'Regenerating saved output...', async () => {
       switchWorkspace('draft');
       await streamRegenerate(output);
-    } catch (error) {
-      setStatus(error.message, true);
-    }
-  });
-  item.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-    await api(`/api/library/${output.id}`, { method: 'DELETE' });
-    if (state.currentOutputId === output.id) {
-      state.currentOutputId = null;
-      state.currentOutput = null;
-    }
-    await loadLibrary();
-    setStatus('Deleted saved output.');
-  });
+    }, { busyText: 'Regenerating...' }));
+  item.querySelector('[data-action="delete"]').addEventListener('click', (event) => runUserAction(event, 'Deleting saved output...', async () => {
+      await api(`/api/library/${output.id}`, { method: 'DELETE' });
+      if (state.currentOutputId === output.id) {
+        state.currentOutputId = null;
+        state.currentOutput = null;
+      }
+      await loadLibrary();
+      setStatus('Deleted saved output.');
+    }, { busyText: 'Deleting...' }));
   return item;
 }
 
@@ -1323,26 +2181,29 @@ async function loadTeachingAids(outputId = state.currentOutputId) {
 }
 
 function renderTeachingAids() {
+  if (!els.teachingAidsPanel || !els.teachingAidsStatus || !els.teachingAidsList) {
+    return;
+  }
   const savedLesson = Boolean(state.currentOutputId);
   const isLessonPlan = (state.currentInputs?.kind || els.kind.value) === 'lesson_plan';
   els.teachingAidsPanel.classList.toggle('hidden', !isLessonPlan);
   els.teachingAidsStatus.textContent = savedLesson
-    ? 'Generate practical classroom materials attached to this lesson.'
+    ? 'Choose an aid type, add an optional request, then edit the generated material before printing or sharing.'
     : 'Save the lesson plan to generate attached classroom materials.';
   document.querySelectorAll('[data-aid-type]').forEach((button) => {
     button.disabled = !savedLesson || !isLessonPlan || state.generating;
   });
   els.teachingAidsList.innerHTML = '';
   if (!savedLesson || !isLessonPlan) {
-    els.teachingAidEditorPanel.classList.add('hidden');
+    els.teachingAidEditorPanel?.classList.add('hidden');
     return;
   }
   if (!state.teachingAids.length) {
-    els.teachingAidsList.innerHTML = '<p class="microcopy">No Teaching Aids yet.</p>';
+    els.teachingAidsList.innerHTML = '<p class="microcopy">No saved Teaching Aids yet. Generate one above to start a reusable class material.</p>';
   } else {
     state.teachingAids.forEach((aid) => {
       const button = document.createElement('button');
-      button.className = 'teaching-aid-item';
+      button.className = `teaching-aid-item${state.currentTeachingAid?.id === aid.id ? ' teaching-aid-item--on' : ''}`;
       button.type = 'button';
       button.innerHTML = `<strong>${escapeHtml(aid.title || teachingAidLabel(aid.aid_type))}</strong><span>${escapeHtml(teachingAidLabel(aid.aid_type))} | ${escapeHtml(aid.updated_at)}</span>`;
       button.addEventListener('click', () => openTeachingAid(aid));
@@ -1352,17 +2213,21 @@ function renderTeachingAids() {
   if (state.currentTeachingAid || state.teachingAidDraft) {
     renderTeachingAidEditor();
   } else {
-    els.teachingAidEditorPanel.classList.add('hidden');
+    els.teachingAidEditorPanel?.classList.add('hidden');
   }
 }
 
 function openTeachingAid(aid) {
   state.currentTeachingAid = aid;
   state.teachingAidDraft = null;
+  state.teachingAidEditing = false;
   renderTeachingAidEditor();
 }
 
 function renderTeachingAidEditor() {
+  if (!els.teachingAidEditorPanel || !els.teachingAidTitle || !els.teachingAidEditor || !els.teachingAidPreview) {
+    return;
+  }
   const aid = state.teachingAidDraft || state.currentTeachingAid;
   if (!aid) {
     els.teachingAidEditorPanel.classList.add('hidden');
@@ -1372,11 +2237,25 @@ function renderTeachingAidEditor() {
   els.teachingAidTitle.value = aid.title || teachingAidLabel(aid.aid_type);
   els.teachingAidEditor.value = normalizeLineEndings(aid.content_md || '');
   renderTeachingAidPreview();
+  setTeachingAidEditMode(state.teachingAidEditing);
   els.deleteTeachingAid.disabled = !state.currentTeachingAid;
   els.shareTeachingAid.disabled = !state.currentTeachingAid;
 }
 
+function setTeachingAidEditMode(isEditing) {
+  state.teachingAidEditing = Boolean(isEditing);
+  els.teachingAidTitle?.classList.toggle('hidden', !state.teachingAidEditing);
+  els.teachingAidEditor?.classList.toggle('hidden', !state.teachingAidEditing);
+  els.saveTeachingAid?.classList.toggle('hidden', !state.teachingAidEditing);
+  if (els.editTeachingAid) {
+    els.editTeachingAid.textContent = state.teachingAidEditing ? 'Hide markdown' : 'Edit';
+  }
+}
+
 function renderTeachingAidPreview() {
+  if (!els.teachingAidEditor || !els.teachingAidPreview) {
+    return;
+  }
   const markdown = normalizeLineEndings(els.teachingAidEditor.value);
   els.teachingAidPreview.innerHTML = markdown.trim()
     ? markdownToHtml(markdown)
@@ -1434,6 +2313,7 @@ async function generateTeachingAid(aidType) {
     source_section: selectedSourceSection(),
     content_md: '',
   };
+  state.teachingAidEditing = true;
   renderTeachingAidEditor();
   setStatus(`Generating ${title}...`);
   const response = await fetch(`/api/library/${state.currentOutputId}/teaching-aids/stream`, {
@@ -1454,6 +2334,7 @@ async function generateTeachingAid(aidType) {
     els.teachingAidEditor.value = state.teachingAidDraft.content_md;
     renderTeachingAidPreview();
   });
+  els.teachingAidsStatus.textContent = `${title} ready. Review the preview, then save it to the lesson.`;
   setStatus(`${title} ready. Edit and save the aid.`);
 }
 
@@ -1488,33 +2369,51 @@ async function saveTeachingAid() {
   }
   await loadTeachingAids();
   openTeachingAid(state.currentTeachingAid);
+  setTeachingAidEditMode(false);
   setStatus('Teaching Aid saved.');
 }
 
 async function printTeachingAid() {
   const aid = state.currentTeachingAid || state.teachingAidDraft;
-  if (!aid || !els.teachingAidEditor.value.trim()) {
+  const content = normalizeLineEndings(els.teachingAidEditor.value || aid?.content_md || '').trim();
+  if (!aid || !content) {
     setStatus('No Teaching Aid to print.', true);
     return;
   }
-  const payload = state.currentTeachingAid
+  const payload = state.currentTeachingAid && !state.teachingAidEditing
     ? { output_id: state.currentOutputId, teaching_aid_id: state.currentTeachingAid.id }
     : {
-        content_md: normalizeLineEndings(els.teachingAidEditor.value),
+        content_md: content,
         metadata: { ...collectInputs(), format: 'Teaching Aid', title: els.teachingAidTitle.value.trim() || teachingAidLabel(aid.aid_type) },
       };
-  const data = await api('/api/print', {
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    setStatus('Browser blocked the print preview window.', true);
+    return;
+  }
+  printWindow.document.write('<!doctype html><title>Preparing Teaching Aid...</title><p>Preparing Teaching Aid preview...</p>');
+  printWindow.document.close();
+  const response = await fetch('/api/print/preview', {
     method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(state.csrfToken ? { 'X-Klasbot-CSRF': state.csrfToken } : {}),
+    },
     body: JSON.stringify(payload),
   });
-  if (data.fallback && data.html) {
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(data.html);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: response.statusText }));
+    printWindow.close();
+    throw new Error(error.detail || response.statusText);
   }
-  setStatus('Teaching Aid sent to printer.');
+  const html = await response.text();
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
+  setStatus('Teaching Aid print preview opened.');
 }
 
 async function shareTeachingAid() {
@@ -1563,7 +2462,7 @@ async function loadTeachers() {
         <button class="secondary" type="button">Reset PIN</button>
       </div>
     `;
-    item.querySelector('button').addEventListener('click', async () => {
+    item.querySelector('button').addEventListener('click', (event) => runUserAction(event, '', async () => {
       const pin = window.prompt(`New PIN for ${teacher.name}`);
       if (!pin) return;
       await api(`/api/admin/teachers/${teacher.id}/reset-pin`, {
@@ -1571,7 +2470,7 @@ async function loadTeachers() {
         body: JSON.stringify({ pin }),
       });
       setStatus('PIN reset.');
-    });
+    }, { busyText: 'Resetting...' }));
     els.teacherList.appendChild(item);
   });
 }
@@ -1603,28 +2502,32 @@ async function loadCurriculumDocuments() {
       </div>
     `;
     item.querySelector('[data-action="activate"]').disabled = curriculumDocument.active;
-    item.querySelector('[data-action="activate"]').addEventListener('click', async () => {
-      await api(`/api/admin/curriculum/${curriculumDocument.id}/activate`, { method: 'POST' });
-      state.curriculumCache.clear();
-      await loadCurriculumDocuments();
-      await loadCurriculumGrades();
-      setStatus('Curriculum activated.');
-    });
+    item.querySelector('[data-action="activate"]').addEventListener('click', (event) => runUserAction(event, 'Activating curriculum...', async () => {
+        await api(`/api/admin/curriculum/${curriculumDocument.id}/activate`, { method: 'POST' });
+        state.curriculumCache.clear();
+        await loadCurriculumDocuments();
+        await loadCurriculumGrades();
+        await loadGradingCurriculumGrades();
+        setStatus('Curriculum activated.');
+      }, { busyText: 'Activating...' }));
     item.querySelector('[data-action="deactivate"]').disabled = !curriculumDocument.active;
-    item.querySelector('[data-action="deactivate"]').addEventListener('click', async () => {
-      await api(`/api/admin/curriculum/${curriculumDocument.id}/deactivate`, { method: 'POST' });
-      state.curriculumCache.clear();
-      await loadCurriculumDocuments();
-      await loadCurriculumGrades();
-      setStatus('Curriculum deactivated.');
-    });
+    item.querySelector('[data-action="deactivate"]').addEventListener('click', (event) => runUserAction(event, 'Deactivating curriculum...', async () => {
+        await api(`/api/admin/curriculum/${curriculumDocument.id}/deactivate`, { method: 'POST' });
+        state.curriculumCache.clear();
+        await loadCurriculumDocuments();
+        await loadCurriculumGrades();
+        await loadGradingCurriculumGrades();
+        setStatus('Curriculum deactivated.');
+      }, { busyText: 'Deactivating...' }));
     item.querySelector('[data-action="delete"]').disabled = curriculumDocument.active;
-    item.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-      await api(`/api/admin/curriculum/${curriculumDocument.id}`, { method: 'DELETE' });
-      state.curriculumCache.clear();
-      await loadCurriculumDocuments();
-      setStatus('Inactive curriculum deleted.');
-    });
+    item.querySelector('[data-action="delete"]').addEventListener('click', (event) => runUserAction(event, 'Deleting curriculum...', async () => {
+        await api(`/api/admin/curriculum/${curriculumDocument.id}`, { method: 'DELETE' });
+        state.curriculumCache.clear();
+        await loadCurriculumDocuments();
+        await loadCurriculumGrades();
+        await loadGradingCurriculumGrades();
+        setStatus('Inactive curriculum deleted.');
+      }, { busyText: 'Deleting...' }));
     els.curriculumList.appendChild(item);
   });
 }
@@ -1678,6 +2581,7 @@ async function savePacing(event) {
   state.curriculumCache.clear();
   renderPacingEditor(data.pacing);
   await loadCurriculumPacing();
+  await loadGradingCurriculumWeeks();
   setStatus('Weekly pacing saved.');
 }
 
@@ -1688,6 +2592,7 @@ async function resetPacing() {
   state.curriculumCache.clear();
   renderPacingEditor(data.pacing);
   await loadCurriculumPacing();
+  await loadGradingCurriculumWeeks();
   setStatus('Weekly pacing reset.');
 }
 
@@ -1816,6 +2721,7 @@ async function uploadCurriculum(event) {
   const uploadResult = await response.json();
   await loadCurriculumDocuments();
   await loadCurriculumGrades();
+  await loadGradingCurriculumGrades();
   const summary = uploadResult.document.parse_summary || {};
   setStatus(`Curriculum uploaded. Confidence ${summary.average_confidence ?? 0}; warnings ${summary.warning_count ?? 0}.`);
 }
@@ -1839,10 +2745,13 @@ async function bootstrap() {
     state.csrfToken = data.csrf_token || '';
     showApp();
     await loadLibrary();
+    await loadGradingBatches();
+    await loadClassRecords();
     await loadTeachers();
     await loadCurriculumDocuments();
     await loadLessonPlanFormats();
     await loadCurriculumGrades();
+    await loadGradingCurriculumGrades();
     await configurePromptPreview();
     await checkOllamaStatus();
   } catch {
@@ -1853,7 +2762,7 @@ async function bootstrap() {
 els.loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   els.loginError.textContent = '';
-  try {
+  await runUserAction(event, 'Logging in...', async () => {
     const data = await api('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ pin: els.pin.value }),
@@ -1864,76 +2773,93 @@ els.loginForm.addEventListener('submit', async (event) => {
     els.pin.value = '';
     showApp();
     await loadLibrary();
+    await loadGradingBatches();
+    await loadClassRecords();
     await loadTeachers();
     await loadCurriculumDocuments();
     await loadLessonPlanFormats();
     await loadCurriculumGrades();
+    await loadGradingCurriculumGrades();
     await configurePromptPreview();
     await checkOllamaStatus();
-  } catch (error) {
-    els.loginError.textContent = error.message;
-  }
+  }, {
+    busyText: 'Logging in...',
+    report: (message, isError = false) => {
+      if (isError) {
+        els.loginError.textContent = message;
+      }
+    },
+  });
 });
 
-els.logoutButton.addEventListener('click', async () => {
-  await api('/api/auth/logout', { method: 'POST' });
-  state.teacher = null;
-  state.csrfToken = '';
-  showLogin();
+els.logoutButton.addEventListener('click', (event) => {
+  runUserAction(event, 'Logging out...', async () => {
+    await api('/api/auth/logout', { method: 'POST' });
+    state.teacher = null;
+    state.csrfToken = '';
+    showLogin();
+  }, { busyText: 'Logging out...' });
 });
 
 els.adminToggle.addEventListener('click', () => {
   switchWorkspace('teacher-admin');
-  loadTeachers().catch((error) => setStatus(error.message, true));
+  runUserAction(els.adminToggle, 'Loading teacher admin...', loadTeachers, { busyText: 'Loading...' });
 });
 
 els.curriculumToggle.addEventListener('click', () => {
   switchWorkspace('curriculum');
-  loadCurriculumDocuments().catch((error) => setStatus(error.message, true));
+  runUserAction(els.curriculumToggle, 'Loading curriculum...', loadCurriculumDocuments, { busyText: 'Loading...' });
 });
 
 els.formatAdminToggle.addEventListener('click', () => {
   switchWorkspace('plan-formats');
-  loadLessonPlanFormats().catch((error) => setStatus(error.message, true));
+  runUserAction(els.formatAdminToggle, 'Loading lesson formats...', loadLessonPlanFormats, { busyText: 'Loading...' });
 });
 
 els.teacherForm.addEventListener('submit', async (event) => {
   event.preventDefault();
-  await api('/api/admin/teachers', {
-    method: 'POST',
-    body: JSON.stringify({
-      name: document.getElementById('teacher-name').value,
-      pin: document.getElementById('teacher-pin').value,
-      is_admin: document.getElementById('teacher-admin').checked,
-    }),
+  await runUserAction(event, 'Adding teacher...', async () => {
+    await api('/api/admin/teachers', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: document.getElementById('teacher-name').value,
+        pin: document.getElementById('teacher-pin').value,
+        is_admin: document.getElementById('teacher-admin').checked,
+      }),
+    });
+    els.teacherForm.reset();
+    await loadTeachers();
+    setStatus('Teacher added.');
+  }, {
+    busyText: 'Adding...',
   });
-  els.teacherForm.reset();
-  await loadTeachers();
-  setStatus('Teacher added.');
 });
 
-els.refreshTeachers.addEventListener('click', loadTeachers);
-els.refreshCurriculum.addEventListener('click', loadCurriculumDocuments);
-els.refreshFormats.addEventListener('click', () => loadLessonPlanFormats().catch((error) => setStatus(error.message, true)));
+els.refreshTeachers.addEventListener('click', (event) => runUserAction(event, 'Refreshing teachers...', loadTeachers, { busyText: 'Refreshing...' }));
+els.refreshCurriculum.addEventListener('click', (event) => runUserAction(event, 'Refreshing curriculum...', loadCurriculumDocuments, { busyText: 'Refreshing...' }));
+els.refreshFormats.addEventListener('click', (event) => runUserAction(event, 'Refreshing formats...', loadLessonPlanFormats, { busyText: 'Refreshing...' }));
 els.formatAdminSelect.addEventListener('change', renderSelectedLessonPlanFormat);
 els.formatAdminForm.addEventListener('submit', (event) => {
-  saveSelectedLessonPlanFormat(event).catch((error) => setStatus(error.message, true));
+  event.preventDefault();
+  runUserAction(event, 'Saving lesson format...', () => saveSelectedLessonPlanFormat(event), { busyText: 'Saving...' });
 });
 els.resetFormat.addEventListener('click', () => {
-  resetSelectedLessonPlanFormat().catch((error) => setStatus(error.message, true));
+  runUserAction(els.resetFormat, 'Resetting format...', resetSelectedLessonPlanFormat, { busyText: 'Resetting...' });
 });
 els.curriculumUploadForm.addEventListener('submit', (event) => {
-  uploadCurriculum(event).catch((error) => setStatus(error.message, true));
+  event.preventDefault();
+  runUserAction(event, 'Uploading and parsing curriculum...', () => uploadCurriculum(event), { busyText: 'Uploading...' });
 });
 if (els.pacingForm) {
   els.pacingForm.addEventListener('submit', (event) => {
-    savePacing(event).catch((error) => setStatus(error.message, true));
+    event.preventDefault();
+    runUserAction(event, 'Saving weekly pacing...', () => savePacing(event), { busyText: 'Saving...' });
   });
 }
 if (els.resetPacing) {
-  els.resetPacing.addEventListener('click', () => resetPacing().catch((error) => setStatus(error.message, true)));
+  els.resetPacing.addEventListener('click', () => runUserAction(els.resetPacing, 'Resetting weekly pacing...', resetPacing, { busyText: 'Resetting...' }));
 }
-els.refreshLibrary.addEventListener('click', loadLibrary);
+els.refreshLibrary.addEventListener('click', (event) => runUserAction(event, 'Refreshing library...', loadLibrary, { busyText: 'Refreshing...' }));
 els.libraryFiltersToggle.addEventListener('click', () => {
   state.libraryFiltersCollapsed = !state.libraryFiltersCollapsed;
   updateLibraryFilterVisibility();
@@ -1941,12 +2867,56 @@ els.libraryFiltersToggle.addEventListener('click', () => {
 els.previewTab.addEventListener('click', () => setDraftView('preview'));
 els.editTab.addEventListener('click', () => setDraftView('edit'));
 els.currentDraftButton.addEventListener('click', () => switchWorkspace('draft'));
+els.gradingButton.addEventListener('click', () => {
+  switchWorkspace('grading');
+  runUserAction(els.gradingButton, 'Loading grading batches...', loadGradingBatches, { busyText: 'Loading...' });
+});
+els.classRecordsButton.addEventListener('click', () => {
+  switchWorkspace('class-records');
+  runUserAction(els.classRecordsButton, 'Loading class records...', loadClassRecords, { busyText: 'Loading...' });
+});
 els.libraryButton.addEventListener('click', () => {
   switchWorkspace('library');
-  loadLibrary().catch((error) => {
+  runUserAction(els.libraryButton, 'Loading library...', loadLibrary, { busyText: 'Loading...' }).catch((error) => {
     els.librarySummary.textContent = error.message;
   });
 });
+els.refreshGrading.addEventListener('click', (event) => runUserAction(event, 'Refreshing grading batches...', loadGradingBatches, { busyText: 'Refreshing...' }));
+els.refreshClassRecords.addEventListener('click', (event) => runUserAction(event, 'Refreshing class records...', loadClassRecords, { busyText: 'Refreshing...' }));
+els.classRecordForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  runUserAction(event, 'Creating class record...', () => createClassRecord(event), { busyText: 'Creating...' });
+});
+els.gradingBatchForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  runUserAction(event, 'Creating grading batch...', () => createGradingBatch(event), { busyText: 'Creating...' });
+});
+els.gradingGrade.addEventListener('change', () => loadGradingCurriculumSubjects().catch((error) => setStatus(error.message, true)));
+els.gradingSubject.addEventListener('change', () => loadGradingCurriculumTopics().catch((error) => setStatus(error.message, true)));
+els.gradingTopic.addEventListener('change', () => loadGradingCurriculumWeeks().catch((error) => setStatus(error.message, true)));
+els.gradingUploadForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  runUserAction(event, 'Uploading quiz files...', () => uploadGradingImages(event), {
+    busyText: 'Uploading...',
+    report: setGradingStatus,
+  });
+});
+els.detectSubmissions.addEventListener('click', (event) => runUserAction(event, 'Detecting worksheet regions...', detectGradingSubmissions, {
+  busyText: 'Detecting...',
+  report: setGradingStatus,
+}));
+els.gradeSubmissions.addEventListener('click', (event) => runUserAction(event, 'Extracting answers with Ollama and proposing scores...', gradeGradingSubmissions, {
+  busyText: 'Grading...',
+  report: setGradingStatus,
+}));
+els.printGrading.addEventListener('click', (event) => runUserAction(event, 'Preparing grading print preview...', printGradingBatch, {
+  busyText: 'Preparing...',
+  report: setGradingStatus,
+}));
+els.deleteGradingBatch.addEventListener('click', (event) => runUserAction(event, 'Deleting grading batch...', deleteActiveGradingBatch, {
+  busyText: 'Deleting...',
+  report: setGradingStatus,
+}));
 [
   els.librarySearch,
   els.libraryTypeFilter,
@@ -1960,10 +2930,10 @@ els.libraryButton.addEventListener('click', () => {
 });
 els.newLessonButton.addEventListener('click', newLesson);
 els.previewPromptButton.addEventListener('click', () => {
-  previewPrompt().catch((error) => setStatus(error.message, true));
+  runUserAction(els.previewPromptButton, 'Building prompt preview...', previewPrompt, { busyText: 'Previewing...' });
 });
 if (els.checkOllamaButton) {
-  els.checkOllamaButton.addEventListener('click', checkOllamaStatus);
+  els.checkOllamaButton.addEventListener('click', (event) => runUserAction(event, 'Checking Ollama...', checkOllamaStatus, { busyText: 'Checking...' }));
 }
 els.kind.addEventListener('change', () => {
   updateFormats();
@@ -1982,26 +2952,29 @@ els.weekNumber.addEventListener('change', () => {
 });
 els.generateForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  streamGenerate(collectInputs());
+  streamGenerate(collectInputs(), event.submitter);
 });
-els.saveButton.addEventListener('click', () => saveDraft().catch((error) => setStatus(error.message, true)));
-els.printButton.addEventListener('click', () => printDraft().catch((error) => setStatus(error.message, true)));
-els.shareButton.addEventListener('click', () => shareDraft().catch((error) => setStatus(error.message, true)));
+els.saveButton.addEventListener('click', (event) => runUserAction(event, 'Saving draft...', saveDraft, { busyText: 'Saving...' }));
+els.printButton.addEventListener('click', (event) => runUserAction(event, 'Preparing print...', printDraft, { busyText: 'Preparing...' }));
+els.shareButton.addEventListener('click', (event) => runUserAction(event, 'Creating share link...', shareDraft, { busyText: 'Sharing...' }));
 document.querySelectorAll('[data-aid-type]').forEach((button) => {
-  button.addEventListener('click', () => generateTeachingAid(button.dataset.aidType).catch((error) => setStatus(error.message, true)));
+  button.addEventListener('click', () => runUserAction(button, 'Generating Teaching Aid...', () => generateTeachingAid(button.dataset.aidType), { busyText: 'Generating...' }));
 });
-els.teachingAidEditor.addEventListener('input', () => {
-  if (state.teachingAidDraft) {
-    state.teachingAidDraft.content_md = normalizeLineEndings(els.teachingAidEditor.value);
-  }
-  renderTeachingAidPreview();
-});
-els.saveTeachingAid.addEventListener('click', () => saveTeachingAid().catch((error) => setStatus(error.message, true)));
-els.printTeachingAid.addEventListener('click', () => printTeachingAid().catch((error) => setStatus(error.message, true)));
-els.shareTeachingAid.addEventListener('click', () => shareTeachingAid().catch((error) => setStatus(error.message, true)));
-els.copyTeachingAid.addEventListener('click', copyTeachingAidIntoLesson);
-els.deleteTeachingAid.addEventListener('click', () => deleteTeachingAid().catch((error) => setStatus(error.message, true)));
-els.mobilePairButton.addEventListener('click', () => createMobilePairingToken().catch((error) => setStatus(error.message, true)));
+if (els.teachingAidEditor) {
+  els.teachingAidEditor.addEventListener('input', () => {
+    if (state.teachingAidDraft) {
+      state.teachingAidDraft.content_md = normalizeLineEndings(els.teachingAidEditor.value);
+    }
+    renderTeachingAidPreview();
+  });
+}
+els.saveTeachingAid?.addEventListener('click', (event) => runUserAction(event, 'Saving Teaching Aid...', saveTeachingAid, { busyText: 'Saving...' }));
+els.editTeachingAid?.addEventListener('click', () => setTeachingAidEditMode(!state.teachingAidEditing));
+els.printTeachingAid?.addEventListener('click', (event) => runUserAction(event, 'Printing Teaching Aid...', printTeachingAid, { busyText: 'Printing...' }));
+els.shareTeachingAid?.addEventListener('click', (event) => runUserAction(event, 'Creating Teaching Aid share link...', shareTeachingAid, { busyText: 'Sharing...' }));
+els.copyTeachingAid?.addEventListener('click', copyTeachingAidIntoLesson);
+els.deleteTeachingAid?.addEventListener('click', (event) => runUserAction(event, 'Deleting Teaching Aid...', deleteTeachingAid, { busyText: 'Deleting...' }));
+els.mobilePairButton.addEventListener('click', (event) => runUserAction(event, 'Creating mobile pairing code...', createMobilePairingToken, { busyText: 'Pairing...' }));
 
 updateLibraryFilterVisibility();
 renderDraftPreview();

@@ -6,10 +6,12 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_ROOT / "data"
 CURRICULUM_UPLOAD_DIR = DATA_DIR / "curriculum_uploads"
+GRADING_UPLOAD_DIR = DATA_DIR / "grading_uploads"
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gemma4:e2b")
 OLLAMA_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "180"))
+OLLAMA_GRADING_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_GRADING_TIMEOUT_SECONDS", "60"))
 SESSION_COOKIE_NAME = os.getenv("KLASBOT_SESSION_COOKIE", "klasbot_session")
 SESSION_HOURS = int(os.getenv("KLASBOT_SESSION_HOURS", "12"))
 SCHOOL_NAME = os.getenv("KLASBOT_SCHOOL_NAME", "Klasbot School")
@@ -36,3 +38,10 @@ def get_share_dir() -> Path:
     if configured:
         return Path(configured).expanduser()
     return DATA_DIR / "shared_exports"
+
+
+def get_grading_upload_dir() -> Path:
+    configured = os.getenv("KLASBOT_GRADING_UPLOAD_DIR")
+    if configured:
+        return Path(configured).expanduser()
+    return GRADING_UPLOAD_DIR

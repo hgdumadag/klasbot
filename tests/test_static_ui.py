@@ -56,6 +56,46 @@ def test_library_uses_middle_workspace_view():
     assert "outputMetadataText" in app_js
 
 
+def test_grading_setup_uses_curriculum_dropdown_controls():
+    app_js = (ROOT / "klasbot" / "static" / "app.js").read_text(encoding="utf-8")
+    index_html = (ROOT / "klasbot" / "static" / "index.html").read_text(encoding="utf-8")
+
+    assert '<select id="grading-grade" required>' in index_html
+    assert '<select id="grading-subject" required>' in index_html
+    assert '<select id="grading-topic" required>' in index_html
+    assert '<select id="grading-week-topic" required>' in index_html
+    assert 'id="grading-questions"' in index_html
+    assert 'id="grading-status"' in index_html
+    assert 'id="grading-upload-button"' in index_html
+    assert "loadGradingCurriculumGrades" in app_js
+    assert "loadGradingCurriculumSubjects" in app_js
+    assert "loadGradingCurriculumTopics" in app_js
+    assert "loadGradingCurriculumWeeks" in app_js
+    assert "week_topic" in app_js
+    assert "questions" in app_js
+    assert "setGradingStatus" in app_js
+    assert "Upload complete" in app_js
+
+
+def test_class_records_forms_do_not_overflow_workspace():
+    app_js = (ROOT / "klasbot" / "static" / "app.js").read_text(encoding="utf-8")
+    index_html = (ROOT / "klasbot" / "static" / "index.html").read_text(encoding="utf-8")
+    styles_css = (ROOT / "klasbot" / "static" / "styles.css").read_text(encoding="utf-8")
+
+    assert 'class="class-record-create-panel"' in index_html
+    assert index_html.index('id="class-record-form"') < index_html.index('class="class-records-layout"')
+    assert 'class="record-field--title"' in app_js
+    assert 'class="record-field--notes"' in app_js
+    assert "class-records-panel--detail" in app_js
+    assert "data-close-active-class" in app_js
+    assert ".class-record-create-form" in styles_css
+    assert ".class-records-panel--detail .class-record-create-panel" in styles_css
+    assert ".class-records-panel--detail .class-records-layout" in styles_css
+    assert ".inline-record-form .record-field--title" in styles_css
+    assert ".inline-record-form input," in styles_css
+    assert "min-width: 0;" in styles_css
+
+
 def test_draft_has_teacher_preview_and_markdown_source():
     app_js = (ROOT / "klasbot" / "static" / "app.js").read_text(encoding="utf-8")
     index_html = (ROOT / "klasbot" / "static" / "index.html").read_text(encoding="utf-8")

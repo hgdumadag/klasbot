@@ -8,6 +8,7 @@ from fastapi.testclient import TestClient
 def client(tmp_path, monkeypatch):
     monkeypatch.setenv("KLASBOT_DB_PATH", str(tmp_path / "klasbot.db"))
     monkeypatch.setenv("KLASBOT_SHARE_DIR", str(tmp_path / "shared_exports"))
+    monkeypatch.setenv("KLASBOT_GRADING_UPLOAD_DIR", str(tmp_path / "grading_uploads"))
 
     from klasbot import db
     from klasbot.auth import hash_pin
