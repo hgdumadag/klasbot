@@ -24,3 +24,4 @@ def test_vertex_gemma_model_name_is_normalized(monkeypatch):
 
     assert _vertex_model_name("gemma-4-26b-a4b-it-maas") == "google/gemma-4-26b-a4b-it-maas"
     assert _vertex_model_name("google/gemma-4-26b-a4b-it-maas") == "google/gemma-4-26b-a4b-it-maas"
+    assert _vertex_model_name("google/emma-4-26b-a4b-it-maas") == "google/gemma-4-26b-a4b-it-maas"

@@ -752,12 +752,12 @@ async def _sse_tokens(inputs: dict[str, Any]):
                 generated_content = True
             yield _sse(token)
         if not generated_content:
-            yield _sse("[Ollama generation returned no content - showing fallback draft]\n\n")
+            yield _sse(f"[{_ai_provider_label()} generation returned no content - showing fallback draft]\n\n")
             async for chunk in _placeholder_sse(inputs):
                 yield chunk
     except (OllamaStreamError, VertexGemmaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
         reason = _ollama_error_message(exc)
-        yield _sse(f"[Ollama generation failed - showing fallback draft]\nReason: {reason}\n\n")
+        yield _sse(f"[{_ai_provider_label()} generation failed - showing fallback draft]\nReason: {reason}\n\n")
         async for chunk in _placeholder_sse(inputs):
             yield chunk
 
@@ -823,12 +823,12 @@ async def _teaching_aid_sse(output: dict[str, Any], inputs: dict[str, Any]):
             yield _sse(token)
         if not generated_content:
             label = teaching_aid_label(inputs.get("aid_type") or "")
-            yield _sse(f"[Ollama generation returned no content - showing fallback {label}]\n\n")
+            yield _sse(f"[{_ai_provider_label()} generation returned no content - showing fallback {label}]\n\n")
             yield _sse(_fallback_teaching_aid(output, inputs))
     except (OllamaStreamError, VertexGemmaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
         reason = _ollama_error_message(exc)
         label = teaching_aid_label(inputs.get("aid_type") or "")
-        yield _sse(f"[Ollama generation failed - showing fallback {label}]\nReason: {reason}\n\n")
+        yield _sse(f"[{_ai_provider_label()} generation failed - showing fallback {label}]\nReason: {reason}\n\n")
         yield _sse(_fallback_teaching_aid(output, inputs))
     yield _sse("[DONE]", event="done")
 

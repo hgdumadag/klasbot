@@ -36,6 +36,8 @@ def create_ai_client(provider: str | None = None) -> Any:
 
 def _vertex_model_name(model: str) -> str:
     clean_model = model.strip()
+    if clean_model in {"emma-4-26b-a4b-it-maas", "google/emma-4-26b-a4b-it-maas"}:
+        clean_model = clean_model.replace("emma-4", "gemma-4", 1)
     if "/" in clean_model:
         return clean_model
     return f"google/{clean_model}"
