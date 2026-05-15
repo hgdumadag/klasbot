@@ -247,6 +247,17 @@ class ScoreGridRequest(BaseModel):
     scores: list[ScoreEntryRequest] = Field(default_factory=list)
 
 
+class AttendanceEntryRequest(BaseModel):
+    student_id: int
+    status: Literal["present", "absent", "late", "excused"] = "present"
+    notes: str = Field(default="", max_length=500)
+
+
+class AttendanceGridRequest(BaseModel):
+    attendance_date: str = Field(min_length=1, max_length=32)
+    rows: list[AttendanceEntryRequest] = Field(default_factory=list)
+
+
 LOCAL_CLIENT_HOSTS = {"127.0.0.1", "::1", "localhost", "testclient"}
 REMOTE_PUBLIC_PREFIXES = ("/share/", "/mobile/pair/")
 REMOTE_STATIC_PREFIXES = ("/static/mobile",)
@@ -1467,6 +1478,51 @@ async def class_records_scores_save(
     if not grid:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
     return grid
+
+
+@app.get("/api/class-records/classes/{class_id}/attendance")
+async def class_records_attendance_get(
+    class_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+    attendance_date: str = Query(default=""),
+) -> dict:
+    selected_date = attendance_date or datetime.now(PHILIPPINE_TZ).date().isoformat()
+    grid = db.get_attendance_grid(teacher["id"], class_id, selected_date)
+    if not grid:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return grid
+
+
+@app.put("/api/class-records/classes/{class_id}/attendance")
+async def class_records_attendance_save(
+    class_id: int,
+    payload: AttendanceGridRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    try:
+        grid = db.save_attendance_grid(
+            teacher["id"],
+            class_id,
+            payload.attendance_date,
+            [item.model_dump() if hasattr(item, "model_dump") else item.dict() for item in payload.rows],
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    if not grid:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return grid
+
+
+@app.get("/api/class-records/classes/{class_id}/attendance/summary")
+async def class_records_attendance_summary(
+    class_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+    days: int = Query(default=30, ge=1, le=60),
+) -> dict:
+    summary = db.get_attendance_summary(teacher["id"], class_id, days)
+    if not summary:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return {"summary": summary}
 
 
 @app.get("/api/class-records/classes/{class_id}/dashboard")

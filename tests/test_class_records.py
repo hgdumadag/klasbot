@@ -99,6 +99,47 @@ def test_class_records_reject_score_above_max(client):
     assert "maximum" in response.json()["detail"]
 
 
+def test_class_records_daily_attendance_grid_and_summary(client):
+    login(client, "1111")
+    class_id = _create_class(client)
+    first_student = _add_student(client, class_id, "Ana", "Santos")
+    second_student = _add_student(client, class_id, "Ben", "Reyes")
+
+    empty_grid = client.get(
+        f"/api/class-records/classes/{class_id}/attendance",
+        params={"attendance_date": "2026-06-17"},
+    )
+    assert empty_grid.status_code == 200
+    assert len(empty_grid.json()["rows"]) == 2
+    assert empty_grid.json()["rows"][0]["status"] == "present"
+    assert empty_grid.json()["summary"]["missing"] == 2
+
+    response = client.put(
+        f"/api/class-records/classes/{class_id}/attendance",
+        json={
+            "attendance_date": "2026-06-17",
+            "rows": [
+                {"student_id": first_student, "status": "present", "notes": ""},
+                {"student_id": second_student, "status": "absent", "notes": "Sick"},
+            ],
+        },
+    )
+    assert response.status_code == 200
+    saved = response.json()
+    assert saved["summary"]["present"] == 1
+    assert saved["summary"]["absent"] == 1
+    assert saved["summary"]["attendance_rate"] == 50
+
+    summary = client.get(f"/api/class-records/classes/{class_id}/attendance/summary")
+    assert summary.status_code == 200
+    data = summary.json()["summary"]
+    assert data["dates"] == ["2026-06-17"]
+    assert data["day_summaries"][0]["absent"] == 1
+    students_by_name = {student["display_name"]: student for student in data["students"]}
+    assert students_by_name["Ana Santos"]["attendance_records"][0]["status"] == "present"
+    assert students_by_name["Ben Reyes"]["attendance_records"][0]["status"] == "absent"
+
+
 def test_class_records_are_scoped_to_teacher(client):
     login(client, "1111")
     class_id = _create_class(client)
@@ -111,6 +152,7 @@ def test_class_records_are_scoped_to_teacher(client):
     assert client.get(f"/api/class-records/classes/{class_id}").status_code == 404
     assert client.get(f"/api/class-records/classes/{class_id}/students").status_code == 404
     assert client.get(f"/api/class-records/assessments/{assessment_id}/scores").status_code == 404
+    assert client.get(f"/api/class-records/classes/{class_id}/attendance").status_code == 404
     response = client.patch(
         f"/api/class-records/students/{student_id}",
         json={"first_name": "Blocked", "last_name": "Teacher", "status": "active"},

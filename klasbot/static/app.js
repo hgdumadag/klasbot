@@ -25,6 +25,7 @@ const state = {
   classRecords: [],
   activeClassRecord: null,
   activeScoreAssessmentId: null,
+  activeAttendanceDate: null,
   demoConfig: null,
 };
 
@@ -439,6 +440,7 @@ function showLogin() {
   state.classRecords = [];
   state.activeClassRecord = null;
   state.activeScoreAssessmentId = null;
+  state.activeAttendanceDate = null;
   state.activeClassTab = 'dashboard';
 }
 
@@ -1474,16 +1476,22 @@ async function createClassRecord(event) {
 
 async function selectClassRecord(classId) {
   const data = await api(`/api/class-records/classes/${classId}`);
-  const [students, assessments] = await Promise.all([
+  const attendanceDate = state.activeAttendanceDate || todayIsoDate();
+  const [students, assessments, attendanceGrid, attendanceSummary] = await Promise.all([
     api(`/api/class-records/classes/${classId}/students`),
     api(`/api/class-records/classes/${classId}/assessments`),
+    api(`/api/class-records/classes/${classId}/attendance?attendance_date=${encodeURIComponent(attendanceDate)}`),
+    api(`/api/class-records/classes/${classId}/attendance/summary?days=30`),
   ]);
   state.activeClassRecord = {
     class: data.class,
     dashboard: data.dashboard,
     students: students.students || [],
     assessments: assessments.assessments || [],
+    attendanceGrid,
+    attendanceSummary: attendanceSummary.summary,
   };
+  state.activeAttendanceDate = attendanceGrid.attendance_date || attendanceDate;
   state.activeClassTab = state.activeClassTab || 'dashboard';
   renderClassRecordsWorkspace();
 }
@@ -1556,6 +1564,44 @@ async function saveScoreEntry(event) {
   setStatus('Scores saved.');
 }
 
+async function loadAttendanceDate(attendanceDate) {
+  const classId = state.activeClassRecord?.class?.id;
+  if (!classId) return;
+  const grid = await api(`/api/class-records/classes/${classId}/attendance?attendance_date=${encodeURIComponent(attendanceDate)}`);
+  state.activeAttendanceDate = grid.attendance_date;
+  state.activeClassRecord = {
+    ...state.activeClassRecord,
+    attendanceGrid: grid,
+  };
+  renderClassRecordsWorkspace();
+}
+
+async function saveAttendance(event) {
+  event.preventDefault();
+  const classId = state.activeClassRecord?.class?.id;
+  if (!classId) return;
+  const form = event.currentTarget;
+  const attendanceDate = form.querySelector('[name="attendance_date"]').value || todayIsoDate();
+  const rows = [...form.querySelectorAll('[data-attendance-row]')].map((row) => ({
+    student_id: Number(row.dataset.studentId),
+    status: row.querySelector('[name="attendance_status"]').value,
+    notes: row.querySelector('[name="attendance_notes"]').value.trim(),
+  }));
+  const grid = await api(`/api/class-records/classes/${classId}/attendance`, {
+    method: 'PUT',
+    body: JSON.stringify({ attendance_date: attendanceDate, rows }),
+  });
+  const summary = await api(`/api/class-records/classes/${classId}/attendance/summary?days=30`);
+  state.activeAttendanceDate = grid.attendance_date;
+  state.activeClassRecord = {
+    ...state.activeClassRecord,
+    attendanceGrid: grid,
+    attendanceSummary: summary.summary,
+  };
+  renderClassRecordsWorkspace();
+  setStatus('Attendance saved.');
+}
+
 function renderClassRecordsWorkspace() {
   els.classRecordsPanel?.classList.toggle('class-records-panel--detail', Boolean(state.activeClassRecord));
   renderClassRecordList();
@@ -1597,6 +1643,7 @@ function renderClassRecordDetail() {
   const tabs = [
     ['dashboard', 'Dashboard'],
     ['students', 'Students'],
+    ['attendance', 'Attendance'],
     ['assessments', 'Assessments'],
     ['performance', 'Student Performance'],
   ];
@@ -1616,6 +1663,7 @@ function renderClassRecordDetail() {
           <article>
             <h4>Next actions</h4>
             <button class="secondary compact" type="button" data-jump-class-tab="students">Add Students</button>
+            <button class="secondary compact" type="button" data-jump-class-tab="attendance">Take Attendance</button>
             <button class="secondary compact" type="button" data-jump-class-tab="assessments">Create Assessments</button>
           </article>
           <article>
@@ -1633,6 +1681,16 @@ function renderClassRecordDetail() {
         </div>
         ${renderStudentForm()}
         ${renderStudentTable(active.students || [])}
+      </section>
+    `,
+    attendance: `
+      <section class="class-tab-panel">
+        <div class="class-tab-panel__head">
+          <h4>Daily Attendance</h4>
+          <p class="microcopy">Capture attendance for a selected date and review recent daily attendance in one view.</p>
+        </div>
+        ${renderAttendanceCapture(active.attendanceGrid)}
+        ${renderAttendanceOverview(active.attendanceSummary)}
       </section>
     `,
     assessments: `
@@ -1718,6 +1776,21 @@ function renderClassRecordDetail() {
       { busyText: 'Opening...' },
     ));
   });
+  els.classRecordDetail.querySelector('[data-attendance-form]')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    runUserAction(event, 'Saving attendance...', () => saveAttendance(event), { busyText: 'Saving...' });
+  });
+  els.classRecordDetail.querySelector('[data-attendance-date]')?.addEventListener('change', (event) => {
+    runUserAction(event.currentTarget, 'Loading attendance...', () => loadAttendanceDate(event.currentTarget.value), { busyText: 'Loading...' });
+  });
+  els.classRecordDetail.querySelectorAll('[data-mark-attendance]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const status = button.dataset.markAttendance;
+      els.classRecordDetail.querySelectorAll('[name="attendance_status"]').forEach((select) => {
+        select.value = status;
+      });
+    });
+  });
 }
 
 function renderStudentForm() {
@@ -1738,7 +1811,7 @@ function renderStudentForm() {
 }
 
 function renderAssessmentForm() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIsoDate();
   return `
     <form class="inline-record-form assessment-form" data-assessment-form>
       <input class="record-field--title" name="title" type="text" placeholder="Quiz 1: Human Body Systems" required />
@@ -1759,6 +1832,10 @@ function renderAssessmentForm() {
   `;
 }
 
+function todayIsoDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 function renderStudentTable(students) {
   if (!students.length) return '<p class="microcopy">No students yet.</p>';
   return `
@@ -1775,6 +1852,127 @@ function renderStudentTable(students) {
       `).join('')}</tbody>
     </table></div>
   `;
+}
+
+function renderAttendanceCapture(grid) {
+  const attendanceDate = grid?.attendance_date || state.activeAttendanceDate || todayIsoDate();
+  const rows = grid?.rows || [];
+  const summary = grid?.summary || {};
+  if (!rows.length) {
+    return '<p class="microcopy">Add students before taking attendance.</p>';
+  }
+  return `
+    <form class="attendance-panel" data-attendance-form>
+      <div class="attendance-toolbar">
+        <label>
+          Date
+          <input name="attendance_date" data-attendance-date type="date" value="${escapeHtml(attendanceDate)}" required />
+        </label>
+        <div class="attendance-actions">
+          <button class="secondary compact" type="button" data-mark-attendance="present">Mark all present</button>
+          <button class="secondary compact" type="button" data-mark-attendance="absent">Mark all absent</button>
+          <button class="primary compact" type="submit">Save attendance</button>
+        </div>
+      </div>
+      <div class="metric-grid attendance-metrics">
+        <article><span>Present</span><strong>${summary.present || 0}</strong></article>
+        <article><span>Late</span><strong>${summary.late || 0}</strong></article>
+        <article><span>Absent</span><strong class="${summary.absent ? 'attendance-count--alert' : ''}">${summary.absent || 0}</strong></article>
+        <article><span>Attendance rate</span><strong>${formatPercent(summary.attendance_rate)}</strong></article>
+      </div>
+      <div class="table-scroll"><table class="records-table attendance-entry-table">
+        <thead><tr><th>Student</th><th>Status</th><th>Notes</th><th>Recorded</th></tr></thead>
+        <tbody>${rows.map((row) => `
+          <tr data-attendance-row data-student-id="${row.student.id}">
+            <td>${escapeHtml(row.student.display_name || `${row.student.first_name} ${row.student.last_name}`)}</td>
+            <td><select name="attendance_status">${attendanceStatusOptions(row.status)}</select></td>
+            <td><input name="attendance_notes" type="text" value="${escapeHtml(row.notes || '')}" placeholder="Optional note" /></td>
+            <td>${row.is_recorded ? '<span class="status-pill">Saved</span>' : '<span class="score-cell--muted">New</span>'}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table></div>
+    </form>
+  `;
+}
+
+function renderAttendanceOverview(summary) {
+  const dates = summary?.dates || [];
+  const students = summary?.students || [];
+  const daySummaries = summary?.day_summaries || [];
+  if (!dates.length) {
+    return `
+      <section class="attendance-overview">
+        <h4>Recent Attendance</h4>
+        <p class="microcopy">Saved attendance dates will appear here.</p>
+      </section>
+    `;
+  }
+  const tableMinWidth = Math.max(760, 240 + dates.length * 92);
+  return `
+    <section class="attendance-overview">
+      <div class="class-tab-panel__head">
+        <h4>Recent Attendance</h4>
+        <p class="microcopy">One row per learner, one column per saved day.</p>
+      </div>
+      <div class="attendance-day-strip">
+        ${daySummaries.map((day) => `
+          <article>
+            <span>${escapeHtml(formatShortDate(day.attendance_date))}</span>
+            <strong>${formatPercent(day.attendance_rate)}</strong>
+            <small>${day.present || 0} present | ${day.absent || 0} absent</small>
+          </article>
+        `).join('')}
+      </div>
+      <div class="table-scroll"><table class="records-table attendance-summary-table" style="min-width: ${tableMinWidth}px">
+        <thead><tr>
+          <th>Student</th>
+          ${dates.map((date) => `<th>${escapeHtml(formatShortDate(date))}</th>`).join('')}
+        </tr></thead>
+        <tbody>${students.map((student) => `
+          <tr>
+            <td>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</td>
+            ${(student.attendance_records || []).map((record) => renderAttendanceStatusCell(record)).join('')}
+          </tr>
+        `).join('')}</tbody>
+      </table></div>
+    </section>
+  `;
+}
+
+function attendanceStatusOptions(selectedStatus) {
+  return [
+    ['present', 'Present'],
+    ['absent', 'Absent'],
+    ['late', 'Late'],
+    ['excused', 'Excused'],
+  ].map(([value, label]) => `<option value="${value}" ${selectedStatus === value ? 'selected' : ''}>${label}</option>`).join('');
+}
+
+function renderAttendanceStatusCell(record) {
+  if (!record || !record.is_recorded) {
+    return '<td><span class="attendance-status attendance-status--missing">No record</span></td>';
+  }
+  return `
+    <td>
+      <span class="attendance-status attendance-status--${escapeHtml(record.status)}">${escapeHtml(formatAttendanceStatus(record.status))}</span>
+      ${record.notes ? `<small>${escapeHtml(record.notes)}</small>` : ''}
+    </td>
+  `;
+}
+
+function formatAttendanceStatus(status) {
+  return {
+    present: 'Present',
+    absent: 'Absent',
+    late: 'Late',
+    excused: 'Excused',
+  }[status] || 'No record';
+}
+
+function formatShortDate(value) {
+  if (!value) return '';
+  const [, month = '', day = ''] = String(value).split('-');
+  return `${month}/${day}`;
 }
 
 function renderAssessmentTable(assessments) {

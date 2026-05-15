@@ -960,6 +960,104 @@ textarea {
   background: var(--paper);
 }
 
+.attendance-panel,
+.attendance-overview {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.attendance-toolbar {
+  display: grid;
+  grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: end;
+  padding: 0.8rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--paper);
+}
+
+.attendance-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.attendance-metrics .attendance-count--alert {
+  color: var(--danger);
+}
+
+.attendance-entry-table select,
+.attendance-entry-table input {
+  width: 100%;
+  min-width: 0;
+}
+
+.attendance-day-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 0.55rem;
+}
+
+.attendance-day-strip article {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.65rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--paper);
+}
+
+.attendance-day-strip span,
+.attendance-day-strip small {
+  color: var(--ink-500);
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.attendance-day-strip strong {
+  font-size: 1rem;
+}
+
+.attendance-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.attendance-status--present {
+  background: var(--green-50);
+  color: var(--green-900);
+}
+
+.attendance-status--absent {
+  background: rgba(220, 38, 38, 0.11);
+  color: var(--danger);
+}
+
+.attendance-status--late {
+  background: rgba(234, 179, 8, 0.18);
+  color: #854d0e;
+}
+
+.attendance-status--excused,
+.attendance-status--missing {
+  background: var(--ink-100);
+  color: var(--ink-500);
+}
+
+.attendance-summary-table td small {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--ink-400);
+  font-size: 0.68rem;
+}
+
 .bar-chart {
   display: grid;
   gap: 0.5rem;
@@ -2024,6 +2122,14 @@ legend {
 
   .performance-dashboard {
     grid-template-columns: 1fr;
+  }
+
+  .attendance-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .attendance-actions {
+    justify-content: flex-start;
   }
 
   .library-filter-row button {

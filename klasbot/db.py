@@ -263,6 +263,18 @@ def init_db(db_path: Path | None = None) -> None:
               UNIQUE (assessment_id, student_id)
             );
 
+            CREATE TABLE IF NOT EXISTS attendance_records (
+              id INTEGER PRIMARY KEY,
+              class_id INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+              student_id INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+              attendance_date TEXT NOT NULL,
+              status TEXT NOT NULL CHECK (status IN ('present','absent','late','excused')),
+              notes TEXT,
+              created_at TEXT NOT NULL DEFAULT (datetime('now')),
+              updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+              UNIQUE (class_id, student_id, attendance_date)
+            );
+
             CREATE TABLE IF NOT EXISTS schema_migrations (
               name TEXT PRIMARY KEY,
               applied_at TEXT NOT NULL
@@ -1679,6 +1691,204 @@ def save_score_grid(teacher_id: int, assessment_id: int, rows: list[dict[str, An
                 ),
             )
         return get_score_grid_by_id(connection, teacher_id, assessment_id)
+
+
+def get_attendance_grid(teacher_id: int, class_id: int, attendance_date: str) -> dict[str, Any] | None:
+    with connect() as connection:
+        return get_attendance_grid_by_date(connection, teacher_id, class_id, attendance_date)
+
+
+def get_attendance_grid_by_date(
+    connection: sqlite3.Connection,
+    teacher_id: int,
+    class_id: int,
+    attendance_date: str,
+) -> dict[str, Any] | None:
+    class_record = get_class_record_by_id(connection, teacher_id, class_id)
+    if not class_record:
+        return None
+    students = _list_class_students_by_connection(connection, teacher_id, class_id)
+    records = connection.execute(
+        """
+        SELECT *
+        FROM attendance_records
+        WHERE class_id = ? AND attendance_date = ?
+        """,
+        (class_id, attendance_date),
+    ).fetchall()
+    records_by_student = {int(row["student_id"]): dict(row) for row in records}
+    rows = []
+    for student in students:
+        record = records_by_student.get(int(student["id"]))
+        rows.append(
+            {
+                "student": student,
+                "attendance_id": record["id"] if record else None,
+                "status": record["status"] if record else "present",
+                "notes": record["notes"] if record else "",
+                "is_recorded": record is not None,
+            }
+        )
+    return {
+        "class": class_record,
+        "attendance_date": attendance_date,
+        "summary": _attendance_day_summary(rows),
+        "rows": rows,
+    }
+
+
+def save_attendance_grid(
+    teacher_id: int,
+    class_id: int,
+    attendance_date: str,
+    rows: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    now = utc_now()
+    allowed_statuses = {"present", "absent", "late", "excused"}
+    with connect() as connection:
+        if not get_class_record_by_id(connection, teacher_id, class_id):
+            return None
+        enrolled_ids = {
+            int(row["student_id"])
+            for row in connection.execute(
+                "SELECT student_id FROM class_enrollments WHERE class_id = ?",
+                (class_id,),
+            ).fetchall()
+        }
+        for item in rows:
+            student_id = int(item["student_id"])
+            if student_id not in enrolled_ids:
+                raise ValueError("Attendance includes a student outside this class")
+            status = (item.get("status") or "present").strip()
+            if status not in allowed_statuses:
+                raise ValueError("Attendance status is invalid")
+            connection.execute(
+                """
+                INSERT INTO attendance_records (
+                  class_id, student_id, attendance_date, status, notes, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(class_id, student_id, attendance_date) DO UPDATE SET
+                  status = excluded.status,
+                  notes = excluded.notes,
+                  updated_at = excluded.updated_at
+                """,
+                (
+                    class_id,
+                    student_id,
+                    attendance_date,
+                    status,
+                    (item.get("notes") or "").strip(),
+                    now,
+                    now,
+                ),
+            )
+        return get_attendance_grid_by_date(connection, teacher_id, class_id, attendance_date)
+
+
+def get_attendance_summary(teacher_id: int, class_id: int, limit: int = 30) -> dict[str, Any] | None:
+    with connect() as connection:
+        class_record = get_class_record_by_id(connection, teacher_id, class_id)
+        if not class_record:
+            return None
+        students = _list_class_students_by_connection(connection, teacher_id, class_id)
+        date_rows = connection.execute(
+            """
+            SELECT attendance_date
+            FROM attendance_records
+            WHERE class_id = ?
+            GROUP BY attendance_date
+            ORDER BY attendance_date DESC
+            LIMIT ?
+            """,
+            (class_id, max(1, min(int(limit or 30), 60))),
+        ).fetchall()
+        dates = [row["attendance_date"] for row in date_rows]
+        records_by_student_date: dict[tuple[int, str], dict[str, Any]] = {}
+        if dates:
+            placeholders = ",".join("?" for _ in dates)
+            record_rows = connection.execute(
+                f"""
+                SELECT *
+                FROM attendance_records
+                WHERE class_id = ? AND attendance_date IN ({placeholders})
+                """,
+                (class_id, *dates),
+            ).fetchall()
+            records_by_student_date = {
+                (int(row["student_id"]), row["attendance_date"]): dict(row)
+                for row in record_rows
+            }
+        day_summaries = []
+        student_count = len(students)
+        for attendance_date in dates:
+            day_records = [
+                records_by_student_date.get((int(student["id"]), attendance_date))
+                for student in students
+            ]
+            counts = _attendance_status_counts(day_records)
+            recorded_count = sum(counts.values())
+            counts["missing"] = max(0, student_count - recorded_count)
+            day_summaries.append(
+                {
+                    "attendance_date": attendance_date,
+                    "student_count": student_count,
+                    "recorded_count": recorded_count,
+                    **counts,
+                    "attendance_rate": _attendance_rate(counts, student_count),
+                }
+            )
+        student_rows = []
+        for student in students:
+            records = []
+            for attendance_date in dates:
+                record = records_by_student_date.get((int(student["id"]), attendance_date))
+                records.append(
+                    {
+                        "attendance_date": attendance_date,
+                        "status": record["status"] if record else None,
+                        "notes": record["notes"] if record else "",
+                        "is_recorded": record is not None,
+                    }
+                )
+            student_rows.append({**student, "attendance_records": records})
+        return {
+            "class": class_record,
+            "dates": dates,
+            "day_summaries": day_summaries,
+            "students": student_rows,
+        }
+
+
+def _attendance_day_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    counts = {"present": 0, "absent": 0, "late": 0, "excused": 0, "missing": 0}
+    for row in rows:
+        if not row.get("is_recorded"):
+            counts["missing"] += 1
+            continue
+        status = row.get("status")
+        if status in counts:
+            counts[status] += 1
+    return {
+        "student_count": len(rows),
+        **counts,
+        "attendance_rate": _attendance_rate(counts, len(rows)),
+    }
+
+
+def _attendance_status_counts(records: list[dict[str, Any] | None]) -> dict[str, int]:
+    counts = {"present": 0, "absent": 0, "late": 0, "excused": 0}
+    for record in records:
+        if record and record.get("status") in counts:
+            counts[record["status"]] += 1
+    return counts
+
+
+def _attendance_rate(counts: dict[str, int], student_count: int) -> float | None:
+    if not student_count:
+        return None
+    attended = int(counts.get("present") or 0) + int(counts.get("late") or 0)
+    return round(attended / student_count * 100, 1)
 
 
 def preview_grading_score_transfer(teacher_id: int, batch_id: int) -> dict[str, Any] | None:
