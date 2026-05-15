@@ -43,6 +43,23 @@ def test_expired_session_is_rejected(client):
     assert db.get_session("expired-token") is None
 
 
+def test_hosted_demo_cookie_survives_missing_session(tmp_path, monkeypatch):
+    monkeypatch.setenv("KLASBOT_DB_PATH", str(tmp_path / "klasbot.db"))
+
+    from klasbot import auth, db
+    from klasbot.auth import get_current_teacher, hash_pin
+
+    db.init_db()
+    db.create_teacher("Judge Demo", hash_pin("1111"), is_admin=True)
+    monkeypatch.setattr(auth, "HOSTED_DEMO_ENABLED", True)
+    monkeypatch.setattr(auth, "KLASBOT_DEMO_ADMIN_NAME", "Judge Demo")
+
+    teacher = get_current_teacher("session-from-another-vercel-instance")
+
+    assert teacher["name"] == "Judge Demo"
+    assert teacher["is_admin"] is True
+
+
 def test_teaching_aids_are_scoped_and_cascade_with_parent_output(tmp_path, monkeypatch):
     monkeypatch.setenv("KLASBOT_DB_PATH", str(tmp_path / "klasbot.db"))
 

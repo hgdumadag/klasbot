@@ -8,7 +8,7 @@ from fastapi import Cookie, HTTPException, Response, status
 from passlib.context import CryptContext
 
 from klasbot import db
-from klasbot.config import SESSION_COOKIE_NAME, SESSION_HOURS
+from klasbot.config import HOSTED_DEMO_ENABLED, KLASBOT_DEMO_ADMIN_NAME, SESSION_COOKIE_NAME, SESSION_HOURS
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
@@ -66,6 +66,9 @@ def get_current_teacher(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not logged in")
     session = db.get_session(session_token)
     if not session:
+        demo_teacher = _hosted_demo_teacher_for_cookie(session_token)
+        if demo_teacher:
+            return demo_teacher
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session")
     if session["expires_at"] <= db.utc_now():
         db.delete_session(session_token)
@@ -76,6 +79,20 @@ def get_current_teacher(
         "is_admin": bool(session["is_admin"]),
         "csrf_token": session["csrf_token"],
     }
+
+
+def _hosted_demo_teacher_for_cookie(session_token: str | None) -> dict | None:
+    if not HOSTED_DEMO_ENABLED or not session_token:
+        return None
+    for teacher in db.list_teachers():
+        if teacher["name"].casefold() == KLASBOT_DEMO_ADMIN_NAME.casefold():
+            return {
+                "id": teacher["id"],
+                "name": teacher["name"],
+                "is_admin": bool(teacher["is_admin"]),
+                "csrf_token": "",
+            }
+    return None
 
 
 def require_admin(teacher: dict) -> dict:
