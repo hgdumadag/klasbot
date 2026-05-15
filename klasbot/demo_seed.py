@@ -149,9 +149,8 @@ def _seed_scores(teacher_id: int, class_id: int) -> None:
 
 
 def _seed_curriculum_json() -> list[dict]:
-    current = db.list_curriculum_documents()
-    if current:
-        return current
+    if db.curriculum_grades():
+        return db.list_curriculum_documents()
     for path in _curriculum_paths():
         curriculum.ingest_json(source_path=path)
     return db.list_curriculum_documents()

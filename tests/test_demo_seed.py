@@ -39,3 +39,30 @@ def test_demo_seed_finds_packaged_curriculum_json():
     paths = demo_seed._curriculum_paths()
 
     assert any(path.parts[-2:] == ("curriculum_json", "matatag_mathematics_cg.json") for path in paths)
+
+
+def test_demo_seed_reimports_when_documents_exist_without_grades(tmp_path, monkeypatch):
+    monkeypatch.setenv("KLASBOT_DB_PATH", str(tmp_path / "klasbot.db"))
+
+    from klasbot import db
+    from klasbot.demo_seed import seed_demo_data
+
+    db.init_db()
+    with db.connect() as connection:
+        db.create_curriculum_document(
+            connection,
+            {
+                "subject": "Mathematics",
+                "title": "Broken stale import",
+                "filename": "broken.json",
+                "stored_path": "broken.json",
+                "version_label": "Broken",
+                "uploaded_by": None,
+                "active": True,
+                "parse_summary": {},
+            },
+        )
+
+    seed_demo_data("Judge Demo", "1111")
+
+    assert "Grade 4" in db.curriculum_grades()
