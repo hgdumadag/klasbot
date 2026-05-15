@@ -198,6 +198,8 @@ def _prepend_text(prefix: str, content: str | list[dict[str, Any]]) -> str | lis
 def _http_status_error_message(exc: httpx.HTTPStatusError) -> str:
     try:
         data = exc.response.json()
+        if isinstance(data, list) and data:
+            data = data[0]
         if isinstance(data, dict):
             error = data.get("error")
             if isinstance(error, dict) and error.get("message"):
