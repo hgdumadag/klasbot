@@ -121,11 +121,17 @@ def test_class_records_forms_do_not_overflow_workspace():
     assert "Add Students" in app_js
     assert "Create Assessments" in app_js
     assert "Student Performance" in app_js
+    assert "renderPerformanceDashboard" in app_js
+    assert "renderAssessmentResultCell" in app_js
+    assert "score-cell--low" in app_js
     assert ".class-record-create-form" in styles_css
     assert ".class-records-panel--detail .class-record-create-panel" in styles_css
     assert ".class-records-panel--detail .class-records-layout" in styles_css
     assert ".class-tab--on" in styles_css
     assert ".class-dashboard-grid" in styles_css
+    assert ".performance-dashboard" in styles_css
+    assert ".bar-track" in styles_css
+    assert ".score-cell--low" in styles_css
     assert ".inline-record-form .record-field--title" in styles_css
     assert ".inline-record-form input," in styles_css
     assert "min-width: 0;" in styles_css

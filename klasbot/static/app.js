@@ -1651,7 +1651,11 @@ function renderClassRecordDetail() {
           <h4>Student Performance</h4>
           <p class="microcopy">Use the indicators to spot learners who may need follow-up.</p>
         </div>
-        ${renderPerformanceTable(dashboard.students || [])}
+        ${renderPerformanceDashboard(dashboard)}
+        ${renderPerformanceTable(dashboard.students || [], {
+          assessments: dashboard.assessments || active.assessments || [],
+          showAssessmentResults: true,
+        })}
       </section>
     `,
   };
@@ -1792,19 +1796,113 @@ function renderAssessmentTable(assessments) {
   `;
 }
 
-function renderPerformanceTable(students) {
+function renderPerformanceTable(students, options = {}) {
   if (!students.length) return '<p class="microcopy">Add scores to see performance indicators.</p>';
+  const assessments = options.assessments || [];
+  const showAssessmentResults = Boolean(options.showAssessmentResults && assessments.length);
+  const tableMinWidth = showAssessmentResults ? Math.max(760, 380 + assessments.length * 150) : 620;
   return `
-    <div class="table-scroll"><table class="records-table">
-      <thead><tr><th>Student</th><th>Average</th><th>Indicator</th></tr></thead>
+    <div class="table-scroll"><table class="records-table performance-table" style="min-width: ${tableMinWidth}px">
+      <thead><tr>
+        <th>Student</th>
+        ${showAssessmentResults ? assessments.map((assessment) => `
+          <th>
+            <span class="assessment-column-title">${escapeHtml(assessment.title)}</span>
+            <small>Max ${formatNumber(assessment.max_score)}</small>
+          </th>
+        `).join('') : ''}
+        <th>Average</th>
+        <th>Indicator</th>
+      </tr></thead>
       <tbody>${students.map((student) => `
         <tr>
           <td>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</td>
-          <td>${formatPercent(student.average_percentage)}</td>
+          ${showAssessmentResults ? assessments.map((assessment) => renderAssessmentResultCell(
+            (student.assessment_results || []).find((result) => Number(result.assessment_id) === Number(assessment.id)),
+          )).join('') : ''}
+          <td class="${isBelowTarget(student.average_percentage) ? 'performance-value--low' : ''}">${formatPercent(student.average_percentage)}</td>
           <td><span class="status-pill">${escapeHtml(student.status_indicator)}</span></td>
         </tr>
       `).join('')}</tbody>
     </table></div>
+  `;
+}
+
+function renderPerformanceDashboard(dashboard) {
+  const assessments = dashboard.assessments || [];
+  const students = dashboard.students || [];
+  return `
+    <div class="performance-dashboard">
+      <article>
+        <h4>Assessment averages</h4>
+        ${renderAssessmentAverageBars(assessments, dashboard.target_percentage ?? 75)}
+      </article>
+      <article>
+        <h4>Student average bands</h4>
+        ${renderStudentDistributionBars(students)}
+      </article>
+    </div>
+  `;
+}
+
+function renderAssessmentAverageBars(assessments, target) {
+  if (!assessments.length) return '<p class="microcopy">No assessments yet.</p>';
+  return `
+    <div class="bar-chart">
+      ${assessments.map((assessment) => {
+        const average = assessment.average_percentage;
+        const width = average === null || average === undefined ? 0 : Math.max(0, Math.min(100, Number(average)));
+        const low = average !== null && average !== undefined && Number(average) < Number(target);
+        return `
+          <div class="bar-row">
+            <span title="${escapeHtml(assessment.title)}">${escapeHtml(assessment.title)}</span>
+            <div class="bar-track" aria-hidden="true"><i class="${low ? 'bar-fill--low' : ''}" style="width: ${width}%"></i></div>
+            <strong class="${low ? 'performance-value--low' : ''}">${formatPercent(average)}</strong>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderStudentDistributionBars(students) {
+  const buckets = [
+    ['90-100%', students.filter((student) => Number(student.average_percentage) >= 90).length],
+    ['75-89%', students.filter((student) => Number(student.average_percentage) >= 75 && Number(student.average_percentage) < 90).length],
+    ['60-74%', students.filter((student) => Number(student.average_percentage) >= 60 && Number(student.average_percentage) < 75).length],
+    ['0-59%', students.filter((student) => student.average_percentage !== null && student.average_percentage !== undefined && Number(student.average_percentage) < 60).length],
+    ['No data', students.filter((student) => student.average_percentage === null || student.average_percentage === undefined).length],
+  ];
+  const maxCount = Math.max(1, ...buckets.map(([, count]) => count));
+  return `
+    <div class="bar-chart">
+      ${buckets.map(([label, count]) => {
+        const low = label === '60-74%' || label === '0-59%';
+        return `
+          <div class="bar-row">
+            <span>${escapeHtml(label)}</span>
+            <div class="bar-track" aria-hidden="true"><i class="${low ? 'bar-fill--low' : ''}" style="width: ${Math.round((count / maxCount) * 100)}%"></i></div>
+            <strong class="${low && count ? 'performance-value--low' : ''}">${count}</strong>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderAssessmentResultCell(result) {
+  if (!result || result.is_missing) {
+    return '<td class="score-cell score-cell--muted">No data</td>';
+  }
+  if (result.is_absent) {
+    return '<td class="score-cell score-cell--muted">Absent</td>';
+  }
+  const low = Boolean(result.is_below_target);
+  return `
+    <td class="score-cell ${low ? 'score-cell--low' : ''}">
+      <strong>${formatPercent(result.percentage)}</strong>
+      <span>${formatNumber(result.score)} / ${formatNumber(result.max_score)}</span>
+    </td>
   `;
 }
 
@@ -1844,6 +1942,15 @@ function renderScoreEntry(grid) {
 
 function formatPercent(value) {
   return value === null || value === undefined ? 'No data' : `${Number(value).toFixed(Number(value) % 1 === 0 ? 0 : 1)}%`;
+}
+
+function formatNumber(value) {
+  if (value === null || value === undefined || value === '') return 'No data';
+  return Number(value).toFixed(Number(value) % 1 === 0 ? 0 : 1);
+}
+
+function isBelowTarget(value, target = 75) {
+  return value !== null && value !== undefined && Number(value) < target;
 }
 
 function updateLibraryFilters() {

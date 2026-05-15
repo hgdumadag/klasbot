@@ -69,7 +69,14 @@ def test_class_records_crud_score_entry_and_dashboards(client):
     assert dashboard["student_count"] == 2
     assert dashboard["class_average"] == 90
     assert dashboard["missing_or_absent_count"] == 1
+    assert dashboard["below_target_count"] == 0
+    assert dashboard["assessment_count"] == 1
     assert dashboard["students"][0]["status_indicator"] in {"On Track", "No Data", "Watch"}
+    students_by_name = {student["display_name"]: student for student in dashboard["students"]}
+    assert students_by_name["Ana Santos"]["assessment_results"][0]["percentage"] == 90
+    assert students_by_name["Ana Santos"]["assessment_results"][0]["is_below_target"] is False
+    assert students_by_name["Ben Reyes"]["assessment_results"][0]["is_absent"] is True
+    assert students_by_name["Ben Reyes"]["assessment_results"][0]["percentage"] is None
 
     assessment_dashboard = client.get(f"/api/class-records/assessments/{assessment_id}/dashboard")
     assert assessment_dashboard.status_code == 200

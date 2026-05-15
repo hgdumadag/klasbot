@@ -944,6 +944,73 @@ textarea {
   background: var(--paper);
 }
 
+.performance-dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.performance-dashboard article {
+  display: grid;
+  gap: 0.65rem;
+  min-width: 0;
+  padding: 0.8rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--paper);
+}
+
+.bar-chart {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(92px, 1fr) minmax(120px, 1.4fr) minmax(52px, auto);
+  gap: 0.55rem;
+  align-items: center;
+  min-height: 28px;
+}
+
+.bar-row span,
+.assessment-column-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bar-row span {
+  color: var(--ink-700);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.bar-track {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--ink-100);
+}
+
+.bar-track i {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green-700);
+}
+
+.bar-track .bar-fill--low {
+  background: var(--danger);
+}
+
+.bar-row strong {
+  font-size: 0.78rem;
+  text-align: right;
+}
+
 .inline-record-form {
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   align-items: end;
@@ -1005,6 +1072,39 @@ textarea {
   color: var(--ink-500);
   font-size: 0.72rem;
   text-transform: uppercase;
+}
+
+.performance-table th small {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--ink-400);
+  font-size: 0.68rem;
+  text-transform: none;
+}
+
+.score-cell strong,
+.score-cell span {
+  display: block;
+}
+
+.score-cell span {
+  margin-top: 0.12rem;
+  color: var(--ink-500);
+  font-size: 0.72rem;
+}
+
+.score-cell--low,
+.performance-value--low {
+  color: var(--danger);
+  font-weight: 850;
+}
+
+.score-cell--low span {
+  color: var(--danger);
+}
+
+.score-cell--muted {
+  color: var(--ink-400);
 }
 
 .records-table input[type="checkbox"] {
@@ -1919,6 +2019,10 @@ legend {
   }
 
   .class-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .performance-dashboard {
     grid-template-columns: 1fr;
   }
 

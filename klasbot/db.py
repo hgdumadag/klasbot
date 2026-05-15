@@ -1869,22 +1869,41 @@ def get_class_dashboard(teacher_id: int, class_id: int, target: float = 75.0) ->
             average = student.get("average_percentage")
             missing_absent = int(student.get("missing_count") or 0) + int(student.get("absent_count") or 0)
             status_label = "No Data" if average is None else "Watch" if average < target or missing_absent >= 2 else "On Track"
-            student_rows.append({**student, "status_indicator": status_label})
+            student_rows.append(
+                {
+                    **student,
+                    "status_indicator": status_label,
+                    "assessment_results": _student_assessment_results(
+                        connection,
+                        int(student["id"]),
+                        assessments,
+                        target,
+                    ),
+                }
+            )
         assessment_averages = [
             assessment["average_percentage"]
             for assessment in assessments
             if assessment.get("average_percentage") is not None
         ]
         class_average = _class_average(connection, class_id)
+        below_target_count = sum(
+            1
+            for student in student_rows
+            if student.get("average_percentage") is not None and float(student["average_percentage"]) < target
+        )
         return {
             "class": class_record,
             "student_count": len(students),
             "assessment_count": len(assessments),
             "class_average": class_average,
+            "target_percentage": target,
             "highest_assessment_average": max(assessment_averages) if assessment_averages else None,
             "lowest_assessment_average": min(assessment_averages) if assessment_averages else None,
             "missing_or_absent_count": sum(int(student.get("missing_count") or 0) + int(student.get("absent_count") or 0) for student in students),
+            "below_target_count": below_target_count,
             "recent_assessments": assessments[:5],
+            "assessments": assessments,
             "students": student_rows,
         }
 
@@ -1978,6 +1997,47 @@ def _student_summary(connection: sqlite3.Connection, class_id: int, student_id: 
         "missing_count": missing_count,
         "absent_count": absent_count,
     }
+
+
+def _student_assessment_results(
+    connection: sqlite3.Connection,
+    student_id: int,
+    assessments: list[dict[str, Any]],
+    target: float,
+) -> list[dict[str, Any]]:
+    score_rows = connection.execute(
+        """
+        SELECT assessment_id, score, is_absent
+        FROM scores
+        WHERE student_id = ?
+        """,
+        (student_id,),
+    ).fetchall()
+    scores_by_assessment = {int(row["assessment_id"]): dict(row) for row in score_rows}
+    results = []
+    for assessment in assessments:
+        assessment_id = int(assessment["id"])
+        score = scores_by_assessment.get(assessment_id)
+        max_score = float(assessment["max_score"])
+        raw_score = score.get("score") if score else None
+        is_absent = bool(score.get("is_absent")) if score else False
+        percentage = None
+        if raw_score is not None and not is_absent and max_score:
+            percentage = round(float(raw_score) / max_score * 100, 2)
+        results.append(
+            {
+                "assessment_id": assessment_id,
+                "title": assessment["title"],
+                "assessment_type": assessment["assessment_type"],
+                "max_score": max_score,
+                "score": raw_score,
+                "percentage": percentage,
+                "is_absent": is_absent,
+                "is_missing": score is None,
+                "is_below_target": percentage is not None and percentage < target,
+            }
+        )
+    return results
 
 
 def _class_average(connection: sqlite3.Connection, class_id: int) -> float | None:
