@@ -15,8 +15,14 @@ def test_demo_seed_creates_admin_and_sample_classes_idempotently(tmp_path, monke
     teachers = db.list_teachers()
     assert len([teacher for teacher in teachers if teacher["name"] == "Judge Demo"]) == 1
     assert find_teacher_by_pin("1111")["name"] == "Judge Demo"
-    assert len(first["classes"]) == len(second["classes"]) == 2
-    assert len(db.list_class_records(int(first["teacher"]["id"]))) == 2
+    assert len(first["classes"]) == len(second["classes"]) == 3
+    class_records = db.list_class_records(int(first["teacher"]["id"]))
+    assert len(class_records) == 3
+    assert {class_record["student_count"] for class_record in class_records} == {10}
+    for class_record in class_records:
+        students = db.list_class_students(int(first["teacher"]["id"]), int(class_record["id"]))
+        assert students is not None
+        assert len(students) == 10
 
 
 def test_demo_seed_finds_curriculum_json_from_working_directory(tmp_path, monkeypatch):
