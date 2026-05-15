@@ -1,0 +1,2632 @@
+{
+  "document": {
+    "subject": "Mathematics",
+    "title": "MATATAG K TO 10 CURRICULUM OF THE K TO 12 PROGRAM: MATHEMATICS GRADES 1-10",
+    "version_label": "MATATAG",
+    "source_year": "August 2023",
+    "grade_min": 1,
+    "grade_max": 10,
+    "source_filename": "FINAL_MATATAG_Mathematics_CG_2023_Grades_1-10.pdf",
+    "parse_summary": {
+      "unit_count": 40,
+      "grade_count": 10,
+      "total_competency_count": 506,
+      "average_confidence": 0.985,
+      "warning_count": 7,
+      "warnings": [
+        "Grade 1 Q4: Fraction notations '1/2' and '1/4' appeared as garbled OCR characters in source PDF; corrected by context.",
+        "Grade 6 Q1: Fraction '1/3' in competency 8a appeared as garbled OCR character in source PDF; corrected by context.",
+        "Grade 9 Q3: Performance standards table spans pages 62-63 with continuation page lacking column headers; inferred from context.",
+        "Grade 10 Q4: Performance standards continuation page (69) lacks column headers; inferred from context.",
+        "Multiple units: Mathematical symbols (π, exponents, superscripts for quadratic/polynomial notation) may carry OCR artifacts throughout; corrected by context.",
+        "Grade 3 Q3: Performance standards span pages 36-37 with a mid-table page break.",
+        "No 'Suggested Performance Tasks' column is present in this curriculum guide; suggested_tasks is null for all 40 units."
+      ]
+    }
+  },
+  "units": [
+    {
+      "grade_level": "Grade 1",
+      "quarter": 1,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. simple 2-dimensional shapes and their features; 2. whole numbers up to 100; 3. ordinal numbers up to 10th; 4. addition of numbers with sums up to 20",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. simple 2-dimensional shapes and their features; (NA) 2. whole numbers up to 100; 3. ordinal numbers up to 10th; 4. addition of numbers with sums up to 20.",
+      "performance_standard": "By the end of the quarter, the learners are able to: identify and distinguish simple 2-dimensional shapes (MG); count, recognize and represent whole numbers up to 100 (NA); use ordinal numbers up to 10th to describe position (NA); compare and order numbers up to 20 and perform addition of numbers with sums up to 20 (NA).",
+      "suggested_tasks": null,
+      "source_pages": "25",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "identify simple 2-dimensional shapes (triangle, rectangle, square) of different size and in different orientation."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "compare and distinguish 2-dimensional shapes according to features such as sides and corners."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "compose and decompose triangles, squares, and rectangles."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "count up to 100 (includes counting up or down from a given number and identifying a number that is 1 more or 1 less than a given number)."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "read and write numerals up to 100."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "recognize and represent numbers up to 100 using a variety of concrete and pictorial models (e.g., number line, block or bar models, and numerals)."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "compare two numbers up to 20."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "order numbers up to 20 from smallest to largest, and vice versa."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe the position of objects using ordinal numbers: 1st, 2nd, 3rd, up to 10th."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "compose and decompose numbers up to 10 using concrete materials (e.g., 5 is 5 and 0; 4 and 1; 3 and 2; 2 and 3; 1 and 4; 0 and 5)."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "illustrate addition of numbers with sums up to 20 using a variety of concrete and pictorial models and describes addition as \"counting up,\" and \"putting together.\""
+        },
+        {
+          "sequence": 12,
+          "competency_text": "illustrate by applying the following properties of addition, using sums up to 20: a. the sum of zero and any number is equal to the number, and b. changing the order of the addends does not change the sum."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "solve problems (given orally or in pictures) involving addition with sums up to 20."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 1",
+      "quarter": 2,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. measurement of length and distance using non-standard units; 2. place value in any 2-digit number; 3. addition of numbers, with sums up to 100",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. measurement of length and distance using non-standard units; (NA) 2. place value in any 2-digit number; 3. addition of numbers, with sums up to 100.",
+      "performance_standard": "By the end of the quarter, the learners are able to: use non-standard units to compare and measure length and distance (MG); order and decompose (into tens and ones) numbers up to 100 (NA); perform addition of numbers with sums up to 100 (NA).",
+      "suggested_tasks": null,
+      "source_pages": "26",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "measure the length of an object and the distance between two objects using non-standard units."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "compare lengths and distances using non-standard units."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "solve problems involving lengths and distances using non-standard units."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "order numbers up to 100 from smallest to largest, and vice versa."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "counts by 2s, 5s and 10s up to 100."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "determine a. the place value of a digit in a 2-digit number, b. the value of a digit, and c. the digit of a number, given its place value."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "decompose any 2-digit number into tens and ones."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "add numbers by expressing addends as tens and ones (expanded form)."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "add numbers with sums up to 100 without regrouping, using a variety of concrete and pictorial models for: a. 2-digit and 1-digit numbers, and b. 2-digit and 2-digit numbers."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "solve problems (given orally or in pictures) involving addition with sums up to 100 without regrouping."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 1",
+      "quarter": 3,
+      "domain": "Data and Probability (DP); Number and Algebra (NA)",
+      "content": "1. a pictograph without a scale for the representation of data; 2. subtraction of numbers where both numbers are less than 100; 3. repeating patterns",
+      "content_standards": "The learners should have knowledge and understanding of: (DP) 1. a pictograph without a scale for the representation of data; (NA) 2. subtraction of numbers where both numbers are less than 100; 3. repeating patterns.",
+      "performance_standard": "By the end of the quarter, the learners are able to: represent and interpret data in a pictograph without a scale (DP); perform subtraction of numbers where both numbers are less than 100 (NA); extend existing repeating patterns and create new repeating patterns (NA).",
+      "suggested_tasks": null,
+      "source_pages": "27",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "collect data in one variable through a simple interview."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "present data in a pictograph without a scale."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "interpret a pictograph without a scale."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "organize data in a pictograph without a scale into a table."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "illustrate subtraction involving numbers up to 20 using a variety of concrete and pictorial models, and describes subtraction as \"taking away.\""
+        },
+        {
+          "sequence": 6,
+          "competency_text": "find the missing number in addition or subtraction sentences involving numbers up to 20."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "write an equivalent expression to a given addition or subtraction expression (e.g., 2+3 = 1+4; 10-5 = 6-1)."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "solve subtraction problems (given orally or in pictures) where both numbers are less than 20."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "subtract numbers where both numbers are less than 100 using concrete and pictorial models, without regrouping: a. 2-digit minus 1-digit numbers, and b. 2-digit minus 2-digit numbers."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "subtract numbers by expressing minuends and subtrahends as tens and ones (expanded form), without regrouping."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "determine the next term/s in a repeating pattern (patterns could use rhythmic properties, visual elements in the arts, …) (e.g., numbers: 2, 4, 2, 4__, __; letters: a, b, c, a, b, c, a, __, __,)."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "create repeating patterns using objects, images, or numbers."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 1",
+      "quarter": 4,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. fractions 1/2 and 1/4; 2. the denominations and values of Philippine coins and bills up to ₱100; 3. addition of money where the sum is up to ₱100 and subtraction of money where both amounts are less than ₱100; 4. the movement of objects in half turn or quarter turn, in clockwise or counter clockwise direction; 5. time measured in hours, half-hours, quarter hours, days, weeks, months, and years",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. fractions 1/2 and 1/4; 2. the denominations and values of Philippine coins and bills up to ₱100; 3. addition of money where the sum is up to ₱100 and subtraction of money where both amounts are less than ₱100; (MG) 4. the movement of objects in half turn or quarter turn, in clockwise or counter clockwise direction; 5. time measured in hours, half-hours, quarter hours, days, weeks, months, and years.",
+      "performance_standard": "By the end of the quarter, the learners are able to: illustrate and compare the fractions 1/2 and 1/4 (NA); recognize, and determine the value of, Philippine coins and bills up to ₱100 (NA); add money where the sum is up to ₱100 and subtract money where both amounts are less than ₱100 (NA); identify the position of an object following a half turn or quarter turn, in clockwise or counter-clockwise direction (MG); identify and work with time measured in hours, half hours, quarter hours, days, weeks, months, and years (MG).",
+      "suggested_tasks": null,
+      "source_pages": "28",
+      "confidence": 0.85,
+      "warnings": [
+        "Fraction notations '1/2' and '1/4' appeared as garbled OCR characters in the source PDF; corrected by context."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "illustrate 1/2 and 1/4 as parts of a whole."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "compare 1/2 and 1/4 using models."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "count halves and quarters."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "recognize coins (excluding centavo coins) and bills up to ₱100 and their notations."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "determine the value of a number of bills and/or a number of coins (excluding centavo coins) up to ₱100."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "compare different denominations of peso coins (excluding centavo coins) and bills up to ₱100."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "solve 1-step problems (given orally or in pictures) involving addition of money where the sum is up to ₱100, or subtraction of money where both amounts are less than ₱100."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "identify the position of objects moved in half turn or in quarter turn, in clockwise or in counter-clockwise direction, given an initial facing direction."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "read and write time by the hour, half hour, and quarter hour using an analog clock."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "give the days of the week and months of the year in the correct order."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "determine the day and month of the year using a calendar."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve problems involving time (hour, half hour, quarter hour, days in a week, and months in a year)."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 2",
+      "quarter": 1,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. circles, half circles, quarter circles and composite figures made up of squares, rectangles, triangles, circles, half circles, and quarter circles; 2. one step slides and flips of basic shapes and figures; 3. whole numbers up to 1000; 4. ordinal numbers up to 20th; 5. addition of numbers with sums up to 1000",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. circles, half circles, quarter circles and composite figures made up of squares, rectangles, triangles, circles, half circles, and quarter circles; 2. one step slides and flips of basic shapes and figures; (NA) 3. whole numbers up to 1000; 4. ordinal numbers up to 20th; 5. addition of numbers with sums up to 1000.",
+      "performance_standard": "By the end of the quarter, the learners are able to: represent and describe circles, half circles and quarter circles (MG); compose and decompose composite figures made up of squares, rectangles, triangles, circles, half circles, and quarter circles (MG); describe and draw the effect of one-step slides or flips in basic shapes and figures (MG); count, recognize, and represent, whole numbers up to 1000 (NA); use ordinal numbers up to 20th to describe position (NA); perform addition of numbers with sums up to 1000 (NA).",
+      "suggested_tasks": null,
+      "source_pages": "29-30",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "represent and describe circles, half circles and quarter circles."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "compose and decompose composite figures made up of squares, rectangles, triangles, circles, half circles, and quarter circles, using cut-outs and square grids."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe and draw the effect of one-direction multi-step slide (or translation) in basic shapes and figures."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "count up to 1000."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "read and write numerals up to 1000."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "recognize and represent numbers up to 1000 using a variety of concrete and pictorial models, and numerals."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "count by 2s, 5s, 10s, 20s, 50s, and 100s (not beyond 1000)."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "order numbers up to 1000 from smallest to largest, and vice versa."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe the position of objects using ordinal numbers up to 20th."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "determine a. the place value of a digit in a 3-digit number, b. the value of a digit, and c. the digit of a number, given its place value."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "illustrate addition of 2-digit and by 1-digit numbers as \"counting up\" on the number line."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "add numbers with sums up to 1000 in expanded form."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "add numbers with sums up to 1000, with or without regrouping."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "illustrate and apply the following properties of addition using sums up to 1000: a. the sum of zero and any number is equal to the number, b. changing the order of the addends does not change the sum, and c. changing the grouping of the addends does not change the sum."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 2",
+      "quarter": 2,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. the denominations and values of Philippine coins and bills up to ₱1000, and the addition of amounts of money with sums up to ₱1000; 2. measurement, comparison, and estimation of length and distance using appropriate tools and units; 3. subtraction of numbers where both numbers are less than 1000; 4. increasing patterns and decreasing patterns",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. the denominations and values of Philippine coins and bills up to ₱1000, and the addition of amounts of money with sums up to ₱1000; (MG) 2. measurement, comparison, and estimation of length and distance using appropriate tools and units; (NA) 3. subtraction of numbers where both numbers are less than 1000; 4. increasing patterns and decreasing patterns.",
+      "performance_standard": "By the end of the quarter, the learners are able to: determine, and compare the value of, combinations of Philippine coins and bills up to ₱1000 (MG); perform addition of amounts of money with sums up to ₱1000 (NA); measure, compare, and estimate, length and distance using appropriate units (MG); perform subtraction of numbers where both numbers are less than 1000 (NA); extend existing increasing patterns and decreasing patterns and create new increasing patterns and decreasing patterns (NA).",
+      "suggested_tasks": null,
+      "source_pages": "31",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "determine and write the value of a number of bills, or a number of coins, or a combination of bills and coins up to ₱1000 (centavo coins only, peso coins only, peso bills only, combined peso coins and peso bills)."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "compare the values of different denominations of peso coins and bills up to ₱1000."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "solve problems involving addition with sums up to 1000, including problems involving money, with and without regrouping."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "measure and compare lengths of objects, in meters (m) or centimeters (cm), and distance in meters, using appropriate measuring tools."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "identify and use the appropriate unit (m or cm) to measure the length of an object and the distance between two locations."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "estimate length using meters or centimeters, and distance using meters."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "solve problems involving length and distance."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "illustrate subtraction of 2-digit by 1-digit on the number line and as an inverse of addition."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "subtract numbers where both numbers are less than 100 with regrouping: a. 2-digit minus 1-digit numbers, and b. 2-digit minus 2-digit numbers."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "solve problems (given orally or in pictures) involving subtraction where both numbers are less than 100, with and without regrouping."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "subtract numbers, where both numbers are less than 1000, with and without regrouping."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve 1- and 2-step problems involving subtraction where both numbers are less than 1000 (including problems involving money), with and without regrouping."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "determine the next term/s in increasing or decreasing patterns, e.g., numbers, letters and rhythmic properties, visual elements in arts, and repetitions."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "create increasing or decreasing patterns."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 2",
+      "quarter": 3,
+      "domain": "Data and Probability (DP); Number and Algebra (NA)",
+      "content": "1. a pictograph with a scale for the representation of data; 2. multiplication and division of whole numbers using the 2, 3, 4, 5, and 10 multiplication tables; 3. odd and even numbers",
+      "content_standards": "The learners should have knowledge and understanding of: (DP) 1. a pictograph with a scale for the representation of data; (NA) 2. multiplication and division of whole numbers using the 2, 3, 4, 5, and 10 multiplication tables; 3. odd and even numbers.",
+      "performance_standard": "By the end of the quarter, the learners are able to: represent and interpret data in a pictograph with a scale (DP); perform multiplication and division of whole numbers using the 2, 3, 4, 5, and 10 multiplication tables (NA); distinguish even and odd numbers (NA).",
+      "suggested_tasks": null,
+      "source_pages": "32",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "present raw data, or data in tabular form, in a pictograph with a scale, or vice versa."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "interpret data in tabular form and in a pictograph with or without scale."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "count the number of concrete objects in a group by repeated addition and create equal groups, using language such as \"5 groups of 3\" and \"5 threes\"."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "illustrate and write multiplication as repeated addition, using a variety of concrete and pictorial models and numerals, and using a. groups of equal quantities, b. arrays, c. counting by multiples, and d. equal jumps on a number line."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "multiply numbers using the 2, 3, 4, 5, and 10 multiplication tables."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "solve multiplication problems using the 2, 3, 4, 5, and 10 multiplication tables, including problems involving money."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "illustrate division through equal distribution of a number of objects into several groups."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "illustrate and write division expressions using a variety of concrete and pictorial models and numerals, in modelling division as: a. equal sharing or formation of equal groups of objects, and b. repeated subtraction."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "divide numbers using the 2, 3 4, 5, and 10 multiplication tables."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "find the missing number in a number sentence involving multiplication or division by 2, 3, 4, 5, and 10."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "distinguish even and odd numbers using division by 2."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve division problems using the 2, 3, 4, 5, and 10 multiplication tables, including problems involving money."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 2",
+      "quarter": 4,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. unit fractions and similar fractions with denominators 2, 3, 4, 5, 6, and 8; 2. duration of time, elapsed time, and telling and writing time in hours and minutes (using a.m. and p.m.); 3. straight and curved lines, and flat and curved surfaces; 4. the perimeter of triangles, squares, and rectangles",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. unit fractions and similar fractions with denominators 2, 3, 4, 5, 6, and 8; (MG) 2. duration of time, elapsed time, and telling and writing time in hours and minutes (using a.m. and p.m.); 3. straight and curved lines, and flat and curved surfaces; 4. the perimeter of triangles, squares, and rectangles.",
+      "performance_standard": "By the end of the quarter, the learners are able to: represent, identify, and order unit fractions and similar fractions with denominators 2, 3, 4, 5, 6, and 8 (NA); identify and work with time measured in hours, half-hours, quarter hours, days, weeks, months, years (MG); describe duration of time and elapsed time, and read and write time in hours and minutes (MG); distinguish between straight and curved lines, and between flat and curved surfaces (MG); find the perimeter of triangles, squares, and rectangles (MG).",
+      "suggested_tasks": null,
+      "source_pages": "33",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "represent and identify unit fractions with denominators 2, 3, 4, 5, 6, and 8."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "read and write unit fractions in fraction notation."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "order unit fractions from smallest to largest, and vice versa."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "represent and identify similar fractions with denominators 2, 3, 4, 5, 6, and 8 using groups of objects, fraction charts, fraction tiles, and the number line."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "read and write similar fractions in fraction notation."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "order similar fractions from smallest to largest, and vice versa."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "describe the duration of an event in terms of number of days and/or weeks using a calendar."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "read and write time in hours and minutes, with a.m. and p.m., using an analog clock."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve problems involving elapsed time (minutes in an hour, hours in a day, days in a week), including timetables."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "identify and explain the difference between straight and curved lines, and flat and curved surfaces of 3-dimensional objects."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "identify and measure the perimeter of a plane figure using appropriate tools."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "find the perimeter of triangles, squares, and rectangles."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "solve problems involving perimeter of triangles, squares, and rectangles."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 3",
+      "quarter": 1,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. areas of squares and rectangles; 2. points, lines, line segments, and rays; 3. parallel, perpendicular, and intersecting lines; 4. whole numbers up to 10 000; 5. ordinal numbers up to 100th",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. areas of squares and rectangles; 2. points, lines, line segments, and rays; 3. parallel, perpendicular, and intersecting lines; (NA) 4. whole numbers up to 10 000; 5. ordinal numbers up to 100th.",
+      "performance_standard": "By the end of the quarter, the learners are able to: determine the area of squares and rectangles (MG); recognize and draw points, lines, lines segments, rays, and parallel and perpendicular lines (MG); represent, round, compare, and order numbers up to 10 000 (NA).",
+      "suggested_tasks": null,
+      "source_pages": "34",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "illustrate and estimate the area of a square or rectangle using square tile units."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "explore inductively the derivation of the formulas for the areas of a square and a rectangle using square tile units."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "find the areas of squares and rectangles in sq. cm and sq. m."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "solve problems involving areas of squares and rectangles."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "recognize, using models, and draws a point, line, line segment, and ray."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "recognize and draw parallel, intersecting, and perpendicular lines."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "identify and draw line segments of equal length using a ruler."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "represent numbers up to 10 000 using pictorial models and numerals."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "read and write numbers up to 10 000 in numerals and in words."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "describe the position of objects using ordinal numbers up to 100th."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "determine a. the place value of a digit in a 4-digit number, b. the value of a digit, and c. the digit of number, given its place value."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "round numbers to the nearest ten, hundred, or thousand."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "compare numbers up to 10 000 using the symbols =, >, and <."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "order numbers up to 10 000 from smallest to largest, and vice versa."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 3",
+      "quarter": 2,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. measures of mass and capacity; 2. addition and subtraction of numbers of up to 4 digits and money up to ₱10 000",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. measures of mass and capacity; (NA) 2. addition and subtraction of numbers of up to 4 digits and money up to ₱10 000.",
+      "performance_standard": "By the end of the quarter, the learners are able to: measure, estimate, and compare mass of objects (MG); measure and estimate capacity (MG); add and subtract whole numbers (including amounts of money) of up to 4 digits (NA).",
+      "suggested_tasks": null,
+      "source_pages": "35",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "measure mass in grams (g), kilograms (kg) and/or milligrams (mg), using appropriate measuring tools."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "estimate mass of an object using grams, kilograms, and/or milligrams."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "compare masses of objects including the use of a balance scale."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "measure capacity in liters (L) and/or milliliters (mL), using appropriate measuring tools."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "estimate capacity using liters and/or milliliters."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "compare capacities of two containers."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "read and write money in words and using: a. Philippine currency symbols (₱ and PhP) up to ₱10 000, and b. the centavo sign."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "add numbers with sums up to 10 000, with and without regrouping."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "estimate the sum of addends with up to 4 digits."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "solve problems involving addition of numbers with sums up to 10 000, including problems involving money."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "subtract numbers, where both numbers are less than 10 000, with and without regrouping."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "estimate the difference of two numbers of up to 4 digits."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "perform addition and subtraction of 3 to 4 numbers of up to 2 digits, observing correct order of operations."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "solve problems involving addition and subtraction with 3 to 4 numbers of up to 2 digits, including problems involving money."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 3",
+      "quarter": 3,
+      "domain": "Data and Probability (DP); Number and Algebra (NA)",
+      "content": "1. data presented in tables and single bar graphs; 2. outcomes from experiments and real-life situations; 3. multiplication using 6, 7, 8, and 9 multiplication tables; 4. properties of multiplication; 5. multiplication of numbers with and without regrouping; 6. estimation of products of two numbers by first rounding to the nearest multiple of 10; 7. determination of missing terms contained in repeating and increasing patterns, and repeating and decreasing patterns; 8. generation of repeating and increasing patterns, and repeating and decreasing patterns",
+      "content_standards": "The learners should have knowledge and understanding of: (DP) 1. data presented in tables and single bar graphs; 2. outcomes from experiments and real-life situations; (NA) 3. multiplication using 6, 7, 8, and 9 multiplication tables; 4. properties of multiplication; 5. multiplication of numbers with and without regrouping; 6. estimation of products of two numbers by first rounding to the nearest multiple of 10; 7. determination of missing terms contained in repeating and increasing patterns, and repeating and decreasing patterns; 8. generation of repeating and increasing patterns, and repeating and decreasing patterns.",
+      "performance_standard": "By the end of the quarter, the learners are able to: present and interpret data in tables and single bar graphs (DP); describe and compare outcomes of events (DP); multiply using 6, 7, 8, and 9 multiplication tables (NA); illustrate and applies properties of multiplication (NA); multiply numbers with and without regrouping (NA); estimate products of two numbers by first rounding to the nearest multiple of 10 (NA); find a missing term and generate repeating and increasing patterns, and repeating and decreasing patterns (NA).",
+      "suggested_tasks": null,
+      "source_pages": "36-37",
+      "confidence": 0.95,
+      "warnings": [
+        "Performance standards table spans pages 36-37 with a mid-table page break; continuation on p.37 confirmed consistent with column headers on p.36."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "collect data from experiments with a small number of possible outcomes (e.g., rolling a die or tossing a coin)."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "present data in tables and single bar graphs (horizontal and vertical)."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "interpret data in tables and single bar graphs (horizontal and vertical)."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "solve problems using data presented in a single bar graph (horizontal and vertical)."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe and compare outcomes in real-life situations using the following terms: equally likely, less/least likely, more/most likely, certain, and impossible."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "multiply numbers using the 6, 7, 8, and 9 multiplication tables."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "illustrate and apply properties of multiplication for the 6, 7, 8, and 9 multiplication tables: a. one multiplied by any number is equal to the number; b. zero multiplied by any number is zero; c. changing the order of the numbers being multiplied does not change the product; d. changing the grouping of the numbers being multiplied does not change the product; and e. multiplying the sum of two addends by a number is the same as the sum of the products of a number by each addend."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "multiply numbers with and without regrouping: a. 2- to 3-digit numbers by a 1-digit number, and b. 2- to 4-digit numbers by a number whose leading digit is the only non-zero digit, with products up to 10 000."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "estimate the product of 2- to 3-digit numbers by 1- to 2-digit numbers by estimating the factors using multiples of 10."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "solve 1-to 2-step multiplication problems, including problems involving money."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "determine the missing term/s in a pattern with repeating and increasing components or repeating and decreasing components (e.g., 1a, 1b, 1c, 2a, 2b, 2c, …)."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "explain how to generate a given pattern with repeating and increasing components or repeating and decreasing components."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 3",
+      "quarter": 4,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. division using the 6, 7, 8, and 9 multiplication tables; 2. division of 2- to 4-digit numbers; 3. estimation of quotients by first rounding the divisor and dividend to the nearest multiple of 10; 4. addition and subtraction of similar fractions; 5. line symmetry; 6. resulting figure after a translation",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. division using the 6, 7, 8, and 9 multiplication tables; 2. division of 2- to 4-digit numbers; 3. estimation of quotients by first rounding the divisor and dividend to the nearest multiple of 10; 4. addition and subtraction of similar fractions; (MG) 5. line symmetry; 6. resulting figure after a translation.",
+      "performance_standard": "By the end of the quarter, the learners are able to: use the 6, 7, 8, and 9 multiplication tables to divide numbers (NA); divide 2- to 4-digit numbers (NA); estimate quotients by first rounding the divisor and dividend to the nearest multiple of 10 (NA); add and subtract similar fractions (NA); identify a symmetrical shape and draw the line of symmetry (MG).",
+      "suggested_tasks": null,
+      "source_pages": "38",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "illustrate division through equal jumps on the number line and as inverse of multiplication."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "divide numbers using the 6, 7, 8, and 9 multiplication tables."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "find the missing number in a number sentence involving multiplication or division by 6, 7, 8, and 9 (e.g., __ x 7 = 56; 56 ÷ __ = 7)."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "divide numbers with and without remainder: a. 2- to 3-digit numbers by 1-digit number without remainder, b. 2-digit numbers by 1-digit number with remainder, and c. 2- to 4-digit numbers by 10, 100, and 1000."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "estimate the quotient of 2- to 3-digit numbers divided by 1- to 2-digit numbers, using multiples of 10 or 100 as appropriate."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "solve division problems involving 2- to 3-digit numbers by a 1-digit number, including problems involving money."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "represent fractions that are equal to one and greater than one using models."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "add and subtract similar fractions using models."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe and draw the effect of a two-direction multi-step slide (or translation) in basic shapes and figures."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "identify shapes or figures that show line symmetry by drawing the line of symmetry."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "complete a figure that is symmetric with respect to a line."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 1,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. measures of angles; 2. properties of triangles and quadrilaterals; 3. perimeter of quadrilaterals, and composite figures composed of triangles and quadrilaterals; 4. whole numbers up to 1 000 000; 5. addition of numbers with sums up to 1 000 000 and subtraction of numbers where both numbers are less than 1 000 000",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. measures of angles; 2. properties of triangles and quadrilaterals; 3. perimeter of quadrilaterals, and composite figures composed of triangles and quadrilaterals; (NA) 4. whole numbers up to 1 000 000; 5. addition of numbers with sums up to 1 000 000 and subtraction of numbers where both numbers are less than 1 000 000.",
+      "performance_standard": "By the end of the quarter, the learners are able to: illustrate and measure different angles (MG); classify triangles and quadrilateral, and differentiate quadrilaterals, by applying their properties (MG); find the perimeter of quadrilaterals and composite figures composed of triangles and quadrilaterals (MG); read, write, and compare whole numbers up to 1 000 000 (NA); performs addition of numbers with sums up to 1 000 000 and subtraction of numbers where both numbers are less than 1 000 000 (NA).",
+      "suggested_tasks": null,
+      "source_pages": "39",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "illustrate different angles (right, acute, and obtuse) using models."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "measure and draw angles using a protractor."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "draw and state the properties of triangles and quadrilaterals."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "classify triangles and quadrilaterals according to sides and angles."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "differentiate different quadrilaterals."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "find the perimeter of quadrilaterals that are not squares or rectangles."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "find the perimeter of composite figures composed of triangles and quadrilaterals."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "read and write numbers up to 1 000 000 in numerals and in words."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "determine a. the place value of a digit in a 6-digit number, b. the value of a digit, and c. the digit of number, given its place value."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "compare numbers up to 1 000 000 using =, < and >."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "round numbers to the nearest hundred thousand."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "estimate the sum and difference of two 5- to 6-digit numbers by rounding the addends to the nearest large place value of the numbers."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "add numbers with sums up to 1 000 000 and subtracts numbers where both numbers are less than 1 000 000, with and without regrouping."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 2,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. multiplication of whole numbers with products up to 1 000 000, division of up to 4-digit numbers by up to 2-digit numbers, and the MDAS rules; 2. conversion of units of length, mass, capacity, and time; 3. addition and subtraction of similar fractions, including mixed numbers",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. multiplication of whole numbers with products up to 1 000 000, division of up to 4-digit numbers by up to 2-digit numbers, and the MDAS rules; (MG) 2. conversion of units of length, mass, capacity, and time; (NA) 3. addition and subtraction of similar fractions, including mixed numbers.",
+      "performance_standard": "By the end of the quarter, the learners are able to: perform multiplication of whole numbers with products up to 1 000 000 (NA); perform division of up to 4-digit numbers by up to 2-digit numbers (NA); perform different operations by applying the MDAS rules (NA); convert units of length, mass, capacity, and time (MG); perform addition and subtraction of similar fractions, including mixed numbers (NA).",
+      "suggested_tasks": null,
+      "source_pages": "40-41",
+      "confidence": 0.97,
+      "warnings": [
+        "Content spans two pages (40-41); page break falls between conversion and fractions sections; continuity verified."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "multiply two numbers with and without regrouping: a. 3- to 4-digit numbers by a 1-digit number, and b. 2- to 3-digit numbers by 2-digit numbers, with products up to 1 000 000."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "estimate the result of multiplying two numbers where the product is less than 1 000 000."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "solve multi-step problems involving one or more of the four operations with results of calculations up to 1 000 000, including problems involving money."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "divide two numbers with and without regrouping: a. 3- to 4-digit numbers by 1-digit numbers, b. 2- to 3-digit numbers by 2-digit numbers."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "estimate the quotient when dividing 3- to 4-digit dividends by 1- to 2-digit divisors, by first estimating the dividends and divisors using multiples of 10."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "represent situations involving one or more of the four operations using a number sentence."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "perform two or more different operations by applying the MDAS rules."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "convert common units of measure from larger to smaller units, and vice versa: a. meter and centimeter, b. kilometer and meter, c. kilogram and gram, d. gram and milligram, and e. liter and milliliter."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "convert time measures from smaller to larger units, and vice versa: a. seconds to minutes, b. minutes to hours, c. hours to days, d. days to weeks, e. weeks to months, and f. months to years."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "solve problems involving conversion of units of length, mass, capacity, and time, including problems involving elapsed time in hours and minutes."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "identify proper fractions, improper fractions, and mixed numbers."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "rewrite improper fractions into mixed numbers, and vice versa."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "plot fraction (proper fractions, improper fractions, and mixed numbers) with denominators 2, 4, 5, and 10 on the number line."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "add and subtract similar fractions: a. two proper fractions, b. two mixed numbers, c. a mixed number and a proper fraction, d. a whole number and a proper fraction, and e. a whole number and a mixed number."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 3,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. dissimilar and equivalent fractions; 2. factors and multiples of numbers up to 100; 3. addition and subtraction of dissimilar fractions; 4. symmetric figures with respect to a line; 5. resulting images after applying reflection with respect to a line",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. dissimilar and equivalent fractions; 2. factors and multiples of numbers up to 100; 3. addition and subtraction of dissimilar fractions; (MG) 4. symmetric figures with respect to a line; 5. resulting images after applying reflection with respect to a line.",
+      "performance_standard": "By the end of the quarter, the learners are able to: represent, compare, and order dissimilar fractions (NA); find factors and multiples of numbers up to 100 (NA); identify symmetry with respect to a line, and create figures that have line symmetry (MG); perform reflection with respect to a line, including glide reflection, to obtain images of shapes (MG).",
+      "suggested_tasks": null,
+      "source_pages": "42",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "represent dissimilar fractions, with denominators up to 10, using models."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "compare dissimilar fractions using the symbols =, >, and <."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "order dissimilar fractions from smallest to largest, and vice versa."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "generate equivalent fractions using models."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "determine equivalent fractions."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "identify the multiples of given numbers up to 100."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "find all the factors of a given number up to 100."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "reduce fractions to simplest form."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "add and subtract dissimilar fractions using models."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "add and subtract dissimilar fractions: a. two proper fractions, b. two mixed numbers, c. a mixed number and a proper fraction, d. a whole number and a proper fraction, and e. a whole number and a mixed number."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve multi-step problems involving addition and/or subtraction of fractions."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "identify symmetry with respect to a line."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "complete a figure that is symmetric with respect to a line."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "draws the image of an object after applying reflection with respect to a line, including glide reflection."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 4,
+      "domain": "Data and Probability (DP); Number and Algebra (NA)",
+      "content": "1. presentation and interpretation of data in tabular form and in a single line graph; 2. simple patterns; 3. number sentences; 4. decimal numbers and their relationship to fractions",
+      "content_standards": "The learners should have knowledge and understanding of: (DP) 1. presentation and interpretation of data in tabular form and in a single line graph; (NA) 2. simple patterns; 3. number sentences; 4. decimal numbers and their relationship to fractions.",
+      "performance_standard": "By the end of the quarter, the learners are able to: present and interpret data in tabular form and in a single line graph (DP); generate a simple pattern and describe the rule used (NA); complete number sentences to represent number properties and number facts (NA); represent, compare, order, and round decimal numbers (NA); convert decimal numbers to fractions and fractions (with denominators 10 or 100) to decimals (NA).",
+      "suggested_tasks": null,
+      "source_pages": "43",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "collect data with time element using appropriate sources."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "present data in a tabular form, or in a single line graph."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "interpret data presented in a tabular form, or in a single line graph."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "solve problems using data for at most two variables in a tabular form, or in a single line graph."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe the rule used to generate a given simple pattern."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "complete a number sentence: a. to represent a property of operations (e.g., 4 + 3 = 3 + __) (commutative property of addition), b. to represent equivalent number facts (e.g., 4 + __ = 6 + 3)."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "represent decimal numbers using models and manipulatives to show the relationship to fractions."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "read and write decimal numbers with decimal parts to hundredths."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "determine a. the place value to hundredths of a digit in a given decimal number, b. the value of a digit, and c. the digit of number, given its place value."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "convert decimal numbers to fractions, and fractions with denominators 10 or 100 to decimals."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "plot decimal numbers with tenth decimal part on the number line."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "compare and order decimal numbers with decimal parts to hundredths."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "round decimal numbers to the nearest whole number and to the nearest tenth."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 1,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. 12- and 24-hour time, and world time zones; 2. the GMDAS rules for operations with numbers; 3. multiplication of fractions; 4. area of a parallelogram, triangle, and trapezoid",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. 12- and 24-hour time, and world time zones; (NA) 2. the GMDAS rules for operations with numbers; 3. multiplication of fractions; (MG) 4. area of a parallelogram, triangle, and trapezoid.",
+      "performance_standard": "By the end of the quarter, the learners are able to: use 12- and 24-hour time (MG); compare the time in world time zones with the time in the Philippines (MG); use the GMDAS rules for 3 or more different operations (NA); multiply fractions (NA); determine the area of a parallelogram, triangle, and trapezoid (MG).",
+      "suggested_tasks": null,
+      "source_pages": "44",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "describe a 12- and 24-hour clock system."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "convert 12-hour time to 24-hour time, and vice-versa."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "solve problems involving 12- and 24-hour time."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "compare the time in different world time zones to the time in the Philippines using a world time zone map."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "solve problems on comparing the time in different world time zones to the time in the Philippines."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "perform three or more different operations by applying the GMDAS rules."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "multiply fractions using models."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "multiply a fraction by a fraction."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve multi-step problems involving multiplication of fractions that may or may not also involve addition or subtraction of fractions."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "identify the height of a parallelogram, triangle, and trapezoid, in different orientations."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "find the area of a parallelogram, triangle, and trapezoid, in sq. cm or sq. m, using formulas."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "estimate the areas of triangles and quadrilaterals (parallelogram, rhombus, trapezoid) using grids."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 2,
+      "domain": "Number and Algebra (NA)",
+      "content": "1. division of fractions; 2. decimal numbers with decimal parts up to ten thousandths; 3. addition and subtraction of decimal numbers; 4. divisibility rules; 5. prime and composite numbers",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. division of fractions; 2. decimal numbers with decimal parts up to ten thousandths; 3. addition and subtraction of decimal numbers; 4. divisibility rules; 5. prime and composite numbers.",
+      "performance_standard": "By the end of the quarter, the learners are able to: divide fractions (NA); compare, order, and round decimals to the nearest one thousandth (NA); add and subtract decimal numbers (NA); use divisibility rules (NA); distinguish prime numbers from composite numbers (NA).",
+      "suggested_tasks": null,
+      "source_pages": "45",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "divide fractions using models."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "divide a fraction by a fraction."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "solve multi-step problems involving division of fractions that may or may not involve the other operations with fractions."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "determine a. the place value to thousandths of a digit in a given decimal number, b. the value of a digit, and c. the digit of a number, given its place value."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "read and write decimal numbers with decimal parts to thousandths."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "convert terminating decimals to fractions, and vice versa."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "compare and order decimal numbers with decimal parts to thousandths."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "round decimal numbers to the nearest thousandths."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "add and subtract decimal numbers with decimal parts of up to 3 decimal places."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "solve multi-step problems involving addition and/or subtraction of decimals, including problems involving money."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "use divisibility rules to find common factors of numbers: a. divisibility rules for 2, 5, and 10, b. divisibility rules for 3, 6, and 9, and c. divisibility rules for 4, 8, 11, and 12."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "distinguish prime numbers from composite numbers using the Sieve of Eratosthenes."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 3,
+      "domain": "Data and Probability (DP); Number and Algebra (NA)",
+      "content": "1. double bar graphs and double line graphs; 2. theoretical probability; 3. multiplication and division of decimal numbers",
+      "content_standards": "The learners should have knowledge and understanding of: (DP) 1. double bar graphs and double line graphs; 2. theoretical probability; (NA) 3. multiplication and division of decimal numbers.",
+      "performance_standard": "By the end of the quarter, the learners are able to: identify, construct, and interpret double bar graphs and double line graphs (DP); draw conclusions and make inferences from data represented in double bar graphs and double line graphs (DP); calculate theoretical probability (DP); multiply and divide decimal numbers (NA).",
+      "suggested_tasks": null,
+      "source_pages": "46",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "collects bivariate data from interview, questionnaire, and other appropriate sources."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "identify the appropriate graph (bar graph or line graph) to represent a given set of data."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "construct double bar graphs and double line graphs."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "interpret data presented in a double bar graph or a double line graph."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "draw conclusions or make inferences based on data presented in a double bar graph or a double line graph."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "solve problems using data presented in a double bar graph or a double line graph."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "describe probability as a measure of the chance of an event occurring."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "calculate the theoretical probability of a simple event by listing all possible outcomes."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "estimate each of two decimal numbers to the nearest whole number to estimate their product."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "multiply decimal numbers with decimal parts of up to 2 decimal places."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve multi-step problems involving multiplication of decimals that may or may not also involve addition or subtraction of decimals, including problems involving money."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "estimate the quotient when dividing two decimal numbers by estimating the dividend and divisor to the nearest whole number."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "divide: a. 1- to 2-digit whole numbers resulting in a terminating decimal quotient (e.g., 4 ÷ 5 = 0.8), and b. a decimal of up to 2 decimal places by a 1- to 2-digit whole number, resulting in a terminating decimal quotient of up to 3 decimal places."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 4,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. GMDAS rules when performing three or more operations with fractions and decimals; 2. prisms and pyramids; 3. surface area of solid figures; 4. cubes and rectangular prisms; 5. resulting image after rotation",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. GMDAS rules when performing three or more operations with fractions and decimals; (MG) 2. prisms and pyramids; 3. surface area of solid figures; 4. cubes and rectangular prisms; 5. resulting image after rotation.",
+      "performance_standard": "By the end of the quarter, the learners are able to: apply the GMDAS rules with operations with fractions and decimals (NA); illustrate and describe solid figures and their nets (MG); determine the surface area of solid figures (MG); distinguish between cubes and rectangular prisms, and estimate their volumes (MG); draw the image of an object after applying rotation about a point (MG).",
+      "suggested_tasks": null,
+      "source_pages": "47",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "solve multi-step problems involving division of decimals that may or may not also involve the other operations with decimals, including problems involving money."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "perform three or more different operations with fractions and decimals by applying the GMDAS rules."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "illustrate different solid figures using concrete and pictorial models."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "relate plane figures to solid figures using concrete and pictorial models."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe and differentiate prisms and pyramids using their vertices, faces, and/or edges."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "illustrate and describe solid figures and their nets."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "make models of solid figures."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "illustrate and find the surface area of solid figures."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve problems involving the surface area of solid figures."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "describe and distinguish cubes and rectangular prisms."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "estimate the volume of a cube and of a rectangular prism using non-standard units of measurement."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "draw the image of an object after applying rotation about a point given an angle of rotation, clockwise or counterclockwise."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 1,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. tessellation of shapes; 2. translation, reflection and rotation with shapes; 3. the four operations with decimals; 4. the four operations with different combinations of fractions, whole numbers, and mixed numbers",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. tessellation of shapes; 2. translation, reflection and rotation with shapes; (NA) 3. the four operations with decimals; 4. the four operations with different combinations of fractions, whole numbers, and mixed numbers.",
+      "performance_standard": "By the end of the quarter, the learners are able to: tessellate a surface using different shapes (MG); perform the four operations with decimals (NA); perform the four operations with different combinations of fractions, whole numbers, and mixed numbers (NA).",
+      "suggested_tasks": null,
+      "source_pages": "48",
+      "confidence": 0.9,
+      "warnings": [
+        "Competency 8a: A fraction (1/3) appeared as a garbled OCR character in the source PDF; corrected by context to '1/3 = 0.3333…'."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "explore whether or not a shape tessellates."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "tessellate a surface using different shapes, including triangles, squares, and rectangles."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "draw resulting images of shapes that undergo translation, reflection, rotation."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "add and subtract decimals with decimal parts of up to 4 decimal places."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "solve multi-step problems involving addition and/or subtraction of decimals, including problems involving money."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "mentally multiply decimals of up to 2 decimal places by 0.1, 0.01, 0.001, 10, 100, and 1000."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "solve multi-step problems involving multiplication of decimals that may or may not also involve addition or subtraction of decimals, including problems involving money."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "divide: a. 1- to 2-digit whole numbers resulting in a repeating (non-terminating) decimal quotient (e.g., 1/3 = 0.3333…), and b. a whole number by a decimal of 1 decimal place."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "mentally divide: a. decimals of up to 4 decimal places by 0.1, 0.01, and 0.001, and b. decimals of up to 2 decimal places by 10, 100, and 1000."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "solve problems involving division of decimals that may or may not involve the other operations with decimals and/or whole numbers."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "obtain products that result from multiplying different combinations of fractions, whole numbers, and mixed numbers."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve multi-step problems involving multiplication that may or may not involve addition or subtraction of different combinations of fractions, whole numbers, and mixed numbers."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "divide different combinations of fractions, whole numbers, and mixed numbers."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "solve multi-step problems involving division of different combinations of fractions, whole numbers, and mixed numbers that may or may not involve any of the other operations of fractions."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 2,
+      "domain": "Number and Algebra (NA)",
+      "content": "1. ratio and proportion; 2. percentages, and their relationships with fractions and decimals; 3. exponential form, including calculation using the GEMDAS rules",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. ratio and proportion; 2. percentages, and their relationships with fractions and decimals; 3. exponential form, including calculation using the GEMDAS rules.",
+      "performance_standard": "By the end of the quarter, the learners are able to: describe and apply the concepts of ratio and proportion (NA); relate percentages to fractions and decimals (NA); evaluate, and perform calculations with, numbers expressed in exponential form (NA).",
+      "suggested_tasks": null,
+      "source_pages": "49",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "describe the relationship between quantities using ratio for: a. part-whole relationships, and b. part-part relationships."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "express one number as a fraction of another given their ratio, and vice versa."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "identify and write equivalent ratios."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "solve problems involving ratio."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "illustrate ratio and proportion in given situations using tables and/or the double number line model."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "find how many times one value is larger than another given their ratio, and vice versa."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "solve problems involving ratio and proportion."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "illustrate and explain the relationships between percentages, fractions, and decimals."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "identify and explain the uses of percentages."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "write numbers in exponential form (e.g., 2 × 2 × 2 = 2³), and vice versa (e.g., 2³ = 2 × 2 × 2)."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "give the value of numbers expressed in exponential form."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "perform calculations involving numbers in exponential form by applying the GEMDAS rules."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 3,
+      "domain": "Measurement and Geometry (MG)",
+      "content": "1. units of volume and capacity; 2. volume of cubes and rectangular prisms; 3. perimeter and area of triangles, parallelograms, trapezoids, and composite figures composed of triangles, squares, and rectangles; 4. parts of a circle, including circumference",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. units of volume and capacity; 2. volume of cubes and rectangular prisms; 3. perimeter and area of triangles, parallelograms, trapezoids, and composite figures composed of triangles, squares, and rectangles; 4. parts of a circle, including circumference.",
+      "performance_standard": "By the end of the quarter, the learners are able to: convert between units of volume and capacity (MG); find the volume of cubes and rectangular prisms (MG); find the perimeter and area of triangles, parallelograms, trapezoids, and composite figures composed of triangles, squares, and rectangles (MG); describe the parts of a circle (MG); use pi (π) to calculate the circumference of a circle (MG).",
+      "suggested_tasks": null,
+      "source_pages": "50",
+      "confidence": 0.97,
+      "warnings": [
+        "Mathematical symbols π in formulas C = πd and C = 2πr may have OCR artifacts in source; corrected by context."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "determine appropriate units for measuring volume and capacity."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "convert cu. cm to L, and vice versa."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "find the volume of a cube and of a rectangular prism using standard units of measurement."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "solve problems involving volumes of cubes and rectangular prisms."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "solve problems involving capacity."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "convert sq. cm to sq. m, and vice versa."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "find the area, in sq. m or sq. cm, of composite figures composed of triangles, squares, and rectangles."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "solve problems involving the perimeter and area of triangles, parallelograms, trapezoids, and composite figures composed of triangles, squares, and rectangles."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "draw circles with different radii using a pair of compasses."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "identify and describes the parts of a circle."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "measure the circumference of circles using appropriate tools."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "approximate the value of pi (π) (the ratio of circumference to diameter)."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "find the circumference of a circle using C = πd or C = 2πr."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 4,
+      "domain": "Measurement and Geometry (MG); Data and Probability (DP); Number and Algebra (NA)",
+      "content": "1. area of a circle; 2. composite figures composed of any two or more of: triangle, square, rectangle, circle, semi-circle; 3. pie graphs; 4. common factors, greatest common factors, common multiples, and least common multiples",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. area of a circle; 2. composite figures composed of any two or more of: triangle, square, rectangle, circle, semi-circle; (DP) 3. pie graphs; (NA) 4. common factors, greatest common factors, common multiples, and least common multiples.",
+      "performance_standard": "By the end of the quarter, the learners are able to: find the area of a circle (MG); find the area of composite figures composed of any two or more of: triangle, square, rectangle, circle, semi-circle (MG); construct and interpret pie graphs (DP); find common factors, greatest common factors, common multiples, and least common multiples (NA).",
+      "suggested_tasks": null,
+      "source_pages": "51",
+      "confidence": 0.97,
+      "warnings": [
+        "Formula A = πr² contains a Greek letter and superscript; may have partial OCR rendering in source; corrected by context."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "explore inductively the area of a circle leading to the formula A = πr²."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "find the area of a circle using the formula."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "find the area of composite figures composed of any two or more of the following: triangle, square, rectangle, circle, and semicircle."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "solve problems involving circumference and area of circles, and composite figures."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "find the angle measures and/or percentages based on the given data for a pie graph."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "construct a pie graph using appropriate tools."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "interpret data presented in a pie graph."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "interpret data from digital media that are presented in tabular or graphical form."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "draw conclusions or make inferences based on data presented in a pie graph."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "solve problems using data presented in a pie graph."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "determine the common factors and the greatest common factor (GCF) of two numbers using the following methods: listing, prime factorization, and continuous division."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "find the common multiples and least common multiple (LCM) of two numbers using the following methods: listing, prime factorization, and continuous division."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "solve problems involving GCF and LCM."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 1,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. regular and irregular polygons and their features/properties; 2. determination of measures of angles and number of sides of polygons; 3. application of percentages; 4. use of rates; 5. rational numbers",
+      "content_standards": "The learners should have knowledge and understanding of: (MG) 1. regular and irregular polygons and their features/properties; 2. determination of measures of angles and number of sides of polygons; (NA) 3. application of percentages; 4. use of rates; 5. rational numbers.",
+      "performance_standard": "By the end of the quarter, the learners are able to: draw, and describe the features/properties of, regular and irregular polygons (MG); use percentages in different contexts (NA); identify and use rates (NA); create a financial plan (NA); describe, order, and perform operations on, rational numbers (NA).",
+      "suggested_tasks": null,
+      "source_pages": "52",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "draw and describe regular and irregular polygons with 5, 6, 8, or 10 sides, based on measurements of sides and angles, using a ruler and protractor."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "draw triangles, quadrilaterals, and regular polygons (5, 6, 8, or 10 sides) with given angle measures."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe and explain the relationships between angle pairs based on their measures."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "classify polygons according to the number of sides, whether they are regular or irregular, and whether they are convex or non-convex."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "deduce the relationship between the exterior angle and adjacent interior angle of a polygon."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "determine the measures of angles and the number of sides of polygons."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "solve problems involving: a. percentage increase, and b. percentage decrease."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "solve money problems involving percentages (e.g., discount, commission, sales tax, simple interest)."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "create a financial plan."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "identify and explain the uses of rates."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve problems involving rates (e.g., speed)."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "describe given rational numbers as fractions, decimals, or percentages."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "order rational numbers on a number line."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "perform operations on rational numbers."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 2,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. square roots of perfect squares, cube roots of perfect cubes, and irrational numbers; 2. conversion of units of measure; 3. volume of square and rectangular pyramids, and cylinders; 4. sets and subsets, and the union and intersection of sets using Venn diagrams; 5. subset of real numbers",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. square roots of perfect squares, cube roots of perfect cubes, and irrational numbers; (MG) 2. conversion of units of measure; 3. volume of square and rectangular pyramids, and cylinders; (NA) 4. sets and subsets, and the union and intersection of sets using Venn diagrams; 5. subset of real numbers.",
+      "performance_standard": "By the end of the quarter, the learners are able to: determine square roots of perfect squares and cube roots of perfect cubes, and identify irrational numbers (NA); convert units of measure from different systems of measure (MG); find the volume of square and rectangular pyramids, and the volume of cylinders (MG); describe sets and their subsets, and the union and intersection of sets (NA); illustrates sets and subsets, and union and intersection of sets, using Venn diagrams (NA).",
+      "suggested_tasks": null,
+      "source_pages": "53",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "determine the square roots of perfect squares and the cube roots of perfect cubes."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "identify irrational numbers involving square roots and cube roots, and their locations on the number line."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "convert units of measure within the International System of Units (SI) and across different systems of measure."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "explain inductively the volume of a cylinder using the area of a circle, leading to the identification of the formula."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "find the volume of a cylinder."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "solve problems involving the volumes of cylinders."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "explore inductively the volume of square and rectangular pyramids using rectangular prisms, leading to the identification of the formula."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "estimate volumes of square and rectangular pyramids."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve problems involving volumes of square or rectangular pyramids."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "describe sets and their subsets, the union of sets, and the intersection of sets."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "illustrate sets and their subsets, the union of sets, and the intersection of sets, through the use of Venn diagrams."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "illustrate the different subsets of real numbers."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 3,
+      "domain": "Data and Probability (DP); Number and Algebra (NA)",
+      "content": "1. data collection and sampling techniques, and the presentation of data in appropriate tables and graphs; 2. interpretation of statistical graphs; 3. the set of integers, and comparing and ordering integers; 4. the four operations with integers; 5. simplification of numerical expressions involving integers; 6. absolute value of an integer",
+      "content_standards": "The learners should have knowledge and understanding of: (DP) 1. data collection and sampling techniques, and the presentation of data in appropriate tables and graphs; 2. interpretation of statistical graphs; (NA) 3. the set of integers, and comparing and ordering integers; 4. the four operations with integers; 5. simplification of numerical expressions involving integers; 6. absolute value of an integer.",
+      "performance_standard": "By the end of the quarter, the learners are able to: collect data, and organize data in a frequency distribution table (DP); represent and interpret data in different types of graphs (DP); compare and order integers, including through the use of the number line (NA); perform the four operations with integers (NA); simplify numerical expressions involving integers (NA); identify the absolute value of an integer (NA).",
+      "suggested_tasks": null,
+      "source_pages": "54",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "investigate different data collection and sampling techniques."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "organize statistical data in a frequency distribution table."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "use appropriate graphs to represent organized data: pie graph, bar graph, line graph, and stem-and-leaf plot."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "interpret statistical graphs."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "describe the set of integers."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "use positive and negative numbers to describe directions or opposites in real-life situations."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "locate integers on the number line."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "compare and order integers."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "add and subtract integers; using concrete models (e.g., counters, integer chips), pictorial models (e.g., bar models, number lines), and with integers written as numerals."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "multiply and divide integers."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "simplify numerical expressions involving integers using number properties and the order of operations (GEMDAS)."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "identify the absolute value of an integer, and its meaning on the number line."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 4,
+      "domain": "Number and Algebra (NA); Data and Probability (DP)",
+      "content": "1. the solution of simple equations; 2. the evaluation of algebraic expressions following substitution; 3. the rearrangement of a formula to make a different variable the subject of the formula; 4. outcomes from experiments; 5. operations using scientific notation",
+      "content_standards": "The learners should have knowledge and understanding of: (NA) 1. the solution of simple equations; 2. the evaluation of algebraic expressions following substitution; 3. the rearrangement of a formula to make a different variable the subject of the formula; (DP) 4. outcomes from experiments; (NA) 5. operations using scientific notation.",
+      "performance_standard": "By the end of the quarter, the learners are able to: solve simple equations (NA); substitute into an algebraic expression to evaluate the expression (NA); rearrange a formula to make a different variable the subject of the formula (NA); gather data from experiments and represent the data in different forms (DP); write numbers in scientific notation and perform operations on numbers written in scientific notation (NA).",
+      "suggested_tasks": null,
+      "source_pages": "55",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "solve simple equations represented by bar models to find unknowns."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "distinguish a variable from a constant in an algebraic expression."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "evaluate algebraic expressions given the value/s of the variable/s."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "translate verbal phrases into algebraic expressions."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "illustrate the properties of equality."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "solve one variable in terms of the other variables in a formula."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "write equations in algebraic form."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "find the value of an unknown in an equation where the unknown is non-negative."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve problems involving algebraic expressions and formulas."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "collect data from experiments (e.g., number of heads obtained when tossing a coin a number of times, number of prime numbers obtained when rolling a die a number of times)."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "express outcomes in words and/or symbols, and represents outcomes in tables and/or graphs."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve problems using the outcomes of experiments."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "write numbers in scientific notation to represent very large or very small numbers, and vice versa."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "perform operations on numbers expressed in scientific notation."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 1,
+      "domain": "Data and Probability (DP); Number and Algebra (NA)",
+      "content": "1. measures of central tendency of ungrouped data; 2. algebraic expressions and operations with monomials, binomials, and multinomials; 3. special products for binomials, and factorization of polynomials; 4. rational algebraic expressions and equations; 5. rules for obtaining terms in sequences",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (DP) 1. measures of central tendency of ungrouped data; (NA) 2. algebraic expressions and operations with monomials, binomials, and multinomials; 3. special products for binomials, and factorization of polynomials; 4. rational algebraic expressions and equations; 5. rules for obtaining terms in sequences.",
+      "performance_standard": "By the end of the quarter, the learners are able to: determine measures of central tendency of ungrouped data and use the measures to draw conclusions (DP); add and subtract monomials, and multiply combinations of monomials, binomials, and multinomials (NA); obtain special binomial products (NA); factorize different types of polynomials (NA); simplify, and operate with, rational algebraic expressions and solve simple rational algebraic equations (NA); obtain the rule for finding the next term in a sequence (NA).",
+      "suggested_tasks": null,
+      "source_pages": "56",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "determine measures of central tendency of ungrouped data."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "draw conclusions from statistical data using the measures of central tendency."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "model real-life situations using algebraic expressions."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "add and subtract simple monomials."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "multiply and divide simple monomials, leading to the derivation of the laws of exponents."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "multiply simple monomials and binomials with simple binomials and multinomials, using the distributive property with various techniques and models."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "use special product patterns to multiply binomials."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "completely factor different types of polynomials (polynomials with common monomial factor; difference of two squares; quadratic trinomials, including perfect square trinomials)."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve problems involving special products and factors of polynomials."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "simplify rational algebraic expressions."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "perform operations on rational algebraic expressions."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve problems involving simple rational algebraic equations (using cross-multiplication)."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "formulate the rule for finding the next term in a sequence by looking for patterns."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 2,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. plotting points, and finding distance and the midpoint of line segments on the Cartesian coordinate plane; 2. volume of pyramids (other than square and rectangular pyramids), cones, and spheres; 3. the Pythagorean Theorem; 4. triangle inequality theorems; 5. earning money, profit and loss, 'best buys', buying on terms",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (NA) 1. plotting points, and finding distance and the midpoint of line segments on the Cartesian coordinate plane; (MG) 2. volume of pyramids (other than square and rectangular pyramids), cones, and spheres; 3. the Pythagorean Theorem; 4. triangle inequality theorems; (NA) 5. earning money, profit and loss, 'best buys', buying on terms.",
+      "performance_standard": "By the end of the quarter, the learners are able to: plot points, find the distance between two points, and find the midpoint of line segments, on the Cartesian coordinate plane (NA); finds the volume of pyramids other than square and rectangular pyramids, and the volumes of cones and spheres (MG); use the Pythagorean theorem to find sides in right triangles and its converse to classify triangles (MG); use the triangle inequality theorems to establish results for angles and sides in triangles (MG); solve financial problems involving earning money, profit and loss, \"best buys,\" and buying on terms (NA).",
+      "suggested_tasks": null,
+      "source_pages": "57",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "illustrate and describe the Cartesian coordinate plane."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "plot points on the Cartesian coordinate plane and determine the coordinates of a point on the plane."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "solve problems involving distance between two points and midpoint of a line segment on the Cartesian coordinate plane."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "explore inductively the volume of pyramids other than square and rectangular pyramids."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "find the volume of pyramids other than square and rectangular pyramids."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "solve problems involving volume of pyramids."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "explore inductively the volumes of cones and spheres, leading to their formulas."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "find the volumes of cones and spheres."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve problems involving the volume of cones and spheres."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "apply the Pythagorean Theorem in finding the missing side of a right triangle, and its converse in classifying triangles."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "apply the triangle inequality theorems to establish results for angles and sides in triangles."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve financial problems involving: a. earning money, b. profit and loss, c. buying amounts of products that represent the best value ('best buys'), and d. buying on terms ('instalment plan')."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 3,
+      "domain": "Number and Algebra (NA)",
+      "content": "1. linear equations in one variable; 2. linear inequalities in one variable and their graphs; 3. linear equations in two variables and their graphs; 4. systems of linear equations in two variables; 5. linear inequalities in two variables",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (NA) 1. linear equations in one variable; 2. linear inequalities in one variable and their graphs; 3. linear equations in two variables and their graphs; 4. systems of linear equations in two variables; 5. linear inequalities in two variables.",
+      "performance_standard": "By the end of the quarter, the learners are able to: solve linear equations and linear inequalities in one variable (NA); graph linear inequalities in one variable (NA); graph linear equations in two variables (NA); solve a system of linear equations graphically and algebraically (NA); use linear inequalities in two variables in the solution of problems (NA).",
+      "suggested_tasks": null,
+      "source_pages": "58",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "solve linear equations in one variable."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "solve problems (e.g., number problems, geometry problems, and money problems) involving linear equations in one variable."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "solve linear inequalities in one variable."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "graph on a number line the solution of linear inequalities in one variable."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "solve problems involving linear inequalities in one variable."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "describe a linear equation in two variables and express its solution using ordered pairs."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "define and determine the slope and intercepts of a line."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "find the equation of a line given: a. two points, b. the slope and a point, c. the slope and y-intercept, and d. the x– and y– intercepts."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "sketch the graph (straight line) of a linear equation given: a. any two points on the line, b. the x– and y– intercepts, and c. the slope and a point on the line."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "define and illustrate a system of linear equations in two variables."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve a system of linear equations (with integer solutions) by graphing."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "classify the types of systems of linear equations based on the number of solutions."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "solve algebraically a system of linear equations in two variables."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "solve problems involving systems of linear equations in two variables."
+        },
+        {
+          "sequence": 15,
+          "competency_text": "recognize and solve problems involving linear inequalities in two variables."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 4,
+      "domain": "Data and Probability (DP)",
+      "content": "1. measures of variability for ungrouped data; 2. interpretation and analysis of graphs from primary and secondary data; 3. experimental and theoretical probability; 4. the Fundamental Counting Principle",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (DP) 1. measures of variability for ungrouped data; 2. interpretation and analysis of graphs from primary and secondary data; 3. experimental and theoretical probability; 4. the Fundamental Counting Principle.",
+      "performance_standard": "By the end of the quarter, the learners are able to: calculate measures of variability for ungrouped data (DP); interpret and analyze graphs from primary and secondary data (DP); determine the number of possible outcomes of an experiment using the Fundamental Counting Principle (DP); calculate the probability of a single event and the probability of simple combined events (DP).",
+      "suggested_tasks": null,
+      "source_pages": "59",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "calculate the measures of variability (range, mean deviation, and standard deviation) for ungrouped data."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "draw conclusions from statistical data using the measures of variability."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "investigate, interpret, and analyze graphs from primary data (e.g., examination scores)."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "investigate, interpret, and analyze graphs from secondary data."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "differentiate theoretical from experimental probability by conducting an experiment or an investigation."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "describe the sample space of an experiment."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "use the Fundamental Counting Principle to determine the number of possible outcomes of an experiment."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "calculate the theoretical probability of a single event by listing all possible outcomes."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "describe probability as a measure of the chance of an event occurring."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "calculate the probability of simple combined events by listing, or by possibility diagrams or tree diagrams."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve problems involving experimental probability and/or theoretical probability using the Fundamental Counting Principle."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 1,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. simple geometric concepts and notations; 2. perpendicular and parallel lines, and angles formed by parallel lines cut by a transversal; 3. relations and functions; 4. graphs of linear functions, and the identification of domain and range, slope, intercepts, and zeros",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (MG) 1. simple geometric concepts and notations; 2. perpendicular and parallel lines, and angles formed by parallel lines cut by a transversal; (NA) 3. relations and functions; 4. graphs of linear functions, and the identification of domain and range, slope, intercepts, and zeros.",
+      "performance_standard": "By the end of the quarter, the learners are able to: illustrate and describe points, lines, rays, line segments, angles, and planes (MG); construct perpendicular and parallel lines (MG); determine the measure of the angles formed by parallel lines cut by a transversal (MG); identify relations and functions (NA); graph a linear function and identify the domain and range, intercepts, slope, and zeros (NA).",
+      "suggested_tasks": null,
+      "source_pages": "60",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "illustrate and describe point, line, ray, line segment, angle, and plane using models and geometric notations."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "construct perpendicular and parallel lines."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "identify the relationships between angles formed by parallel lines cut by a transversal."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "determine angle measures involving angle pairs, parallel and perpendicular lines, and parallel lines cut by a transversal."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "identify relations that are functions based on the definitions of relations and functions."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "determine the domain and the range of a function expressed in different representations."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "express the relationship between two variables as a function."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "determine the slopes (as rate of change) and the zeros of linear functions represented in: a. graphs, b. equations, and c. tables of values."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "graph a linear function and determine its: a. domain, b. range, c. intercepts, and d. slope."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "represent linear relationships found in real-life situations using different representations."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve problems involving linear functions."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 2,
+      "domain": "Measurement and Geometry (MG)",
+      "content": "1. parallelism and perpendicularity of lines; 2. different quadrilaterals and their properties; 3. congruence of triangles; 4. congruence proofs",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (MG) 1. parallelism and perpendicularity of lines; 2. different quadrilaterals and their properties; 3. congruence of triangles; 4. congruence proofs.",
+      "performance_standard": "By the end of the quarter, the learners are able to: determine the conditions for lines to be parallel or perpendicular (MG); use geometric properties to find unknown sides and angles of quadrilaterals (MG); apply the triangle congruence postulates and theorems (MG); construct and justify the construction of segments, angles, and triangles (MG); construct proofs of the congruence of triangles (MG).",
+      "suggested_tasks": null,
+      "source_pages": "61",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "determine conditions that guarantee parallelism and perpendicularity of lines."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "classify quadrilaterals based on formal definitions."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "use properties of parallelograms to find measures of angles, sides, perpendicular height, and diagonals."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "solve problems involving parallelograms, rectangles, squares, or rhombuses by applying their different properties."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "prove properties of parallelograms by applying the relevant theorems."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "derive the properties of trapezoids and kites by exploring the relationship between their parts and secondary parts."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "solve problems on trapezoids and kites by applying their properties."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "distinguish inductive and deductive reasoning for establishing proofs."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "state postulates and theorems about defined and undefined terms in geometry, and formulates proofs involving them."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "use the triangle congruence postulates and theorems to illustrate congruence of triangles, including CPCTC (definition of congruent triangles)."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve problems involving right triangle congruence theorems, isosceles triangle theorem, perpendicular bisector theorem, and midline theorem."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "construct and justify the construction of segments, angles and triangles, including, but not limited to, the triangle's secondary parts and centers, using the triangle congruence postulates and theorems."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "construct congruence proofs involving triangles or corresponding parts of triangles using a two-column proof."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 3,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. quadratic equations and graphs of quadratic functions; 2. the solution of quadratic equations; 3. similarity of polygons; 4. special triangles; 5. direct and inverse variation",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (NA) 1. quadratic equations and graphs of quadratic functions; 2. the solution of quadratic equations; (MG) 3. similarity of polygons; 4. special triangles; (NA) 5. direct and inverse variation.",
+      "performance_standard": "By the end of the quarter, the learners are able to: represent quadratic relationships (NA); interpret features of a parabola (NA); express quadratic functions in different forms (NA); sketch the graph of a quadratic function (NA); solve quadratic equations (NA); illustrate and apply similarity of polygons, including triangles (MG); apply direct and inverse variation (NA).",
+      "suggested_tasks": null,
+      "source_pages": "62-63",
+      "confidence": 0.92,
+      "warnings": [
+        "Performance standards continuation table on page 63 lacks column headers; alignment inferred from page 62 context and is consistent.",
+        "Quadratic function notation (y = a(x-h)² + k, etc.) contained OCR-garbled superscripts in source; corrected by context throughout."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "represent real-life situations that can be modelled using quadratic relationships."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "graph equations in two variables to represent quadratic relationships, such as y = ax², y = ax² + k, y = a(x − h)²."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "interpret features of a parabola such as vertex, axis of symmetry, x-intercepts, opening direction, minimum or maximum value, zeros, and increasing and decreasing intervals."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "transform the quadratic functions y = ax², y = ax² + k, y = a(x − h)² and y = ax² + bx + c into the form y = a(x − h)² + k, and vice versa."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "sketch the graph of quadratic functions expressed in equation form."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "analyze the effect of changing the values of the parameters on the behavior of its graph and on the properties of the quadratic function y = a(x − h)² + k."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "find the zeros of quadratic functions in factored and standard form, graphically and algebraically."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "solve quadratic equations by: a. extracting square roots, b. factoring, and c. using the quadratic formula."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve problems involving quadratic functions and equations."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "illustrate similarity of polygons."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "illustrate and apply triangle similarity theorems in different situations."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve problems involving triangle similarity."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "solve problems involving measures of sides and angles of special triangles (30-60-90, 45-45-90)."
+        },
+        {
+          "sequence": 14,
+          "competency_text": "illustrate real-life situations that involve direct variation and real-life situations that involve inverse variation."
+        },
+        {
+          "sequence": 15,
+          "competency_text": "translate a relationship between two quantities into a variation statement and/or a mathematical equation, given a table of values or a graph."
+        },
+        {
+          "sequence": 16,
+          "competency_text": "solve problems involving variation."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 4,
+      "domain": "Measurement and Geometry (MG); Data and Probability (DP)",
+      "content": "1. triangle theorems and triangle inequality theorems; 2. the trigonometric ratios and their application; 3. interpretation and analysis of data to assess whether the data may be misleading; 4. probabilities of simple and compound events",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (MG) 1. triangle theorems and triangle inequality theorems; 2. the trigonometric ratios and their application; (DP) 3. interpretation and analysis of data to assess whether the data may be misleading; 4. probabilities of simple and compound events.",
+      "performance_standard": "By the end of the quarter, the learners are able to: apply triangle theorems and triangle inequality theorems (MG); apply trigonometric ratios to solve right triangles (MG); interpret and analyze data to assess whether the data may be misleading (DP); determine the probabilities of simple and compound events (DP).",
+      "suggested_tasks": null,
+      "source_pages": "64",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "solve problems involving the perpendicular bisector theorem, isosceles triangle theorem, theorems on equilateral triangles, and the midline theorem."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "explain theorems on triangle inequalities and apply these theorems in comparing measures in a triangle."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "determine the values of the sine, cosine, and tangent trigonometric ratios corresponding to the angles of the special triangles."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "find the values of the sine, cosine, and tangent ratios of any acute angle."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "use the trigonometric ratios in solving right triangles."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "illustrate angles of elevation and angles of depression."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "solve real-life problems involving right triangles through the application of the trigonometric ratios."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "interpret and analyze data from the digital media that are in tabular or graphical form to assess whether the data may be misleading."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "illustrate simple and compound events."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "determine the probabilities of simple and compound events."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve problems involving probabilities of simple and compound events."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 1,
+      "domain": "Measurement and Geometry (MG); Number and Algebra (NA)",
+      "content": "1. the laws of sines and the laws of cosines; 2. translations, reflections, and rotations, in the Cartesian plane; 3. quadratic inequalities in one variable and in two variables; 4. absolute value equations and inequalities in one variable and their graphs",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (MG) 1. the laws of sines and the laws of cosines; 2. translations, reflections, and rotations, in the Cartesian plane; (NA) 3. quadratic inequalities in one variable and in two variables; 4. absolute value equations and inequalities in one variable and their graphs.",
+      "performance_standard": "By the end of the quarter, the learners are able to: find sides and angles in oblique triangles using the laws of sines and the laws of cosines (MG); describe translations, reflections, and rotations in the Cartesian plane (MG); solve and graph the solutions of quadratic inequalities in one variable and in two variables (NA); solve absolute value equations in one variable and absolute value inequalities in one variable, and graph the solutions (NA).",
+      "suggested_tasks": null,
+      "source_pages": "65",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "apply laws of sines in solving oblique triangles, including ambiguous cases."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "apply laws of cosines in solving oblique triangles."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "describe the position of points in the Cartesian plane."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "describe translations, reflections, and rotations, in the Cartesian plane using coordinates."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "solve problems involving laws of sines and cosines, including bearings."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "illustrate on the number line quadratic inequalities in one variable."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "solve quadratic inequalities in one variable and expresses solutions in various notations."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "solve problems involving quadratic inequalities in one variable."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve quadratic inequalities in two variables."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "determine the region of solutions of a linear or quadratic inequality in two variables."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve absolute value equations in one variable and express solutions in various notations."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve absolute value inequalities in one variable and express solutions in various notations."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 2,
+      "domain": "Data and Probability (DP); Number and Algebra (NA)",
+      "content": "1. box-and-whisker plots, and cumulative frequency histograms and polygons; 2. quartiles, deciles, and percentiles; interquartile range, and outliers; 3. radical expressions; 4. the roots of a quadratic equation; 5. quadratic functions; 6. equations reducible to quadratic equations",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (DP) 1. box-and-whisker plots, and cumulative frequency histograms and polygons; 2. quartiles, deciles, and percentiles; interquartile range, and outliers; (NA) 3. radical expressions; 4. the roots of a quadratic equation; 5. quadratic functions; 6. equations reducible to quadratic equations.",
+      "performance_standard": "By the end of the quarter, the learners are able to: construct and interpret box-and-whisker plots, and cumulative frequency histograms and polygons (DP); calculate quartiles, deciles, and percentiles; interquartile range, and outliers (DP); simplify, and perform operations, involving radical expressions (NA); determine the nature of roots of a quadratic equation (NA); determine the equation of a quadratic function (NA); solve equations reducible to quadratic equations and radical equations (NA).",
+      "suggested_tasks": null,
+      "source_pages": "66",
+      "confidence": 0.95,
+      "warnings": [
+        "Competency 11 example equation (x⁴ − 5x² + 4 = 0) contained garbled superscript OCR characters; corrected by context."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "illustrate measures of position (quartiles, deciles, and percentiles)."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "construct and interpret box-and-whisker plots and cumulative frequency histograms and polygons."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "calculate a specified measure of position, interquartile range, and outliers, from ungrouped data."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "calculate the percentile rank of a given score from ungrouped data."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "draw conclusions from statistical data using the measures of position."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "illustrate the laws of rational non-integral exponents."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "simplify radical expressions."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "perform operations involving radical expressions, including rationalizing the denominator."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "determine the nature of roots of a quadratic equation using the discriminant."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "determine the equation of a quadratic function given: a. a table of values, b. its graph, and c. its zeros."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "solve equations reducible to quadratic equations, e.g., x⁴ − 5x² + 4 = 0."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve problems involving quadratic functions."
+        },
+        {
+          "sequence": 13,
+          "competency_text": "solve radical equations, including equations reducible to linear or quadratic equations."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 3,
+      "domain": "Number and Algebra (NA); Data and Probability (DP)",
+      "content": "1. equation of a circle and the graph of a circle; 2. evaluation of statistical reports; 3. union and intersection of events, dependent and independent events, and complementary events",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (NA) 1. equation of a circle and the graph of a circle; (DP) 2. evaluation of statistical reports; 3. union and intersection of events, dependent and independent events, and complementary events.",
+      "performance_standard": "By the end of the quarter, the learners are able to: transform the equation of a circle from center-radius form to general form, and vice versa, and determine the center and radius from a given equation (NA); graph a circle from a given equation of the circle (NA); evaluate statistical reports (DP); calculate probabilities in relation to union and intersection of events; dependent and independent events; and complementary events (DP).",
+      "suggested_tasks": null,
+      "source_pages": "67",
+      "confidence": 1.0,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "transform the equation of a circle from center-radius form to general form, and vice versa."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "determine the center and the radius of a circle from a given equation."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "sketch the graph of a circle given its equation."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "find the equation of a circle from given conditions, e.g., given two points as the endpoints of a diameter."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "solve problems involving geometric figures on the Cartesian plane."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "evaluate statistical reports by linking claims to displays, statistics, and representative data."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "illustrate mutually exclusive events and non-mutually exclusive events."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "identify complementary events."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "solve probability problems involving: a. union and intersection of events, including mutually and non-mutually exclusive events; b. dependent and independent events, including conditional probability where the solution is limited to the use of contingency tables or Venn diagrams; and c. complementary events."
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 4,
+      "domain": "Number and Algebra (NA); Measurement and Geometry (MG)",
+      "content": "1. simple interest, compound interest, and depreciation; 2. central angles; inscribed angles; and angles and lengths formed by intersecting chords, secants, and tangents of a circle; 3. sectors and segments of a circle, and their areas",
+      "content_standards": "The learners demonstrate knowledge and understanding of: (NA) 1. simple interest, compound interest, and depreciation; (MG) 2. central angles; inscribed angles; and angles and lengths formed by intersecting chords, secants, and tangents of a circle; 3. sectors and segments of a circle, and their areas.",
+      "performance_standard": "By the end of the quarter, the learners are able to: calculate compound interest and depreciation (NA); apply properties and relationships of central angles, inscribed angles, chords, secants, and tangents of circles (MG); define sectors and segments of a circle, and find their areas (MG).",
+      "suggested_tasks": null,
+      "source_pages": "68-69",
+      "confidence": 0.92,
+      "warnings": [
+        "Performance standards continuation on page 69 lacks column headers; alignment inferred from page 68 context and is consistent with the rest of the guide."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "explore inductively the relationship between simple interest and compound interest."
+        },
+        {
+          "sequence": 2,
+          "competency_text": "calculate compound interest by repeated applications of simple interest."
+        },
+        {
+          "sequence": 3,
+          "competency_text": "solve problems involving compound interest by repeated applications of simple interest."
+        },
+        {
+          "sequence": 4,
+          "competency_text": "explain inductively the formulas for compound interest and depreciation."
+        },
+        {
+          "sequence": 5,
+          "competency_text": "explore inductively the differences in the amount of compound interest obtained on amounts of money invested: a. annually, b. quarterly, and c. monthly."
+        },
+        {
+          "sequence": 6,
+          "competency_text": "solve real-life problems involving: a. compound interest, and b. depreciation."
+        },
+        {
+          "sequence": 7,
+          "competency_text": "establish properties and relationships for central angles, inscribed angles, secants, and tangents, of a circle."
+        },
+        {
+          "sequence": 8,
+          "competency_text": "solve problems involving: a. central angles, b. inscribed angles, c. angles formed by two intersecting chords, d. angles formed by two secants intersecting outside the circle, e. angles formed by two intersecting tangents, and f. angles formed by intersecting secant and tangent."
+        },
+        {
+          "sequence": 9,
+          "competency_text": "establish properties and relationships for chords, secants, and tangents."
+        },
+        {
+          "sequence": 10,
+          "competency_text": "solve problems involving lengths of: a. intersecting chords, b. two secant segments intersecting outside a circle, and c. two intersecting tangent segments."
+        },
+        {
+          "sequence": 11,
+          "competency_text": "define sectors and segments of a circle and finds their areas."
+        },
+        {
+          "sequence": 12,
+          "competency_text": "solve problems involving area of a sector of a circle, segment of a circle, and shaded regions in other figures that involve sectors or segments."
+        }
+      ]
+    }
+  ]
+}

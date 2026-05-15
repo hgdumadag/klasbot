@@ -1,0 +1,1086 @@
+{
+  "document": {
+    "subject": "Araling Panlipunan",
+    "title": "MATATAG K to 10 Curriculum of the K to 12 Program: Araling Panlipunan Grades 4-10",
+    "version_label": "MATATAG 2023",
+    "source_year": "2023",
+    "grade_min": 4,
+    "grade_max": 10,
+    "source_filename": "FINAL_MATATAG_Araling_Panlipunan_CG_2023_Grades_4-10.pdf",
+    "parse_summary": {
+      "unit_count": 28,
+      "grade_count": 7,
+      "average_confidence": 0.94,
+      "warning_count": 3,
+      "warnings": [
+        "Grade 6 Q4 (pages 39-40): Content listing appears truncated in the PDF at page 40; only partial NILALAMAN and competencies for 'Ang Pilipinas matapos ang EDSA' (economic/political/social challenges) are visible. Confidence lowered for this unit.",
+        "No 'Suggested Performance Tasks' column is present in the curriculum tables of this document; that field is left null for all units.",
+        "This document covers Grades 4-10 (7 grades × 4 quarters = 28 expected units). All 28 units were found. A complete Grades 4-10 guide normally has 28 grade-quarter units; count matches."
+      ]
+    }
+  },
+  "units": [
+    {
+      "grade_level": "Grade 4",
+      "quarter": 1,
+      "domain": "Ang Heograpiya ng Pilipinas",
+      "content": "A. Ang Heograpiya ng Pilipinas\n  1. Paggamit ng Mapa at Globo\n    a. Tiyak (Absolute) na Lokasyon\n    b. Relatibong Lokasyon\nB. Ang Pambansang Teritoryo\n  1. Saligan ng Teritoryo\n    a. Ayon sa Kasaysayan\n    b. Ayon sa Saligang Batas\n    c. Ayon sa Atas ng Pangulo\n    d. Ayon sa Doktrinang Pangkapuluan (Archipelagic Doctrine-UNCLOS)\nC. Pagkakakilanlang Heograpikal\n  1. Heograpiyang Pisikal (Klima, Panahon, Anyong Lupa, at Anyong Tubig)\n  2. Heograpiyang Pantao (Populasyon, Indigenous Peoples/Etnolingguwistikong Pangkat)\nD. Kahalagahan ng Katangiang Heograpikal sa Pag-unlad ng Bansa",
+      "content_standards": "Naipamamalas ang pag-unawa sa pagkakakilanlan ng bansa ayon sa mga katangiang heograpikal",
+      "performance_standard": "Nakagagawa ng presentasyon tungkol sa katangiang heograpikal ng bansa",
+      "suggested_tasks": null,
+      "source_pages": "16",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natutukoy ang kinalalagyan ng Pilipinas gamit ang tiyak at relatibong lokasyon"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Natatalakay ang konsepto ng bansa"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Naipaliliwanag ang mga saligan ng lawak at hangganan ng teritoryo ng Pilipinas"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nailalarawan ang pagkakakilanlang heograpikal ng Pilipinas:\n  a. Heograpiyang Pisikal\n  b. Heograpiyang Pantao"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang ugnayan ng lokasyon ng Pilipinas sa heograpiya nito"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Napahahalagahan ang katangiang heograpikal ng bansa"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 2,
+      "domain": "Ang Pambansang Ekonomiya",
+      "content": "A. Mga Pinagkukunang-Yaman ng Bansa (Likas na Yaman – Lupa, Tubig, Gubat, Enerhiya, Mineral; at Yamang Tao)\n  1. Gawaing Pangkabuhayan ng Bansa\n  2. Mga Hamon at Pagtugon sa mga Gawaing Pangkabuhayan ng Bansa\n  3. Pangangalaga sa mga Pinagkukunang-Yaman ng Bansa\nB. Mga Hamon sa Pagkamit ng Likas-kayang Pag-unlad",
+      "content_standards": "Naipamamalas ang pag-unawa sa ugnayan ng tao at heograpiya bilang batayan sa angkop na pagtugon sa mga oportunidad at hamong kaakibat nito",
+      "performance_standard": "Nakabubuo ng gawaing nagsusulong sa pangangalaga at paglinang ng mga pinagkukunang-yaman",
+      "suggested_tasks": null,
+      "source_pages": "17",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natutukoy ang mga pinagkukunang-yamang matatagpuan sa bansa"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Naipaliliwanag ang iba't ibang pakinabang pangekonomiko ng mga pinagkukunang-yaman ng bansa"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Natatalakay ang mga hamon at pagtugon sa mga gawaing pangkabuhayan ng bansa"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Natutukoy ang mga hamon sa pagkamit ng likas-kayang pag-unlad"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Napahahalagahan ang mga gawaing nagsusulong ng likas-kayang pag-unlad (sustainable development) ng mga pinagkukunang-yaman ng bansa"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 3,
+      "domain": "Ang Pambansang Pamahalaan",
+      "content": "A. Elemento ng Pagkabansa\n  1. Tao\n  2. Teritoryo\n  3. Pamahalaan\n  4. Soberanya\nB. Ang Pambansang Pamahalaan\n  1. Unitary presidential system\n  2. Separation of powers\nC. Serbisyo ng Pamahalaan (Batay sa Pambansang Badyet ng Pilipinas 2022)\n  1. Serbisyong Panlipunan\n    a. Edukasyon, Kultura, at Pagpapaunlad ng Manpower\n    b. Panlipunang Kaligtasan, Kagalingan at Empleyo (Social Security, Welfare and Employment)\n    c. Kalusugan\n  2. Serbisyong Pang-ekonomiya\n    a. Komunikasyon, mga Kalsada, at iba pang Transportasyon\n    b. Agrikultura, Repormang Pansakahan, at Likas na Yaman at Kapaligiran\n    c. Pagpapaunlad ng mga Yamang Tubig at Pagkontrol sa Baha\n  3. Pagkalahatang Serbisyong Publiko (General Services)\n    a. Kaayusang Publiko at Kaligtasan\n    b. Pangkalahatang Administrasyon",
+      "content_standards": "Naipamamalas ang pag-unawa sa papel na ginagampanan ng mga pinuno at iba pang naglilingkod sa pamahalaan tungo sa pagkakaisa, kaayusan, at kaunlaran ng bansa",
+      "performance_standard": "Nakagagawa ng proyektong nanghihikayat sa mga kapuwa mag-aaral sa pagtataguyod at pakikisa sa mga pinuno at iba pang naglilingkod sa pamahalaan",
+      "suggested_tasks": null,
+      "source_pages": "18-19",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang kahalagahan ng mga elemento ng pagkabansa"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang balangkas o estruktura ng pamahalaan ng Pilipinas"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang papel ng pamahalaan at mga programang:\n  A. Pangkalusugan\n  B. Pang-edukasyon\n  C. Pangkapayapaan\n  D. Pang-ekonomiya\n  E. Pang-impraestruktura"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Napahahalagahan ang iba't ibang programa ng pamahalaan"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 4",
+      "quarter": 4,
+      "domain": "Pagkakakilanlan at Pagkamamamayang Pilipino",
+      "content": "A. Mga Sagisag ng Pagkakakilanlang Pilipino\nB. Pagkamamamayan\nC. Karapatan at Tungkulin ng Mamamayang Pilipino\n  1. Kahulugan\n  2. Uri ng Karapatan\n    a. Karapatang Sibil\n    b. Karapatang Politikal\n    c. Karapatang Panlipunan at Pangkabuhayan\n  3. Mga Kaakibat na Tungkulin\nD. Kagalingang Pansibiko",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa mga sagisag ng pagka-Pilipino, karapatan, at tungkulin tungo sa pagbuo ng pagkakakilanlan at kagalingang pansibiko",
+      "performance_standard": "Nakapaglulunsad ng mga gawaing kumikilala at nagsusulong sa karapatan, tungkulin, at pagkakakilanlang Pilipino",
+      "suggested_tasks": null,
+      "source_pages": "20",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Naipaliliwanag ang mga sagisag ng pagkakakilanlang Pilipino"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Natutukoy ang konsepto at prinsipyo ng pagkamamamayan"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Natatalakay ang mga karapatan at tungkulin ng isang mamamayan"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Natatalakay ang konsepto ng kagalingang pansibiko"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Napahahalagahan ang papel na ginagampanan ng mga mamamayan sa pagtataguyod ng karapatan at tungkulin tungo sa pagtamo ng kagalingang pansibiko"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 1,
+      "domain": "Pinagmulan ng Pilipinas at mga Sinaunang Bayan",
+      "content": "A. Pagbuo ng Pangkasaysayang Pananaw\n  1. Pag-aaral ng Kasaysayan\n    a. Kahulugan\n    b. Batayan\n    c. Pamamaraan at Pananaw\nB. Pinagmulan ng Pilipinas at ng Sinaunang Pilipino\n  1. Pinagmulan ng Pilipinas\n    a. Agham\n      - Volcanic Theory\n      - Plate Tectonic Theory\n    b. Kaalamang Bayan (hal. Alamat, Kuwentong Bayan)\nC. Pinagmulan ng Sinaunang Tao sa Pilipinas\n  1. Agham\n    a. Teoryang Austronesyano\n    b. Teorya ng Core Population\n  2. Kaalamang Bayan (hal., Alamat at Kuwentong Bayan)\nD. Interaksiyon ng Tao, Lipunan, at Kapaligiran\n  1. Kaugnayan ng lokasyon sa paghubog ng kasaysayan\n    a. Pilipinas bilang Arkipelago at bahagi ng Timog-Silangang Asya\n    b. Sinaunang Pamayanan sa Ilaya at Ilawud\nE. Pangkapaligiran at Kalidad ng Pamumuhay ng Tao\n  1. Mga Sinaunang Lipunang Pilipino; Organisasyong Panlipunan at Pampolitika (Luzon, Visayas, at Mindanao)\n  2. Teknolohiya at Ekonomiya ng Lipunang Maritime\n    a. panloob at panlabas na kalakalan\n    b. uri ng kabuhayan (pagsasaka, pangingisda, panghihiram o pangungutang, pangangaso, slash and burn, pangangayaw, pagpapanday, paghahabi at iba pa)\n    c. Kababaihan sa sinaunang lipunan",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa pinagmulan ng Pilipinas at sa nabuong kalinangan ng sinaunang bayang Pilipino",
+      "performance_standard": "Nakalilikha ng presentasyon ukol sa pinagmulan ng Pilipinas at ng lahing Pilipino at sa nabuong kalinangan ng sinaunang bayang Pilipino",
+      "suggested_tasks": null,
+      "source_pages": "22-23",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Naipaliliwanag ang pag-aaral ng kasaysayan at mga batayan nito"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Natatalakay ang mga pamamaraan at pananaw ng kasaysayan"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Natutukoy ang pinagmulan ng Pilipinas batay sa agham, kaalamang bayan, at relihiyon"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang pinagmulan ng sinaunang tao sa Pilipinas batay sa agham at kaalamang bayan"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang kaugnayan ng lokasyon sa paghubog ng kasaysayan"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang mga sinaunang bayang Pilipino batay sa organisasyong panlipunan, pang-ekonomiya, at pampolitika"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Napahahalagahan ang ginampanan ng kababaihan sa pagbuo ng kalinangan ng sinaunang Pilipino"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 2,
+      "domain": "Ang Sinaunang Kalinangang Bayan",
+      "content": "A. Pagkakatulad, Pagkakaiba, at Pagkakaugnay-ugnay ng Kalinangan\n  1. Kalinangan Materyal at Di-Materyal\n    a. Paniniwala at Relihiyon (pagsamba tulad ng animismo, anituismo, at iba pang ritwal, paglilibing (mummification primary / secondary burial practices), mga katuruan ng Islam)\n    b. Tradisyon (paggawa ng bangka, pagdaraos ng pagdiriwang, mga kagawiang panlipunan tulad ng pag-aaral, panliligaw, kasal, ugnayan sa pamilya)\n    c. Iba't ibang uri at anyo ng sining pagpapalamuti (hal. kasuotan, alahas, tattoo, pusad / halop)\n    d. Arkitektura - Bahay Kubo bilang batayan ng Arkitekturang Pilipino\nB. Paglaganap at Katuruan ng Islam sa Pilipinas at ang Sultanato\nC. Ugnayan ng Sinaunang Bayang Pilipino sa Ilang Piling bansa sa Asya",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa nabuong kalinangang bayan at ugnayan sa ilang piling bansa sa Asya ng mga sinaunang Pilipino",
+      "performance_standard": "Nakapagsasagawa ng gawaing nagpapahalaga sa nabuong kalinangang bayan at ugnayan sa ilang piling bansa sa Asya ng mga sinaunang Pilipino",
+      "suggested_tasks": null,
+      "source_pages": "24-25",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Naipaliliwanag ang konsepto ng kalinangan at uri nito"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang mga paniniwala, relihiyon, at tradisyon ng sinaunang bayang Pilipino"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Natatalakay ang iba't ibang uri ng sinaunang sining, pagpapalamuti at arkitektura ng mga Pilipino"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Natatalakay ang pagdating at paglaganap ng Islam"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang mga katuruan ng Islam at pamahalaang sultanato"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Napahahalagahan ang ugnayan ng sinaunang bayang Pilipino sa ilang piling bansa sa Asya"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 3,
+      "domain": "Pagtugon ng Bayan sa Hamon ng Kolonyalismong Espanyol",
+      "content": "A. Pagbabagong Pananaw ng Pamamahala\n  1. Dahilan ng Pananakop sa Pilipinas\n  2. Kahulugan ng Kolonisasyon\n  3. Dahilan ng Kolonisasyon\nB. Mga Paraan ng Espanya sa Pagsasailalim sa Lipunang Pilipino\n  1. Puwersang Militar\n  2. Kristiyanisasyon\n  3. Patakarang Pampolitika\n    a. Reduccion\n    b. Patronato Real\nC. Mga Patakarang Kolonyal na Ipinatupad ng Espanya sa Bansa\n  1. Patakarang pang-ekonomiya\n    a. Pagbubuwis o Tributo\n    b. Sistemang Bandala\n    c. Kalakalang Galyon\n    d. Monopolyo sa Tabako\n    e. Real Compañía de Filipinas\n    f. Sapilitang Paggawa o Polo y Servicio\n    g. Sistemang Encomienda\n  2. Pamahalaang Kolonyal (Sentral at Lokal)\nD. Pag-aangkop ng Bayan sa Kulturang Espanyol\n  1. Materyal at Di-Materyal\n    a. Paniniwala at Relihiyon\n    b. Tradisyon\n    c. Iba't ibang uri at anyo ng sining\n    d. Arkitektura\n    e. Edukasyon\n    f. Kalusugan\n  2. Antas ng Katayuan ng mga Pilipino at ng Kababaihan\nE. Pagbabagong Pananaw at Pagtugon ng mga Pilipino sa Kolonyalismong Espanyol\n  1. Mga Paraan ng Pagtugon ng mga Pilipino sa Kolonyalismong Espanyol\n    a. Pag-aalsa\n    b. Pagtanggap sa kapangyarihang kolonyal/pagsuko\n    c. Paninirahan/Pagtatago sa Kabundukan\nF. Pagtatanggol ng mga katutubong Pilipino laban sa Kolonyalismong Espanyol\n  1. Mga Dahilan\n    a. Pagtutol sa Kristiyanismo at Pagmamalabis ng Dayuhan\n    b. Digmaang Moro\n    c. Pag-aalsang Agraryo\n    d. Pag-aalsa ng Cofradia de San Jose\nG. Pagpupunyagi, Kinahinatnan, at Implikasyon ng Pagtatanggol at Pagpapanatili ng Kalayaan mula sa mga Espanyol\n  1. Tangkang Pananakop sa Cordillera\n  2. Tangkang Pananakop sa mga bahagi ng Mindanao",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa pagtugon at pagpupunyagi ng mga Pilipino sa panahon ng kolonyalismong Espanyol",
+      "performance_standard": "Nakapagsasagawa ng presentasyon ukol sa pagpapahalaga at pagmamalaki sa pagpupunyagi ng mga Pilipino sa pagpapanatili ng kasarinlan",
+      "suggested_tasks": null,
+      "source_pages": "26-28",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natutukoy ang kahulugan at mga dahilan ng kolonisasyon"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang mga paraan sa pagsasailalim sa lipunang Pilipino"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang mga patakarang kolonyal na ipinatupad ng Espanya sa bansa"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang mga paraan ng pag-aangkop at pagtugon ng mga Pilipino sa kolonyalismong Espanyol"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Natatalakay ang katayuan ng kababaihan sa panahon ng kolonyalismong Espanyol"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang mga pagpupunyagi, kinahinatnan, at implikasyon ng pagtatanggol ng mga katutubong pangkat kababaihan, at iba pang sektor na mapanatili ang kalayaan sa kolonyalismo"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 5",
+      "quarter": 4,
+      "domain": "Pag-usbong ng Nasyonalismong Pilipino",
+      "content": "A. Pagbubuo ng Kamalayang Nasyonalismong Pilipino\n  1. Konsepto ng Nasyonalismo\n  2. Mga salik na nagbigay daan sa pag-usbong ng nasyonalismong Pilipino\n    a. Pandaigdigang Pangyayari (Cadiz Constitution, La Ilustracion (Age of Enlightenment), Pagtatapos ng Kalakalang Galyon at pagbubukas ng mga pantalan sa pandaigdigang kalakalan, Pagbubukas ng Suez Canal)\n    b. Panloob na Pangyayari (Pag-usbong Panggitnang uri, Ang Isyu ng Sekularisasyon at Pilipinisasyon (Pedro Pelaez), Ang Liberal na Pangasiwaan ni Gob. Hen. Carlos Ma. Dela Torre, Pag-aalsa sa Cavite at ang Paggarote sa Tatlong Paring Martir (GOMBURZA))\nB. Kilusang Propaganda\n  1. Layunin\n  2. Mga Repormista\n  3. La Solidaridad\n  4. Ambag ng Kilusang Propaganda\n  5. La Liga Filipina",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa mga salik na nagbigay-daan sa pag-usbong ng nasyonalismong Pilipino at Kilusang Propaganda",
+      "performance_standard": "Nakapagsasagawa ng adbokasiya na naglalayong pahalagahan ang pag-usbong ng nasyonalismong Pilipino",
+      "suggested_tasks": null,
+      "source_pages": "29-30",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Nasusuri ang konsepto ng nasyonalismo"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang pagbabagong dulot ng kaisipang liberal sa pag-usbong ng nasyonalismo"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang ambag ng panggitnang uri sa pag-usbong ng nasyonalismong Pilipino"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Naipaliliwanag ang kilusan para sa sekularisasyon at Pilipinisasyon ng mga Parokya"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang mga idinulot ng Cavite Mutiny at paggarote sa GOMBURZA sa pag-usbong ng nasyonalismong Pilipino"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Naiisa-isa ang mga layunin ng pagkakatatag ng Kilusang Propaganda"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Nasusuri ang papel na ginampanan ng Kilusang Propaganda sa pag-usbong ng nasyonalismo"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 1,
+      "domain": "Tungo sa Kalayaan ng Pilipinas",
+      "content": "A. Katipunan\n  1. Pagkakatatag ng Katipunan\n  2. Layunin at Aral\n  3. Paglaganap\n  4. Balangkas\nB. Himagsikang Pilipino\n  1. Pagsisimula ng Himagsikang Pilipino (1896-1897)\n    a. Sigaw sa Pugadlawin\n    b. Mga Labanan\n    c. Pagkakaroon ng mga Paksyon\n    d. Kumbensiyon ng Tejeros\n    e. Pagiging Martir ni Rizal sa Bagumbayan\n  2. Pagpapatuloy ng Himagsikang Pilipino (1897-1898)\n    a. Pagpaslang kay Bonifacio\n    b. Kasunduan sa Biak-na-Bato\n    c. Pagbabalik ni Aguinaldo mula sa Hongkong\nC. Deklarasyon ng Kasarinlan at Pagkakatatag ng Unang Republika\n  1. Pangyayaring nagbigay-daan sa pagkakatatag ng Unang Republika\n    a. Pagdedeklara ng Kalayaan (June 12, 1898)\n    b. Kongreso ng Malolos\n    c. Konstitusyon ng Malolos\n    d. Republika ng Malolos\nD. Kabayanihang Pilipino laban sa mga Espanyol\n  1. Papel ng Katutubong Pilipino\n  2. Papel ng Kababaihan",
+      "content_standards": "Naipamamalas ang pag-unawa sa himagsikang Pilipino bilang isa sa pamamaraang ginamit ng mga Pilipino sa pagsulong ng kalayaan laban sa mga Espanyol",
+      "performance_standard": "Nakabubuo ng presentasyon na nagpakikita ng kahalagahan sa kasalukuyan ng pagsulong ng kalayaan ng mga Pilipino laban sa mga Espanyol",
+      "suggested_tasks": null,
+      "source_pages": "32-33",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang pagkakatatag, layunin, aral at paglaganap ng Katipunan"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang mga pangyayaring naganap sa Panahon ng Himagsikang Pilipino (1892-1896)"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang mga bunga ng pangyayari sa panahon ng Himagsikang Pilipino (1896-1898)"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Napahahalagahan ang deklarasyon ng kasarinlan ng Pilipinas at ang pagkakatatag ng Unang Republika"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Natatalakay ang partisipasyon ng kababaihan sa Himagsikang Pilipino"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 2,
+      "domain": "Ang Pilipinas sa Harap ng Imperyalismong Amerikano at Hapones",
+      "content": "A. Konsepto ng Imperyalismo\nB. Imperyalismong Amerikano\n  1. Dahilan at Mahahalagang Pangyayari\n    a. Unang Putok sa Panulukan ng Silencio at Sociego, Sta. Mesa (Peb 1899)\n    b. Kasunduang Bates (Aug. 1899)\n    c. Labanan sa Tirad Pass (Dec. 1899)\n    d. Pagdakip kay Emilio Aguinaldo (March 1901)\n    e. Tagumpay ng Balangiga (Sept. 1901)\n    f. Iba't ibang labanan (Cordillera, Mindanao, at iba pang lugar)\n  2. Pagpapaigting ng Kapangyarihang Amerikano\n    a. Pamahalaan (Pamahalaang Militar; Pamahalaang Sibil)\n    b. Pasipikasyon at Kooptasyon (Batas Sedisyon; Batas sa Rekonsentrasyon; Batas sa Watawat; Batas sa Brigandage)\n    c. Kalakalan\n    d. Edukasyon\n    e. Kalusugan\n    f. Transportasyon at Komunikasyon\n    g. Kultura\n  3. Pagsusumikap ng mga Pilipino tungo sa Pagtatatag ng Nagsasariling Pamahalaan\n    a. Philippine Bill of 1902\n    b. Pilipinisasyon\n    c. Batas Jones\n    d. Misyong OsRox (Hare-Hawes-Cutting Law)\n    e. Misyong Quezon (Tydings-McDuffie)\n  4. Pamahalaang Komonwelt\n    a. Saligang Batas ng 1935\n    b. Pagpapasinaya ng Pamahalaang Komonwelt\n    c. Mga Polisiya at Programa sa Panahon ng Komonwelt (Women's suffrage; Pambansang Wika; Pagkupkop sa mga Hudyo)\nC. Imperyalismong Hapones\n  1. Mga Layunin at mahahalagang pangyayari sa pananakop ng mga Hapones\n    a. Pagsiklab ng Ikalawang Digmaang Pandaigdig\n    b. Labanan sa Bataan at Corregidor\n    c. Death March\n    d. Kuwento ng Pang-aabuso (Pang-aabusong Seksuwal - Comfort Women; Pang-aabusong Pisikal at Mental)\n  2. Patakaran at Programa ng mga Hapones\nD. Kabayanihang Pilipino sa Panahon ng Digmaan at Kapayapaan (1898-1946)\n  1. Karapatang Bumoto ng Kababaihan (suffrage)\n  2. Pakikipaglaban sa mga Hapones at Pagmamahal sa Bayan (HUKBALAHAP, Kilusang Gerilya, Pagkilos ng Sibilyan)",
+      "content_standards": "Naipamamalas ang pag-unawa sa pamamaraan, mga pagbabago sa lipunan at pakikibaka ng mga Pilipino na makamtan ang kalayaan at pagkakakilanlan sa ilalim ng Imperyalismong Amerikano at Hapones",
+      "performance_standard": "Nakabubuo ng proyekto na nagpapakita ng pagmamalaki sa pagpupunyagi ng mga Pilipino na makamit ang ganap na kalayaan mula sa Imperyalismong Amerikano at Hapones",
+      "suggested_tasks": null,
+      "source_pages": "34-36",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang konsepto ng imperyalismo"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang pakikibaka ng mga Pilipino sa panahon ng Digmaang Pilipino-Amerikano"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang imperyalistang pamamaraang ginamit ng mga Amerikano sa pananakop sa Pilipinas"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nakabubuo ng kongklusyon tungkol sa pagsusumikap ng mga Pilipino tungo sa pagtatatag ng nagsasariling pamahalaan"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang polisiya at programa ng Pamahalaang Komonwelt"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Natataya ang mga kontribusyon ng mga natatanging Pilipinong nakipaglaban para sa kalayaan laban sa mga Amerikano"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Natatalakay ang mga layunin at mahahalagang pangyayari sa pananakop ng mga Hapones"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "Nasusuri ang mga pagbabagong naidulot sa lipunang Pilipino ng mga polisiya at programang ipinatupad ng mga Hapones"
+        },
+        {
+          "sequence": 9,
+          "competency_text": "Nakapagsasagawa ng pananaliksik ukol sa kontribusyon ng pagpupunyagi ng mga Pilipino sa pagkamit ng ganap na Kalayaan"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 3,
+      "domain": "Mga Hamon at Tunguhin bilang isang Malayang Bansa (1946-1986)",
+      "content": "A. Kaayusang Panlipunan matapos ang Ikalawang Digmaang Pandaigdig\n  1. Politika\n    a. Pagtatatag ng Ikatlong Republika ng Pilipinas\n    b. Cold War\n  2. Ekonomiya\n    a. Rehabilitasyong Pang-ekonomiya\n  3. Sosyo-Kultural\n    a. Kalagayang pang-edukasyon\nB. Mga Hamong dulot ng Neokolonyalismo\n  1. Ekonomiya\n    a. Kabuhayan at Kalakalan (Parity Rights, Bell Trade Act/Philippine Trade Act, Philippine Rehabilitation Act, Filipino First Policy)\n  2. Politika\n    a. Kasunduang Militar (Military Bases, Mutual Defense Treaty, Military Assistance Agreement of 1947)\n  3. Sosyo-Kultural\n    a. Pagbibigay importansya sa wikang Ingles\n    b. Paggamit ng mass media\nC. Mga Hamon sa Demokrasya\n  1. Deklarasyon ng Batas Militar\n  2. Pagpapatupad ng Diktadura\n    a. Epekto ng Diktadura\n      a.1. Pagkawala ng mga institusyong demokratiko - malayang lehislatura\n      a.2. Paghina ng ekonomiya\n      a.3. Paglabag sa Karapatang Pantao (Human Rights Violation)\n      a.4. Ill-gotten Wealth\n    b. Paglaban sa Diktadura\n      b.1. Mga pagkilos laban sa Diktadura\n      b.2. Pagpaslang kay Ninoy Aquino\nD. Pagbabalik ng Demokrasya: Pamana ng EDSA People Power I",
+      "content_standards": "Naipamamalas ang pag-unawa sa ilang mga hamong pampolitika, pang-ekonomiya at pangsosyo-kultural na kinaharap ng mga Pilipino bilang isang malayang bansa mula 1946 hanggang 1986",
+      "performance_standard": "Nakagagawa ng adbokasiya na nagpapakita ng pagmamalaki sa pagpupunyagi ng mga Pilipino sa ilang mga hamong pampolitika, pang-ekonomiya at pangsosyo-kultural na kinaharap ng mga Pilipino bilang isang malayang bansa mula 1946 hanggang 1986",
+      "suggested_tasks": null,
+      "source_pages": "37-38",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Nailalarawan ang kaayusang panlipunan sa Pilipinas matapos ang Ikalawang Digmaang Pandaigdig"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Natatalakay ang mga patakarang pang-ekonomiya ng Pilipinas mula 1946-1986 na nakatali sa neokolonyalismo"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasisiyasat ang layunin ng mga kasunduang militar sa pagitan ng Pilipinas at Amerika"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nakabubuo ng kongklusyon tungkol sa epekto ng neokolonyalistang pananaw sa kultura at lipunang Pilipino"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang mga suliranin at hamon sa kasarinlan at pagkabansa ng mga Pilipino sa ilalim ng Batas Militar"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nabibigyang-halaga ang kontribusyon ng People Power I sa muling pagkamit ng kalayaan at kasarinlan sa mapayapang paraan"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 6",
+      "quarter": 4,
+      "domain": "Tungo sa Malaya, Maunlad, at Makataong Lipunan (Ikalimang Republika)",
+      "content": "A. Ang Pilipinas matapos ang EDSA\n  1. Politika\n    a. Saligang Batas ng 1987 (key features: additional commissions, independent bodies, ombudsman)\n    b. Korupsiyon\n    c. Dinastiyang Politikal\n    d. Mga Paglabag sa Karapatang Pantao\n    e. Usaping Pangkapayapaan (hal., CPP-NPA-NDF, MNLF/MILF)\n    f. Ugnayang Panlabas (Isyung Teritoryal - West Philippine Sea; Midya bilang haligi ng Demokrasya)\n  2. Ekonomiya\n    a. Pangkalahatang-tanaw sa ekonomiya (1986-kasalukuyan) - talakayan sa kahirapan, mga sektor\n    b. Globalisasyon\n    c. Isyu sa Paggawa\n    d. Migrasyon\n  [NOTE: Content list appears truncated in source PDF at page 40; additional socio-cultural content may be present in full document.]",
+      "content_standards": "Naipamamalas ang pag-unawa sa pagtugon ng mga Pilipino sa mga hamong pangkabuhayan, pampolitika, panlipunan at pangkultura bilang isang malayang bansa mula 1987 hanggang kasalukuyan",
+      "performance_standard": "Nakabubuo ng panukalang programa na tumutugon sa mga hamong pangkabuhayan, pampolitika, panlipunan at pangkultura bilang isang malayang bansa mula 1987 hanggang kasalukuyan",
+      "suggested_tasks": null,
+      "source_pages": "39-40",
+      "confidence": 0.75,
+      "warnings": [
+        "Content listing appears truncated in the source PDF at page 40. Only political and partial economic topics are visible. Socio-cultural content and remaining competencies (beyond sequence 3) may have been cut off. Confidence lowered accordingly."
+      ],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Nailalarawan ang kaayusang panlipunan matapos ang EDSA 1"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nakabubuo ng kongklusyon ukol sa mga hamong politikal ng Pilipinas mula 1987 hanggang sa kasalukuyan"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang mga hamong pang-ekonomiya ng Pilipinas mula 1987 hanggang sa kasalukuyan"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 1,
+      "domain": "Heograpiya at Sinaunang Kasaysayan",
+      "content": "ANG HEOGRAPIYA NG TIMOG SILANGANG ASYA\nA. Pisikal na Heograpiya ng Timog Silangang Asya\n  1. Lokasyon ng Timog Silangang Asya\n  2. Pisikal na Katangian ng Rehiyon (mainland at insular)\n  3. Epekto ng Katangiang Pisikal ng Timog Silangang Asya sa Pamumuhay ng mga Tao\n  4. Ang Likas na Yaman ng Timog Silangang Asya at Likas-kayang Pag-unlad\nB. Heograpiyang Pantao ng Timog Silangang Asya\n  1. Pagkakaiba ng Kalinangan\n    a. Pangkat-etnolinggwistiko sa kapuluang Timog Silangang Asya\n    b. Pangkat-etnolinggwistiko sa pang-kontinenteng Timog Silangang Asya\n    c. Sistema ng Pananampalataya\n  2. Estrukturang Panlipunan\n  3. Ugnayang Pangkapangyarihan\nSINAUNANG KASAYSAYAN NG TIMOG SILANGANG ASYA\nA. Paglaganap ng Tao sa Timog Silangang Asya\n  1. Austronesian\n  2. Mainland Origin Hypothesis (Bellwood)\n  3. Island Origin Hypothesis (Solheim)\n  4. \"Peopling of Mainland SE Asia\"\nB. Mga Sinaunang Kabihasnan sa Timog Silangang Asya\n  1. Mga Sinaunang Kabihasnan sa Mainland (Pangkontinente)\n    a. Funan\n    b. Angkor (Khmer)\n    c. Pagan\n    d. Toungoo\n    e. Lê\n    f. Ayutthaya\n  2. Mga Sinaunang Kabihasnang Insular\n    a. Srivijaya\n    b. Sailendra\n    c. Madjapahit\n    d. Malacca\n  3. Ugnayan ng Pilipinas sa mga sinaunang kabihasnan sa Timog Silangang Asya\n  4. Ugnayan ng Kabihasnan sa Timog Silangang Asya sa Kabihasnang Tsina at India",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa ginampanan ng katangiang pisikal ng rehiyon sa pagbuo ng sinaunang kasaysayan at kalinangan ng mga mamamayan sa Pilipinas at Timog Silangang Asya",
+      "performance_standard": "Nakabubuo ng proyekto na nagpapaliwanag sa ginampanan ng katangiang pisikal ng rehiyon sa pagbuo ng sinaunang kasaysayan at kalinangan ng mga mamamayan sa Pilipinas at Timog Silangang Asya",
+      "suggested_tasks": null,
+      "source_pages": "42-43",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Naipaliliwanag ang mahalagang ginampanan ng katangiang pisikal ng Pilipinas at ng rehiyon sa pagbuo ng sinaunang kasaysayan at kalinangan ng mga mamamayan sa Pilipinas at Timog Silangang Asya"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang heograpiyang pantao ng Timog Silangang Asya batay sa pangkat-etnolinggwistiko, pananampalataya, estrukturang panlipunan, at ugnayang pangkapangyarihan"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Naiuugnay ang katangian ng sinaunang lipunan sa pagkakamag-anak, pamilya at kasarian (kinship, family and gender) sa Timog Silangang Asya"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang kalinangang Austronesyano at Imperyong Maritima kaugnay sa pagbuo ng kalinangan ng Pilipinas at Timog Silangang Asya"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Naiuugnay ang sinaunang kabihasnan ng Pilipinas sa mga bansa sa Timog Silangang Asya, China at India"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Napahahalagahan ang ugnayan ng heograpiya at sinaunang kasaysayan ng mga bansa sa Timog Silangang Asya"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 2,
+      "domain": "Kolonyalismo at Imperyalismo sa Timog Silangang Asya",
+      "content": "A. Ang Konsepto ng Kolonyalismo at Imperyalismo\n  1. Ang kahulugan at ang pagkakaiba ng kolonyalismo at imperyalismo\n  2. Ang pagkakaiba ng tuwiran at di-tuwirang kolonyalismo\n  3. Ang una at ikalawang yugto ng imperyalismong Kanluranin\n  4. Ang kaso ng Thailand bilang malayang bansa sa panahon ng pamamayani ng imperyalismong Kanluranin sa rehiyon ng Timog Silangang Asya\nB. Ang Kolonyalismo at Imperyalismong Kanluranin sa Pangkapuluang Timog Silangang Asya\n  1. Pilipinas, Indonesia, at Malaysia\n  2. Paghahambing ng mga pamamaraan at patakarang kolonyal sa tatlong bansa ng pangkapuluang Timog Silangang Asya\n  3. Paghahambing ng iba't ibang pagtugon sa kaayusang kolonyal (pag-alsa, pag-angkin at pag-angkop) sa tatlong bansa ng pangkapuluang Timog Silangang Asya\nC. Ang Kolonyalismo at Imperyalismong Kanluranin sa Pangkontinenteng Timog Silangang Asya\n  1. Cambodia, Myanmar, at Vietnam\n  2. Paghahambing ng mga pamamaraan at patakarang kolonyal sa tatlong bansa ng pangkontinenteng Timog Silangang Asya\n  3. Paghahambing ng iba't ibang pagtugon sa kaayusang kolonyal (pag-alsa, pag-angkin at pag-angkop) sa tatlong bansa ng pangkontinenteng Timog Silangang Asya\nD. Paglitaw ng Imperyalismong Hapon sa ika-20 siglo\n  1. Pilipinas, Indonesia, Myanmar, at Vietnam\n  2. Paghahambing ng mga pamamaraan at patakarang kolonyal sa apat na mga bansa ng Timog Silangang Asya\n  3. Paghahambing ng iba't ibang pagtugon sa kaayusang kolonyal (pag-alsa, pag-angkin at pag-angkop) sa apat na mga bansa ng Timog Silangang Asya",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa naging tugon at epekto ng kolonyalismo at imperyalismo sa Pilipinas at Timog Silangang Asya",
+      "performance_standard": "Nakabubuo ng proyekto na nagbibigay-impormasyon sa mga naging tugon sa kolonyalismo at imperyalismo sa Pilipinas at Timog Silangang Asya",
+      "suggested_tasks": null,
+      "source_pages": "44-45",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Naipaliliwanag ang konsepto ng kolonyalismo at imperyalismo"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Naipaghahambing ang una at ikalawang yugto ng imperyalismong Kanluranin"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang mga pamamaraan at patakarang kolonyal sa tatlong bansa ng pangkapuluang Timog Silangang Asya"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang iba't ibang pagtugon sa kaayusang kolonyal (pag-alsa, pag-angkin at pag-angkop) sa tatlong bansa ng pangkapuluang Timog Silangang Asya"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang mga pamamaraan at patakarang kolonyal sa tatlong bansa ng pangkontinenteng Timog Silangang Asya"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang iba't ibang pagtugon sa kaayusang kolonyal (pag-alsa, pag-angkin, at pag-angkop) sa tatlong bansa ng pangkontinenteng Timog Silangang Asya"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Naipaliliwanag ang imperyalismong Hapon sa ika-20 siglo"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "Naipaghahambing ang mga pamamaraan, patakarang kolonyal, at iba't ibang pagtugon sa kaayusang kolonyal (pag-alsa, pag-angkin at pag-angkop) sa apat na mga bansa ng Timog Silangang Asya"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 3,
+      "domain": "Nasyonalismo, Kasarinlan at Pagkabansa",
+      "content": "A. Pagpapaliwanag ng mga Batayang Konsepto\n  1. Ang konsepto ng Nasyonalismo\n  2. Ang konsepto ng Kasarinlan\n  3. Ang konsepto ng Pagkabansa\nB. Nasyonalismo at Pagtamo ng Kasarinlan ng mga Piling Bansa sa Timog Silangang Asya\n  1. Pilipinas\n  2. Burma\n  3. Indonesia\n  4. Vietnam\nC. Mga Hamon sa Pagkabansa ng Pilipinas Matapos ang Ikalawang Digmaang Pandaigdig\n  1. Pagbubuod ng mga hamong politikal (demokrasyang elit, neokolonyalismo, diktadura, malawakang katiwalian)\n  2. Pagbubuod ng mga hamong pang-ekonomiya (lumalaking agwat sa pagitan ng mayaman at mahirap, hindi maunlad na sektor ng agrikultura, kawalan ng baseng industriyal)\n  3. Pagbubuod ng mga hamong pangkultura at panlipunan (mga usapin hinggil sa pagkakakilanlang Pilipino at kakulangan ng mga programa sa pagsulong ng kapakanan at kagalingan ng mga grupong etniko, pag-usbong ng mga kilusang komunista at Moro bunsod ng mga suliraning panlipunan)\nD. Mga Hamon ng Pagkabansa sa Pangkontinenteng Timog Silangang Asya Matapos ang Kumperensiya ng Bandung\n  1. Cambodia, Laos, Myanmar, Thailand, at Vietnam\n  2. Paghahambing ng mga hamon sa pagkabansa ng limang bansa sa pangkontinenteng Timog Silangang Asya\nE. Mga Hamon sa Pagkabansa sa Pangkapuluang Timog Silangang Asya matapos ang Kumperensiya ng Bandung\n  1. Indonesia\n  2. Malaysia\n  3. Singapore\n  4. Brunei\n  5. Pagkakamit ng Kasarinlan ng Timor Leste (2002)\n  6. Paghahambing ng mga hamon sa pagkabansa ng limang bansa sa pangkapuluang Timog Silangang Asya",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa nasyonalismo at pagkabansa sa konteksto ng kolonyalismo sa Pilipinas at Timog Silangang Asya",
+      "performance_standard": "Nakapagsasagawa ng pagtatanghal na nagpapahalaga sa nasyonalismo at pagkabansa ng Pilipinas at Timog Silangang Asya sa konteksto ng kolonyalismo",
+      "suggested_tasks": null,
+      "source_pages": "46-47",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Naipaliliwanag ang sumusunod na konsepto:\n  A. Nasyonalismo\n  B. Kasarinlan\n  C. Pagkabansa"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Naipaliliwanag ang pagtamo ng kasarinlan ng mga piling bansa sa Timog Silangang Asya"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang mga hamon sa pagkabansa ng Pilipinas matapos ang Ikalawang Digmaang Pandaigdig"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang mga hamon sa pagkabansa ng pangkontinenteng Timog Silangang Asya matapos ang Kumperensiya ng Bandung"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang mga hamon sa pagkabansa ng pangkapuluang Timog Silangang Asya matapos ang Kumperensiya ng Bandung"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 7",
+      "quarter": 4,
+      "domain": "Ugnayan ng mga Bansa sa Rehiyon",
+      "content": "A. Ang Pagtatag ng ASEAN\n  1. Pagsilang at Pag-unlad ng Panloob at Panlabas ng Rehiyonal na Ugnayan ng ASEAN (Rise and development of inter- and intra-regional relationships of ASEAN)\n    a. Layunin\n    b. Kasaysayan\n    c. Estruktura (Coordinating & Community Council)\n  2. Tagumpay ng ASEAN sa pagkamit ng kaunlaran at kapayapaan sa rehiyon\n    a. Declaration on the Zone of Peace, Freedom and Neutrality (ZOPFAN)\n    b. Declaration of ASEAN Concord\n    c. ASEAN Free Trade Area (AFTA) at ASEAN Economic Community (AEC)\n    d. Southeast Asian Nuclear-Weapon-Free Zone Treaty (SEANWFZ)\n    e. ASEAN Vision 2020\nB. Ang Pilipinas sa ASEAN\n  1. Pagsapi ng Pilipinas sa ASEAN\n  2. Papel ng Pilipinas sa ASEAN\n  3. ASEAN bilang isa sa mga batayan ng patakarang panlabas at pangkalakalan ng Pilipinas\nC. Ang ASEAN at Hamon ng Likas-kayang Pag-unlad sa Pilipinas at Timog Silangang Asya\n  1. ASEAN Sustainable Goals\n  2. ASEAN Community 2015 (ACI15): ASEAN Economic (AEC), Political-Security (APSC), Socio-Cultural (ASCC)\n  3. ASEAN COMMUNITY VISION 2025\n  4. Pangunahing hamon na hinaharap ng ASEAN\nD. Kalagayang ng Karapatang Pantao sa Pilipinas at Timog Silangang Asya\n  1. Pagtatatag ng ASEAN Intergovernmental Commission on Human Rights (AICHR)\n  2. ASEAN Human Rights Declaration (AHRD)\n  3. Mga Isyung hinaharap ng ASEAN kaugnay sa karapatang pantao",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa papel ng ASEAN sa pagtugon sa mga hamon at pagkakamit ng likas-kayang pag-unlad ng mga bansa sa Timog Silangang Asya",
+      "performance_standard": "Nakabubuo ng adbokasiya na nagsusulong sa pagpapahalaga sa papel ng ASEAN tungo sa pagkakaisa at pagharap sa hamon ng likas-kayang pag-unlad at karapatang pantao sa Timog Silangang Asya",
+      "suggested_tasks": null,
+      "source_pages": "48-49",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang layunin, kasaysayan, estruktura, at ilang tagumpay ng ASEAN"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Naiuugnay ang papel ng Pilipinas bilang aktibong kasapi ng ASEAN"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang mga hamon at tugon ng ASEAN sa pagtamo ng likas-kayang pag-unlad (sustainable development)"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang papel ng ASEAN sa usapin ng karapatang pantao sa Pilipinas at Timog Silangang Asya"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 1,
+      "domain": "Heograpiya at Sinaunang Kabihasnan ng Asya at Daigdig",
+      "content": "A. Heograpiya ng Asya at Daigdig\n  1. Mga Kontinente ng Daigdig\n  2. Natatanging Katangiang Pisikal ng Daigdig\n  3. Implikasyon ng heograpiya ng daigdig sa pamumuhay ng mga tao\nB. Mga Sinaunang Kabihasnan\n  1. Katuturan ng Kabihasnan\n  2. Kabihasnang sumibol sa lambak-ilog (Tigris-Euphrates, Indus, Huang He, at Ilog Nile)\n  3. Kabihasnang Mediterano (Minoan, Myceanean)\n  4. Kabihasnang Meso-America at Andes (Olmec, Maya, Aztec, at Inca)\n  5. Kabihasnan sa Rehiyong Pacific (Polynesian)\nC. Estrukturang Panlipunan sa Iba't ibang Bahagi ng Asya at Daigdig\n  1. Lipunang Sumerian at Egyptian\n  2. Sistemang Varna/Caste\n  3. Lipunang Greek at Roman\n  4. Iba pang sinaunang lipunan\nD. Ang Relihiyon at Ibang Paniniwala\n  1. Hinduism at Buddhism\n  2. Judaism, Kristiyanismo at Islam\n  3. Confucianism at Shintoism",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa interaksiyon ng tao sa kaniyang kapaligiran na nagbigay daan sa pagkakakilanlan at pagtugon sa nagbabagong kapaligiran",
+      "performance_standard": "Nakagagawa ng presentasyon na nagpapatunay ng interaksiyon ng tao at kapaligiran",
+      "suggested_tasks": null,
+      "source_pages": "51-52",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Nailalarawan ang katangiang pisikal ng daigdig at implikasyon nito sa pamumuhay ng mga tao"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang kalagayang heograpikal ng mga sinaunang kabihasnan sa Asya at iba pang bahagi ng daigdig"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Napatutunayan ang kahalagahan ng pakikipag-ugnayan ng mga tao sa pag-unlad ng mga kabihasnan"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Natataya ang epekto ng estrukturang panlipunan sa pag-unlad ng pamumuhay ng tao"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Naipaliliwanag ang papel ng relihiyon at ibang paniniwala sa paghubog sa pagkakakilanlang kultural ng tao"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Napahahalagahan ang interaksiyon ng tao sa kaniyang kapaligiran"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 2,
+      "domain": "Kolonyalismo, Imperyalismo, Nasyonalismo at Pagkabansa",
+      "content": "A. Mahahalagang Pangyayari sa Daigdig noong Ika-15 at Ika-16 Siglo\n  1. Pagsasara ng Constantinople\n  2. Renaissance\n  3. Repormasyon\n  4. Kontra-Repormasyon\nB. Panahon ng Paggalugad at Kolonyalismo sa America\n  1. Ang Europe sa Panahon ng Paggalugad at Kolonyalismo\n    a. Mga Dahilan\n    b. Tunggalian ng Portugal at Spain\n    c. Ang Epekto ng Pananakop sa Imperyong Aztec at Inca sa lipunang Mesoamerican/Andean at sa Lipunang Espanyol\nC. Ang mga Asyano sa Panahon ng Paggalugad at Kolonyalismo\n  1. Ang paglalakbay ni Ibn Battuta\n  2. Ming China (tuon sa paglalakbay na isinagawa sa ilalim ng pamumuno ni Zheng He)\n  3. Mughal Empire ng India\n  4. Tokugawa Japan (Edict of Sakoku)\nD. Panahon ng Imperyalismo\n  1. Pag-usbong ng mga Imperyo ng England, France, the Netherlands, Portugal, at Spain sa America, India at East Indies\n  2. Pagpasok ng mga Imperyalistang Estado ng Russia, Italy, Germany, United States, at Japan\nE. Panahon ng Absolutismo, Liberalismo at Enlightenment\n  1. Mga mahalagang pangyayari\n  2. Rebolusyong Amerikano\nF. Rebolusyong Pranses at Pag-usbong ng mga Bansang Estado\n  1. French Revolution at mga pagbabagong dulot nito\n  2. Pag-usbong ng mga Bansang-Estado\nG. Paglaganap ng Nasyonalismo sa Asya at Amerika\n  1. Modernisasyon ng Japan (Meiji Restoration)\n  2. Himagsikan sa South America (Simon Bolivar)\n  3. Back-to-Africa Movement\n  4. United League ni Sun Yat Sen\n  5. Passive Resistance ni Gandhi (India)",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa hamon ng kolonyalismo at imperyalismo sa pagpapatatag ng nasyonalismo at pagkabansa",
+      "performance_standard": "Nakabubuo ng mungkahing solusyon sa mga napapanahong isyung may kaugnayan sa pagpapatatag ng nasyonalismo at pagkabansa",
+      "suggested_tasks": null,
+      "source_pages": "53-54",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang mahahalagang pangyayari noong ika-15 at ika-16 siglo bago ang panahon ng paggalugad ng mga lupain"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang mga pangyayari at kinahinatnan ng paggalugad at kolonyalismo ng mga Europeo sa mga bagong lupain sa America"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang mga naging unang tugon ng mga Asyano sa panahon ng paggalugad at kolonyalismo"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang imperyalismong Europeo at Japan sa Asya at Africa"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Naiuugnay ang Enlightenment at Rebolusyong Amerikano sa paglinang ng nasyonalismo at pagkabansa"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang mahahalagang pangyayari sa panahon ng Rebolusyong Pranses at pagtatag ng mga bansang estado"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Nasusuri ang naging tugon ng ilang bansa sa Asya, Africa at Latin America sa imperyalismong Europeo"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 3,
+      "domain": "Mga Hamon ng Pagkabansa at Kaisahan ng Daigdig",
+      "content": "A. Unang Digmaang Pandaigdig\n  1. Mga Sanhi\n  2. Mga Pangyayari\n  3. Mga Pagbabagong dulot ng Digmaan\nB. Ang Daigdig Pagkaraan ng Digmaan\n  1. Pagtatatag ng League of Nations\n  2. Spanish Flu\n  3. Great Depression\nC. Banta ng Ideolohiyang Totalitaryanismo at Pasismo\n  1. Katuturan ng Totalitaryanismo\n  2. Komunismo sa Russia at China\n  3. Pasismo sa Italy at Nazismo sa Germany\n  4. Militarismo sa Japan\nD. Ikalawang Digmaang Pandaigdig\n  1. Sanhi\n  2. Mga Pangyayari\n  3. Mga Pagbabagong dulot ng Digmaan\nE. Ang Cold War sa Europa at America\n  1. Truman Doctrine at Marshall Plan\n  2. NATO at Warsaw Pact\n  3. Space Race\n  4. Cuban Missile Crisis\nF. Ang Asya at Africa sa Panahon ng Cold War\n  1. Paglaya ng mga Bansa at Neokolonyalismo\n  2. Non-Aligned Nations\n  3. Digmaang Korea at Vietnam\n  4. Russo-Afghan War\nG. Ang Daigdig Matapos ang Cold War: Pagkakabuwag ng USSR\nH. Mga Kilusan para sa Demokrasya\n  1. Civil Rights Movement sa US\n  2. Solidarity Movement ng Poland\n  3. Tiananmen Square Protest sa China\n  4. Anti-Apartheid Movement ng South Africa",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa mga pangyayari at isyung pampolitika sa daigdig na nagpapatatag sa diwa ng demokrasya ng mga mamamayan",
+      "performance_standard": "Nakalilikha ng adbokasiyang may kaugnayan sa mga isyu at hamong pampolitika at pansibiko na nagpapatatag sa diwa ng demokrasya",
+      "suggested_tasks": null,
+      "source_pages": "55-56",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang mga sanhi, pangyayari, at pagbabagong dulot ng Unang Digmaang Pandaigdig"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nabibigyang katuwiran ang naging tugon ng mga bansa sa pagharap sa iba't ibang suliranin pagkaraan ng digmaan"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang ideolohiyang totalitaryanismo bilang banta sa demokratikong pamamahala"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Natataya ang mga sanhi, pangyayari, at pagbabagong dulot ng Ikalawang Digmaang Pandaigdig"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Naipaliliwanag ang mga pangyayaring nagbigay daan sa Cold War at ang mga tunggaliang dulot nito"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang epekto ng Cold War sa Asya at Africa"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Natataya ang kalagayan ng daigdig sa pagwawakas ng Cold War"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "Napahahalagahan ang bahaging ginampanan ng iba't ibang kilusan sa pagtaguyod ng demokratikong lipunan"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 8",
+      "quarter": 4,
+      "domain": "Mga Ugnayang Pandaigdig at mga Hamon sa Makabagong Panahon",
+      "content": "A. Ang United Nations (UN) at ang Pilipinas bilang kasapi nito\n  1. Pagtatag ng UN\n  2. Pilipinas bilang Kasapi ng UN\nB. Mga Isyung Panlipunan: Isyung Pangkalusugan (SARS, Bird Flu, STIs, COVID-19, at iba pa)\nC. Mga Isyung Pampolitika, Pangkabuhayan, at Pangkalikasan\n  1. Terorismo\n  2. Global Financial Crisis\n  3. Climate Change\nD. Globalisasyon at Pagkamamamayan ng Daigdig\n  1. Katuturan at Uri ng Globalisasyon\n    a. Political globalization\n    b. Economic globalization\n    c. Cultural globalization\n  2. Katuturan ng Global Citizenship\n  3. Mga Isyu at Hamon bilang Global Citizen",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa mga adhikain at kontribusyon upang matugunan ang mga isyung kinakaharap ng daigdig",
+      "performance_standard": "Nakagagawa ng pananaliksik na nakapagtataya sa mga napapanahong isyu at usapin sa sariling komunidad na nagpapakita ng pagtugon bilang mapanagutang mamamayan ng bansa at daigdig",
+      "suggested_tasks": null,
+      "source_pages": "57",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Nailalarawan ang United Nations at ang Pilipinas bilang kasapi nito"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang mga isyung panlipunan na kinakaharap ng daigdig"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang mga isyung pampolitika, pangkabuhayan, at pangkalikasang kinakaharap ng daigdig"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Napahahalagahan ang pagiging mapanagutang mamamayan ng daigdig"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 1,
+      "domain": "Batayang Konsepto ng Pag-aaral ng Ekonomiks tungo sa Likas-kayang Pag-unlad",
+      "content": "A. Pag-aaral ng Ekonomiks tungo sa Likas-kayang Pag-unlad\n  1. Kahulugan ng Ekonomiks\n  2. Batayan ng Pag-aaral ng Ekonomiks\n  3. Kahalagahan ng Pag-aaral ng Ekonomiks\nB. Likas-kayang Pag-unlad\n  1. Konsepto ng Likas-kayang Pag-unlad\n  2. Sustainable Development Goals (SDGs)\n  3. Kahalagahan ng Likas-kayang Pag-unlad\nC. Alokasyon at Sistemang Pang-ekonomiya\n  1. Apat na Batayang Katanungang Pang-ekonomiks\n  2. Alokasyon\n  3. Iba't ibang Sistemang Pang-ekonomiya\nD. Produksiyon: Konsepto at Implikasyon\n  1. Kahulugan at Proseso ng Produksiyon at Implikasyon sa pang-araw-araw na pamumuhay\n  2. Mga Salik ng produksiyon at implikasyon sa pang-araw-araw na pamumuhay\n  3. Konsepto at Katangian ng isang Entreprenyur\n  4. Mga Organisasyon ng Negosyo\nE. Pagkonsumo at Matalinong Mamimili\n  1. Konsepto at mga Salik na nakaaapekto sa pagkonsumo\n  2. Mamimili: Kahulugan at mga Katangian ng Isang Matalinong Mamimili\n  3. Mga Karapatan at Tungkulin ng isang Mamimili",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa mga pangunahing konsepto ng ekonomiks at likas-kayang pag-unlad",
+      "performance_standard": "Nakabubuo ng presentasyon tungkol sa mga pangunahing konsepto ng ekonomiks at likas-kayang pag-unlad",
+      "suggested_tasks": null,
+      "source_pages": "59-60",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang mga konsepto at batayan ng pag-aaral ng ekonomiks tungo sa likas-kayang pag-unlad"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Natataya ang kahalagahan ng pagsusulong ng likas-kayang pag-unlad bilang mekanismo sa pagtamo ng pambansa at pandaigdigang kaunlaran"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang ugnayan ng alokasyon at sistemang pang-ekonomiya bilang mekanismo sa pagtugon sa hamon ng kakapusan"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Natatalakay ang mga salik ng produksiyon at ang implikasyon nito sa pang-araw-araw na pamumuhay"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Naipaliliwanag ang mga katangian ng isang entreprenyur at mga organisasyon ng negosyo"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang konsepto at ang mga salik na nakaaapekto sa pagkonsumo"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Naipamamalas ang talino sa pagkonsumo sa pamamagitan ng paggamit ng mga katangian ng isang matalinong mamimili"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "Naisusulong ang mga karapatan at mga tungkulin ng isang mamimili"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 2,
+      "domain": "Ugnayan ng Pamilihan at Pamahalaan tungo sa Pagkakapantay-pantay at Kabutihang Panlahat",
+      "content": "A. Demand, Suplay at Ekwilibriyo sa Pamilihan\n  1. Konsepto ng Demand\n    a. Kahulugan\n    b. Mga salik na nakaaapekto sa demand\n  2. Konsepto ng Suplay\n    a. Kahulugan\n    b. Mga salik na nakaaapekto sa suplay\n  3. Interaksyon ng Demand at Suplay sa Pamilihan\nB. Konsepto ng Pamilihan\n  1. Kahulugan ng Pamilihan\n  2. Iba't ibang estruktura ng pamilihan\nC. Papel ng Pamahalaan sa Pagsasaayos ng Pamilihan\n  1. Public goods\n  2. Externalities\n  3. Assymetric Information",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa ugnayan ng puwersa ng demand at suplay, at sa sistema ng pamilihan bilang batayan ng matalinong pagdedesisyon ng sambahayan at bahay-kalakal tungo sa kabutihang panlahat",
+      "performance_standard": "Nakapagsusuri sa mga pangunahing kaalaman sa ugnayan ng puwersa ng demand at suplay, at sistema ng pamilihan bilang batayan ng matalinong pagdedesisyon ng sambahayan at bahay kalakal tungo sa kabutihang panlahat",
+      "suggested_tasks": null,
+      "source_pages": "61",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang konsepto ng demand"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang mga salik na nakaaapekto sa demand sa pang-araw-araw na pamumuhay"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Natatalakay ang konsepto suplay"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang mga salik na nakaaapekto sa suplay sa pang-araw-araw na pamumuhay"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang interaksiyon ng demand at suplay at implikasyon nito sa kalagayan ng presyo at ng pamilihan"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang kahulugan at iba't ibang estruktura ng pamilihan"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Napahahalagahan ang papel na ginagampanan ng pamahalaan sa pagsasaayos ng pamilihan sa pagkamit ng kabutihang panlahat"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 3,
+      "domain": "Gampanin ng Pamahalaan tungo sa isang Matatag na Pambansang Ekonomiya",
+      "content": "A. Paikot na Daloy ng Ekonomiya\n  1. Kahulugan\n  2. 5 Sector Model\n    a. Unang Modelo\n    b. Ikalawang Modelo - Sambahayan at Bahay-Kalakal\n    c. Ikatlong Modelo - Pinansyal na Sektor/Bangko\n    d. Ikaapat na Modelo – Pamahalaan\n    e. Ikalimang Modelo - Panlabas na Sektor\n  3. Kahalagahan\nB. Pagsukat ng Pambansang Kita\n  1. GNI/GDP\n    b. Kahulugan\n    c. Pagkakaiba\n    d. Kahalagahan\nC. Suliraning Pang-Ekonomiya\n  1. Unemployment\n    a. Kahulugan, Dahilan at Epekto ng Unemployment\n    b. Mga programa ng pamahalaan na tumutugon sa suliranin ng unemployment\nD. Implasyon\n  1. Uri\n  2. Dahilan\n  3. Bunga\n  4. Solusyon\nE. Poverty/Kahirapan\nF. Patakarang Piskal\n  1. Konsepto at Layunin\n  2. Pagbubuwis (Kahulugan at Kahalagahan)\n  3. Budget at Gastos ng Pamahalaan\nG. Patakaran sa Pananalapi\n  1. Konsepto at Layunin\n  2. Instrumento ng Patakaran sa Pananalapi\n  3. Sektor ng Pananalapi\n  4. Mga Institusyong Bangko at Di-bangko\nH. Matalinong Pamamahalang Pampinansyal\n  1. Kahalagahan ng Pag-iimpok at Pamumuhunan\n  2. Financial Literacy (Literasi sa Pananalapi)",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa papel ng pamahalaan sa pagpapatatag ng pambansang ekonomiya sa pagpapabuti ng pamumuhay ng mga mamamayan",
+      "performance_standard": "Nakapagmumungkahi ng solusyon sa mga suliraning pang-ekonomiya sa pagpapatatag ng ekonomiyang pambansa",
+      "suggested_tasks": null,
+      "source_pages": "62-63",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Naipaliliwanag ang ugnayan ng mga sektor na bumubuo sa modelo ng paikot na daloy ng ekonomiya"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Naipaliliwanag ang pamamaraan at kahalagahan ng pagsukat ng Pambansang Kita"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Natataya ang kasalukuyang kalagayan ng unemployment at ang mga programa ng pamahalaang tumutugon sa suliraning ito"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Natatalakay ang konsepto, dahilan, epekto at pagtugon sa implasyon"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang mga dahilan, epekto ng kahirapan (poverty), at ang mga solusyon sa paglutas nito"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang konsepto, layunin at pamamaraan ng pagsasakatuparan ng patakarang piskal partikular ang pagbubuwis"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Nasusuri ang konsepto, layunin at pamamaraan ng pagsasakatuparan ng patakarang pananalapi"
+        },
+        {
+          "sequence": 8,
+          "competency_text": "Napahahalagahan ang ugnayan ng pag-iimpok, pamumuhunan at financial literacy bilang salik sa matalinong pamamahalang pampinansyal"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 9",
+      "quarter": 4,
+      "domain": "Mga Sektor ng Pambansang Ekonomiya tungo sa Pandaigdigang Ugnayan",
+      "content": "A. Konsepto at Palatandaan ng Pambansang Kaunlaran\n  1. Pambansang Kaunlaran\n  2. Mga palatandaan ng pambansang kaunlaran\n  3. Ambisyon 2040 (Katuturan, Layunin, Pagsasakatuparan)\nB. Sektor ng Agrikultura\n  1. Ang bahaging ginagampanan ng agrikultura, pangingisda at paggugubat sa ekonomiya at sa bansa\n  2. Mga dahilan at epekto ng suliranin ng sektor ng agrikultura\n    a. Comprehensive Agrarian Reform\n    b. Rice Tarification\n    c. Food Security\nC. Sektor ng Industriya\n  1. Papel na ginagampanan ng sektor ng industriya, tulad ng manufacturing, tungo sa isang masiglang ekonomiya\n  2. Ang pagkakaugnay ng sektor ng agrikultura at industriya tungo sa pag-unlad ng kabuhayan\n  3. Mga patakarang pang-ekonomiyang nakaaapekto sa sektor ng industriya\n    a. Philippine Competition Policy\n    b. Oil Deregulation Law\n    c. Policy on Micro, Small and Medium Sized Enterprises\n    d. OTOP\nD. Sektor ng Paglilingkod\n  1. Ang bahaging ginagampanan ng sektor ng paglilingkod sa pambansang ekonomiya\n  2. Mga patakarang pang-ekonomiya na nakatutulong sa sektor ng paglilingkod\n  3. Batas na nagbibigay proteksiyon at nangangalaga sa mga karapatan ng manggagawa\n    a. Contractualization & Labor outsourcing\n    b. Salary Standardization Law\nE. Impormal na Sektor\n  1. Mga dahilan at anyo ng impormal na sektor ng ekonomiya\n  2. Mga epekto ng impormal na sektor sa ekonomiya\n  3. Mga patakarang pang-ekonomiya na may kaugnayan sa impormal na sektor\n    a. Child Labor Policy\n    b. Skills and Employability\n    c. Social Security\nF. Kalakalang Panlabas\n  1. Ang kalakaran sa kalakalang panlabas ng Pilipinas\n  2. Ang ugnayan ng Pilipinas para sa kalakalang panlabas nito sa mga samahan tulad ng World Trade Organization at Asia Pacific Economic Cooperation tungo sa patas na kapakinabangan ng mga mamamayan ng daigdig\n  3. Mga kontribusyon ng kalakalang panlabas sa pag-unlad ng ekonomiya ng Pilipinas\n  4. Mga patakarang pang-ekonomiya na nakatutulong sa patakarang panlabas ng bansa sa buhay ng nakararaming Pilipino\n    a. Policy on ASEAN Economic Community\n    b. Policy on Trade Liberalization\n    c. Belt and Road Initiative",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa mga sektor ng ekonomiya at mga patakarang pang-ekonomiya sa harap ng mga hamon at puwersa tungo sa pambansang kaunlaran",
+      "performance_standard": "Nakapagbibigay ng panukala/suhestiyon sa pagpapabuti ng mga sektor ng ekonomiya at mga patakarang pang-ekonomiya",
+      "suggested_tasks": null,
+      "source_pages": "64-66",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang mga palatandaan ng pambansang kaunlaran"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nailalahad ang layunin, paraan at katuturan ng pagsasakatuparan ng Ambisyon 2040"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang kasalukuyang kalagayan at bahaging ginagampanan ng sektor ng agrikultura sa pambansang ekonomiya"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang papel ng sektor ng industriya at mga patakarang pang-ekonomiya na nakatutulong dito sa loob at labas ng bansa"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Napahahalagahan ang papel ng sektor ng paglilingkod at ang mga patakarang pang-ekonomiyang nakatutulong dito"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang papel ng impormal na sector ng ekonomiya at ang mga patakarang pang-ekonomiyang nakatutulong dito"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Nasusuri ang pang-ekonomikong ugnayan at patakarang panlabas na nakatutulong sa Pilipinas"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 1,
+      "domain": "Mga Isyu at Hamong Pangkapaligiran",
+      "content": "A. Mga Hamon at Kontemporanyong Isyung Panlipunan sa Pilipinas at Daigdig\n  1. Kinakaharap na Isyu at Hamong Panlipunan\n    a. 1. Pangkapaligiran; 2. Pang-ekonomiya; 3. Pang-kasarian; 4. Pagkamamamayan\n    b. Kahalagahan ng pag-aaral sa mga hamon at kontemporanyong isyung pambansa at pandaigdig\nB. Konteksto ng Suliraning Pangkapaligiran\n  1. Man-made\n  2. Natural\n  3. Mga Sanhi ng Pagkaubos ng Likas na Yaman\n    a. Illegal Logging\n    b. Over-Mining\n    c. Deforestation\n    d. Forest degradation\n    e. Illegal Fishing\n    f. Illicit wildlife trade\n  4. Climate Change: Global Warming\nC. Mga Pagtugon sa mga Hamong Pangkapaligiran\n  1. Pandaigdig: UN Environment Programme and the 2030 Agenda\n  2. Pambansa:\n    a. RA 9003: Ecological Solid Waste Management Act of 2000\n    b. RA 9275: Philippine Clean Water Act\n    c. RA 8749: Philippine Clean Air Act of 1999\n    d. Iba Pang Batas na Nangangalaga sa Kapaligiran (Local Ordinances etc.)\nD. Dalawang Dulog/Lapit sa Pagtugon sa mga Hamong Pangkapaligiran\nE. Community-Based Disaster Risk Reduction and Management Plan",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa mga sanhi at implikasyon ng mga hamong pangkapaligiran upang maging bahagi ng pagtugon na makapagpapabuti sa pamumuhay ng tao",
+      "performance_standard": "Nakabubuo ng angkop na plano sa pagtugon sa hamong pangkapaligiran",
+      "suggested_tasks": null,
+      "source_pages": "68-69",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang kahalagahan ng kaalaman sa mga kontemporanyong isyu"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang mga sanhi at epekto ng mga suliraning pangkapaligiran ng daigdig"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Natatalakay ang mga programa at inisyatiba upang mapangalagaan ang kapaligiran"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang pagkakaiba ng top-down at bottom up approach sa pagharap sa suliraning pangkapaligiran"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Nasusuri ang kahalagahan ng Community-Based Disaster Risk Reduction and Management Approach sa pagtugon sa mga hamon at suliraning pangkapaligiran"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 2,
+      "domain": "Mga Isyu at Hamong Pang-ekonomiya at Pampolitika",
+      "content": "A. Konteksto ng mga Isyung Pang-ekonomiya\n  1. Isyu ng Kahirapan\n  2. Isyu ng Paggawa\n    a. Unemployment\n    b. Underemployment\n    c. Forced Labor\n    d. Human Trafficking\n  3. Isyu ng Migrasyon\n    a. Brain Drain\n    b. Social Cost of Migration\nB. Konteksto ng mga Isyung Pampolitika\n  1. Dinastiyang Politikal\n  2. Isyung Teritoryal at mga Tunggalian sa Hangganan (Border Conflicts): Mga Isla ng West Philippine Sea\nC. Mga Pagtugon sa mga Hamong Pang-ekonomiya at Pampolitika\n  1. Hague Arbitral Ruling\n  2. Batas ukol sa Pagpapatatag ng Ekonomiya\n    a. Foreign Investment Act ng 2022\n    b. DTI Go Lokal!",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa sanhi at implikasyon ng mga lokal at pandaigdigang isyung pang-ekonomiya upang mapaunlad ang kakayahan sa matalinong pagpapasiya tungo sa pambansang kaunlaran",
+      "performance_standard": "Nakabubuo ng papel ng pagsusuri/mapanuring papel sa mga isyung pang-ekonomiya na nakaaapekto sa kanilang pamumuhay",
+      "suggested_tasks": null,
+      "source_pages": "70",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Naipaliliwanag ang kalagayang pang-ekonomiya ng bansa at ang mga isyung kinakaharap nito bunga ng globalisasyon"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Natataya ang implikasyon ng iba't ibang suliranin sa paggawa, pamumuhay at sa pag-unlad ng ekonomiya ng bansa"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Nasusuri ang mga batas at saligan sa iba't ibang tugon sa pagharap sa hamon at isyung pang-ekonomiya at pampolitika"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 3,
+      "domain": "Mga Isyu at Hamong Pangkasarian",
+      "content": "A. Mga Konseptong Pangkasarian\n  1. Sex\n  2. Gender\n  3. Gender Roles\nB. Gender Roles sa Iba't ibang Panig ng Pilipinas at Daigdig\nC. Mga Isyung Nagaganap sa Lipunan Kaugnay ng Kasarian\n  1. Diskriminasyon sa tahanan, paaralan, komunidad at trabaho\n  2. Karahasan sa Kasarian/Hate Crimes\nD. Mga Saligang Nagtataguyod sa Karapatan Kaugnay ng Kasarian, Karahasan, at Diskriminasyon\n  1. Pandaigdigang Batayan\n    a. Universal Declaration of Human Rights\n    b. Principles of Yogyakarta\n    c. Convention on Elimination of Discrimination against Women\n    d. Convention on the Rights of the Child\n  2. Pambansa at Lokal na Batas",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa mga epekto, isyu, at hamon na may kaugnayan sa kasarian at lipunan upang maging aktibong tagapagtaguyod ng pagkakapantay-pantay at paggalang sa kapuwa bilang kasapi ng pamayanan",
+      "performance_standard": "Nakagagawa ng mga gawain na nagsusulong sa pagtanggap at paggalang sa iba't ibang kasarian",
+      "suggested_tasks": null,
+      "source_pages": "71-72",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Natatalakay ang mga uri ng kasarian (gender) at sex"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang gender roles sa Pilipinas at iba't ibang panig ng daigdig"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Naipaliliwanag ang iba't ibang salik na nagiging dahilan ng diskriminasyon sa kasarian, sa tahanan, paaralan, trabaho at komunidad"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Nasusuri ang iba't ibang nararanasang karahasan ng lahat ng kasarian"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Naipahahayag ang pananaw tungkol sa nararanasang karahasan ng mga batang babae, kababaihan, at miyembro ng LGBTQIA+"
+        },
+        {
+          "sequence": 6,
+          "competency_text": "Nasusuri ang tugon ng iba't ibang samahan (lokal at internasyonal) laban sa karahasan at diskriminasyon"
+        },
+        {
+          "sequence": 7,
+          "competency_text": "Napahahalagahan ang tugon ng pamahalaan at mamamayan ng Pilipinas sa mga isyu ng diskriminasyon at karahasan"
+        }
+      ]
+    },
+    {
+      "grade_level": "Grade 10",
+      "quarter": 4,
+      "domain": "Mga Isyu at Hamon sa Pagkamamamayan",
+      "content": "A. Pagkamamamayan\n  1. Legal na Konsepto at Katuturan\n  2. Lumalawak na Pananaw sa Pagkamamamayan\n    a. Digital Citizenship\n    b. Global Citizenship\nB. Karapatang Pantao\n  1. Konteksto (1987 Constitution at UDHR)\n  2. Uri\n  3. Kahalagahan\nC. Mga Isyu at Hamon sa Pagkamamamayan\n  1. Paglabag sa Karapatang Pantao\n  2. Mga Samahang Nagtataguyod sa Karapatang Pantao\nD. Pakikilahok sa mga gawaing politikal at pansibiko ng mamamayan\n  1. Mabuti at Mapanagutang Pagboto (Voter's Education)\n  2. Pagbuo ng samahang pansibiko\nE. Pagkamamamayan at Mabuting Pamamahala",
+      "content_standards": "Naipamamalas ang pag-unawa at pagpapahalaga sa pagkamamamayan at pakikilahok sa mga gawaing pansibiko tungo sa mapanagutang pagkamamamayan ng daigdig",
+      "performance_standard": "Nakagagawa ng panukala kaugnay sa isyu at hamon sa pagkamamamayan at gawaing pansibiko",
+      "suggested_tasks": null,
+      "source_pages": "73",
+      "confidence": 0.95,
+      "warnings": [],
+      "competencies": [
+        {
+          "sequence": 1,
+          "competency_text": "Naipaliliwanag ang mga katangiang dapat taglayin ng isang aktibong mamamayan na nakikilahok sa mga gawain at usaping pansibiko"
+        },
+        {
+          "sequence": 2,
+          "competency_text": "Nasusuri ang kahalagahan ng pagsusulong at pangangalaga sa karapatang pantao sa pagtugon sa mga isyu at hamong panlipunan"
+        },
+        {
+          "sequence": 3,
+          "competency_text": "Natatalakay ang mga isyu at hamon sa pagkamamamayan"
+        },
+        {
+          "sequence": 4,
+          "competency_text": "Natatalakay ang aktibong pakikilahok ng mamamayan sa mga gawaing pansibiko"
+        },
+        {
+          "sequence": 5,
+          "competency_text": "Napahahalagahan ang papel ng mamamayan sa pagkakaroon ng isang mabuting pamamahala"
+        }
+      ]
+    }
+  ]
+}

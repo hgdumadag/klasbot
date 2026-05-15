@@ -174,6 +174,7 @@ def _curriculum_paths() -> list[Path]:
 
 def _curriculum_dirs() -> list[Path]:
     roots = [
+        Path(__file__).resolve().parent,
         PROJECT_ROOT,
         Path.cwd(),
         Path(__file__).resolve().parents[1],

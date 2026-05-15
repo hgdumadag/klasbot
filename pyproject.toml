@@ -25,3 +25,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["klasbot*"]
+
+[tool.setuptools.package-data]
+klasbot = ["curriculum_json/*.json"]

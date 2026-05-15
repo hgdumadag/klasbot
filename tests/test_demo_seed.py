@@ -31,3 +31,11 @@ def test_demo_seed_finds_curriculum_json_from_working_directory(tmp_path, monkey
     paths = demo_seed._curriculum_paths()
 
     assert expected in paths
+
+
+def test_demo_seed_finds_packaged_curriculum_json():
+    from klasbot import demo_seed
+
+    paths = demo_seed._curriculum_paths()
+
+    assert any(path.parts[-2:] == ("curriculum_json", "matatag_mathematics_cg.json") for path in paths)
