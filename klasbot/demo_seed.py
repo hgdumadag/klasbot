@@ -7,6 +7,25 @@ from klasbot.auth import hash_pin
 from klasbot.config import PROJECT_ROOT
 
 
+SAMPLE_ATTENDANCE_DATES = [
+    "2026-04-27",
+    "2026-04-28",
+    "2026-04-29",
+    "2026-04-30",
+    "2026-05-01",
+    "2026-05-04",
+    "2026-05-05",
+    "2026-05-06",
+    "2026-05-07",
+    "2026-05-08",
+    "2026-05-11",
+    "2026-05-12",
+    "2026-05-13",
+    "2026-05-14",
+    "2026-05-15",
+]
+
+
 SAMPLE_CLASSES = [
     {
         "name": "Grade 6 - Science",
@@ -161,6 +180,7 @@ def _seed_sample_classes(teacher_id: int) -> list[dict]:
         _seed_students(teacher_id, class_id, sample["students"])
         _seed_assessments(teacher_id, class_id, sample["assessments"])
         _seed_scores(teacher_id, class_id)
+        _seed_attendance(teacher_id, class_id)
         seeded.append(db.get_class_record(teacher_id, class_id) or class_record)
     return seeded
 
@@ -236,6 +256,35 @@ def _seed_scores(teacher_id: int, class_id: int) -> None:
                 }
             )
         db.save_score_grid(teacher_id, int(assessment["id"]), rows)
+
+
+def _seed_attendance(teacher_id: int, class_id: int) -> None:
+    students = db.list_class_students(teacher_id, class_id) or []
+    if not students:
+        return
+    for date_index, attendance_date in enumerate(SAMPLE_ATTENDANCE_DATES):
+        rows = []
+        for student_index, student in enumerate(students):
+            pattern = student_index + date_index
+            status = "present"
+            notes = "Sample attendance"
+            if pattern % 23 == 0:
+                status = "excused"
+                notes = "Excused sample absence"
+            elif pattern % 17 == 0:
+                status = "absent"
+                notes = "Sample absence"
+            elif pattern % 11 == 0:
+                status = "late"
+                notes = "Sample late arrival"
+            rows.append(
+                {
+                    "student_id": int(student["id"]),
+                    "status": status,
+                    "notes": notes,
+                }
+            )
+        db.save_attendance_grid(teacher_id, class_id, attendance_date, rows)
 
 
 def _seed_curriculum_json() -> list[dict]:

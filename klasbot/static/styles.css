@@ -961,9 +961,25 @@ textarea {
 }
 
 .attendance-panel,
-.attendance-overview {
+.attendance-performance {
   display: grid;
   gap: 0.75rem;
+}
+
+.attendance-performance-dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.attendance-performance-dashboard article {
+  display: grid;
+  gap: 0.65rem;
+  min-width: 0;
+  padding: 0.8rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--paper);
 }
 
 .attendance-toolbar {
@@ -1051,7 +1067,7 @@ textarea {
   color: var(--ink-500);
 }
 
-.attendance-summary-table td small {
+.attendance-performance-table td small {
   display: block;
   margin-top: 0.15rem;
   color: var(--ink-400);
@@ -2125,6 +2141,10 @@ legend {
   }
 
   .attendance-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .attendance-performance-dashboard {
     grid-template-columns: 1fr;
   }
 

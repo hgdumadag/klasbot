@@ -1644,6 +1644,7 @@ function renderClassRecordDetail() {
     ['dashboard', 'Dashboard'],
     ['students', 'Students'],
     ['attendance', 'Attendance'],
+    ['attendance_performance', 'Attendance Performance'],
     ['assessments', 'Assessments'],
     ['performance', 'Student Performance'],
   ];
@@ -1664,6 +1665,7 @@ function renderClassRecordDetail() {
             <h4>Next actions</h4>
             <button class="secondary compact" type="button" data-jump-class-tab="students">Add Students</button>
             <button class="secondary compact" type="button" data-jump-class-tab="attendance">Take Attendance</button>
+            <button class="secondary compact" type="button" data-jump-class-tab="attendance_performance">Review Attendance</button>
             <button class="secondary compact" type="button" data-jump-class-tab="assessments">Create Assessments</button>
           </article>
           <article>
@@ -1690,7 +1692,15 @@ function renderClassRecordDetail() {
           <p class="microcopy">Capture attendance for a selected date and review recent daily attendance in one view.</p>
         </div>
         ${renderAttendanceCapture(active.attendanceGrid)}
-        ${renderAttendanceOverview(active.attendanceSummary)}
+      </section>
+    `,
+    attendance_performance: `
+      <section class="class-tab-panel">
+        <div class="class-tab-panel__head">
+          <h4>Attendance Performance</h4>
+          <p class="microcopy">Review each student's daily attendance across saved class dates.</p>
+        </div>
+        ${renderAttendancePerformance(active.attendanceSummary)}
       </section>
     `,
     assessments: `
@@ -1895,48 +1905,132 @@ function renderAttendanceCapture(grid) {
   `;
 }
 
-function renderAttendanceOverview(summary) {
+function renderAttendancePerformance(summary) {
   const dates = summary?.dates || [];
   const students = summary?.students || [];
   const daySummaries = summary?.day_summaries || [];
   if (!dates.length) {
     return `
-      <section class="attendance-overview">
-        <h4>Recent Attendance</h4>
-        <p class="microcopy">Saved attendance dates will appear here.</p>
-      </section>
+      <p class="microcopy">Save daily attendance to build the attendance performance view.</p>
     `;
   }
-  const tableMinWidth = Math.max(760, 240 + dates.length * 92);
   return `
-    <section class="attendance-overview">
-      <div class="class-tab-panel__head">
-        <h4>Recent Attendance</h4>
-        <p class="microcopy">One row per learner, one column per saved day.</p>
-      </div>
-      <div class="attendance-day-strip">
-        ${daySummaries.map((day) => `
-          <article>
+    ${renderAttendancePerformanceDashboard(students, daySummaries)}
+    ${renderAttendancePerformanceTable(students, dates)}
+  `;
+}
+
+function renderAttendancePerformanceDashboard(students, daySummaries) {
+  return `
+    <div class="attendance-performance-dashboard">
+      <article>
+        <h4>Daily attendance rates</h4>
+        ${renderAttendanceDayBars(daySummaries)}
+      </article>
+      <article>
+        <h4>Student attendance bands</h4>
+        ${renderAttendanceBandBars(students)}
+      </article>
+    </div>
+  `;
+}
+
+function renderAttendanceDayBars(daySummaries) {
+  if (!daySummaries.length) return '<p class="microcopy">No saved attendance dates yet.</p>';
+  return `
+    <div class="bar-chart">
+      ${daySummaries.map((day) => {
+        const rate = Number(day.attendance_rate || 0);
+        const low = rate < 90;
+        return `
+          <div class="bar-row">
             <span>${escapeHtml(formatShortDate(day.attendance_date))}</span>
-            <strong>${formatPercent(day.attendance_rate)}</strong>
-            <small>${day.present || 0} present | ${day.absent || 0} absent</small>
-          </article>
-        `).join('')}
+            <div class="bar-track" aria-hidden="true"><i class="${low ? 'bar-fill--low' : ''}" style="width: ${Math.max(0, Math.min(100, rate))}%"></i></div>
+            <strong class="${low ? 'performance-value--low' : ''}">${formatPercent(day.attendance_rate)}</strong>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderAttendanceBandBars(students) {
+  const summaries = students.map(studentAttendanceSummary);
+  const buckets = [
+    ['95-100%', summaries.filter((summary) => summary.rate !== null && summary.rate >= 95).length],
+    ['90-94%', summaries.filter((summary) => summary.rate !== null && summary.rate >= 90 && summary.rate < 95).length],
+    ['75-89%', summaries.filter((summary) => summary.rate !== null && summary.rate >= 75 && summary.rate < 90).length],
+    ['0-74%', summaries.filter((summary) => summary.rate !== null && summary.rate < 75).length],
+    ['No data', summaries.filter((summary) => summary.rate === null).length],
+  ];
+  const maxCount = Math.max(1, ...buckets.map(([, count]) => count));
+  return `
+    <div class="bar-chart">
+      ${buckets.map(([label, count]) => {
+        const low = label === '75-89%' || label === '0-74%';
+        return `
+          <div class="bar-row">
+            <span>${escapeHtml(label)}</span>
+            <div class="bar-track" aria-hidden="true"><i class="${low ? 'bar-fill--low' : ''}" style="width: ${Math.round((count / maxCount) * 100)}%"></i></div>
+            <strong class="${low && count ? 'performance-value--low' : ''}">${count}</strong>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderAttendancePerformanceTable(students, dates) {
+  const tableMinWidth = Math.max(900, 520 + dates.length * 92);
+  return `
+    <section class="attendance-performance">
+      <div class="class-tab-panel__head">
+        <h4>Daily Attendance by Student</h4>
+        <p class="microcopy">Present and late count toward attendance rate; absent is highlighted for follow-up.</p>
       </div>
-      <div class="table-scroll"><table class="records-table attendance-summary-table" style="min-width: ${tableMinWidth}px">
+      <div class="table-scroll"><table class="records-table attendance-performance-table" style="min-width: ${tableMinWidth}px">
         <thead><tr>
           <th>Student</th>
+          <th>Rate</th>
+          <th>Present</th>
+          <th>Late</th>
+          <th>Absent</th>
           ${dates.map((date) => `<th>${escapeHtml(formatShortDate(date))}</th>`).join('')}
         </tr></thead>
-        <tbody>${students.map((student) => `
-          <tr>
-            <td>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</td>
-            ${(student.attendance_records || []).map((record) => renderAttendanceStatusCell(record)).join('')}
-          </tr>
-        `).join('')}</tbody>
+        <tbody>${students.map((student) => {
+          const summary = studentAttendanceSummary(student);
+          return `
+            <tr>
+              <td>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</td>
+              <td class="${summary.rate !== null && summary.rate < 90 ? 'performance-value--low' : ''}">${formatPercent(summary.rate)}</td>
+              <td>${summary.present}</td>
+              <td>${summary.late}</td>
+              <td class="${summary.absent ? 'performance-value--low' : ''}">${summary.absent}</td>
+              ${(student.attendance_records || []).map((record) => renderAttendanceStatusCell(record)).join('')}
+            </tr>
+          `;
+        }).join('')}</tbody>
       </table></div>
     </section>
   `;
+}
+
+function studentAttendanceSummary(student) {
+  const records = student.attendance_records || [];
+  const recorded = records.filter((record) => record?.is_recorded);
+  const present = recorded.filter((record) => record.status === 'present').length;
+  const late = recorded.filter((record) => record.status === 'late').length;
+  const absent = recorded.filter((record) => record.status === 'absent').length;
+  const excused = recorded.filter((record) => record.status === 'excused').length;
+  const rate = recorded.length ? roundToOne((present + late) / recorded.length * 100) : null;
+  return {
+    present,
+    late,
+    absent,
+    excused,
+    recorded: recorded.length,
+    rate,
+  };
 }
 
 function attendanceStatusOptions(selectedStatus) {
@@ -1948,14 +2042,14 @@ function attendanceStatusOptions(selectedStatus) {
   ].map(([value, label]) => `<option value="${value}" ${selectedStatus === value ? 'selected' : ''}>${label}</option>`).join('');
 }
 
-function renderAttendanceStatusCell(record) {
+function renderAttendanceStatusCell(record, options = {}) {
   if (!record || !record.is_recorded) {
     return '<td><span class="attendance-status attendance-status--missing">No record</span></td>';
   }
   return `
     <td>
       <span class="attendance-status attendance-status--${escapeHtml(record.status)}">${escapeHtml(formatAttendanceStatus(record.status))}</span>
-      ${record.notes ? `<small>${escapeHtml(record.notes)}</small>` : ''}
+      ${options.showNotes && record.notes ? `<small>${escapeHtml(record.notes)}</small>` : ''}
     </td>
   `;
 }
@@ -2140,6 +2234,10 @@ function renderScoreEntry(grid) {
 
 function formatPercent(value) {
   return value === null || value === undefined ? 'No data' : `${Number(value).toFixed(Number(value) % 1 === 0 ? 0 : 1)}%`;
+}
+
+function roundToOne(value) {
+  return Math.round(Number(value) * 10) / 10;
 }
 
 function formatNumber(value) {

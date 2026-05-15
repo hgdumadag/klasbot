@@ -38,6 +38,14 @@ def test_demo_seed_creates_admin_and_sample_classes_idempotently(tmp_path, monke
             assert grid is not None
             assert len(grid["rows"]) == expected_student_count
             assert all(row["score"] is not None for row in grid["rows"])
+        attendance = db.get_attendance_summary(int(first["teacher"]["id"]), int(class_record["id"]), 30)
+        assert attendance is not None
+        assert len(attendance["dates"]) == 15
+        assert len(attendance["students"]) == expected_student_count
+        assert all(
+            len(student["attendance_records"]) == 15
+            for student in attendance["students"]
+        )
 
 
 def test_demo_seed_finds_curriculum_json_from_working_directory(tmp_path, monkeypatch):
