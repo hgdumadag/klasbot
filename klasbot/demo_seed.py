@@ -152,13 +152,39 @@ def _seed_curriculum_json() -> list[dict]:
     current = db.list_curriculum_documents()
     if current:
         return current
-    curriculum_dir = PROJECT_ROOT / "curriculum_json"
-    for path in _curriculum_paths(curriculum_dir):
+    for path in _curriculum_paths():
         curriculum.ingest_json(source_path=path)
     return db.list_curriculum_documents()
 
 
-def _curriculum_paths(curriculum_dir: Path) -> list[Path]:
-    if not curriculum_dir.exists():
-        return []
-    return sorted(curriculum_dir.glob("*.json"))
+def _curriculum_paths() -> list[Path]:
+    paths: list[Path] = []
+    seen: set[Path] = set()
+    for curriculum_dir in _curriculum_dirs():
+        if not curriculum_dir.exists():
+            continue
+        for path in sorted(curriculum_dir.glob("*.json")):
+            resolved = path.resolve()
+            if resolved in seen:
+                continue
+            seen.add(resolved)
+            paths.append(path)
+    return paths
+
+
+def _curriculum_dirs() -> list[Path]:
+    roots = [
+        PROJECT_ROOT,
+        Path.cwd(),
+        Path(__file__).resolve().parents[1],
+        Path(__file__).resolve().parents[2],
+    ]
+    dirs: list[Path] = []
+    seen: set[Path] = set()
+    for root in roots:
+        curriculum_dir = (root / "curriculum_json").resolve()
+        if curriculum_dir in seen:
+            continue
+        seen.add(curriculum_dir)
+        dirs.append(curriculum_dir)
+    return dirs
