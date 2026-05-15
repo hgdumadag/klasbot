@@ -157,6 +157,8 @@ def init_db(db_path: Path | None = None) -> None:
             CREATE TABLE IF NOT EXISTS grading_batches (
               id INTEGER PRIMARY KEY,
               teacher_id INTEGER NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+              class_id INTEGER REFERENCES classes(id) ON DELETE SET NULL,
+              assessment_id INTEGER REFERENCES assessments(id) ON DELETE SET NULL,
               subject TEXT,
               grade_level TEXT,
               topic TEXT,
@@ -189,6 +191,7 @@ def init_db(db_path: Path | None = None) -> None:
               id INTEGER PRIMARY KEY,
               batch_id INTEGER NOT NULL REFERENCES grading_batches(id) ON DELETE CASCADE,
               image_id INTEGER REFERENCES grading_images(id) ON DELETE SET NULL,
+              student_id INTEGER REFERENCES students(id) ON DELETE SET NULL,
               student_name TEXT,
               student_identifier TEXT,
               crop_box_json TEXT,
@@ -291,6 +294,9 @@ def init_db(db_path: Path | None = None) -> None:
         _ensure_column(connection, "grading_batches", "week_number", "INTEGER")
         _ensure_column(connection, "grading_batches", "week_topic", "TEXT")
         _ensure_column(connection, "grading_batches", "questions_text", "TEXT")
+        _ensure_column(connection, "grading_batches", "class_id", "INTEGER REFERENCES classes(id) ON DELETE SET NULL")
+        _ensure_column(connection, "grading_batches", "assessment_id", "INTEGER REFERENCES assessments(id) ON DELETE SET NULL")
+        _ensure_column(connection, "grading_submissions", "student_id", "INTEGER REFERENCES students(id) ON DELETE SET NULL")
         _run_weekly_pacing_migration(connection)
         _run_weekly_pacing_focus_migration(connection)
         ensure_all_curriculum_pacing(connection)
@@ -896,19 +902,29 @@ def _decode_teaching_aid(row: sqlite3.Row) -> dict[str, Any]:
 def create_grading_batch(teacher_id: int, payload: dict[str, Any]) -> dict[str, Any]:
     now = utc_now()
     with connect() as connection:
+        class_id = int(payload["class_id"])
+        assessment_id = int(payload["assessment_id"])
+        class_record = get_class_record_by_id(connection, teacher_id, class_id)
+        assessment = get_assessment_by_id(connection, teacher_id, assessment_id)
+        if not class_record or not assessment or int(assessment["class_id"]) != class_id:
+            raise ValueError("Selected assessment must belong to the selected class")
+        if float(payload["total_points"]) != float(assessment["max_score"]):
+            raise ValueError("Total points must match the selected assessment maximum")
         cursor = connection.execute(
             """
             INSERT INTO grading_batches (
-              teacher_id, subject, grade_level, topic, quarter, week_number, week_topic, questions_text, total_points, grading_style,
+              teacher_id, class_id, assessment_id, subject, grade_level, topic, quarter, week_number, week_topic, questions_text, total_points, grading_style,
               answer_key_json, rubric_json, status, created_at, updated_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?)
             """,
             (
                 teacher_id,
-                payload.get("subject", "").strip(),
-                payload.get("grade_level", "").strip(),
-                payload.get("topic", "").strip(),
+                class_id,
+                assessment_id,
+                class_record.get("subject", "").strip(),
+                class_record.get("grade_level", "").strip(),
+                assessment.get("title", "").strip(),
                 payload.get("quarter"),
                 payload.get("week_number"),
                 payload.get("week_topic", "").strip(),
@@ -931,9 +947,14 @@ def list_grading_batches(teacher_id: int) -> list[dict[str, Any]]:
         rows = connection.execute(
             """
             SELECT grading_batches.*,
+                   classes.name AS class_name,
+                   assessments.title AS assessment_title,
+                   assessments.max_score AS assessment_max_score,
                    COUNT(DISTINCT grading_images.id) AS image_count,
                    COUNT(DISTINCT grading_submissions.id) AS submission_count
             FROM grading_batches
+            LEFT JOIN classes ON classes.id = grading_batches.class_id
+            LEFT JOIN assessments ON assessments.id = grading_batches.assessment_id
             LEFT JOIN grading_images ON grading_images.batch_id = grading_batches.id
             LEFT JOIN grading_submissions ON grading_submissions.batch_id = grading_batches.id
             WHERE grading_batches.teacher_id = ?
@@ -952,6 +973,11 @@ def get_grading_batch(teacher_id: int, batch_id: int) -> dict[str, Any] | None:
             return None
         batch["images"] = list_grading_images_by_batch(connection, teacher_id, batch_id)
         batch["submissions"] = list_grading_submissions_by_batch(connection, teacher_id, batch_id)
+        batch["class_students"] = (
+            _list_class_students_by_connection(connection, teacher_id, int(batch["class_id"]))
+            if batch.get("class_id")
+            else []
+        )
         return batch
 
 
@@ -961,9 +987,14 @@ def get_grading_batch_by_id(
     row = connection.execute(
         """
         SELECT grading_batches.*,
+               classes.name AS class_name,
+               assessments.title AS assessment_title,
+               assessments.max_score AS assessment_max_score,
                COUNT(DISTINCT grading_images.id) AS image_count,
                COUNT(DISTINCT grading_submissions.id) AS submission_count
         FROM grading_batches
+        LEFT JOIN classes ON classes.id = grading_batches.class_id
+        LEFT JOIN assessments ON assessments.id = grading_batches.assessment_id
         LEFT JOIN grading_images ON grading_images.batch_id = grading_batches.id
         LEFT JOIN grading_submissions ON grading_submissions.batch_id = grading_batches.id
         WHERE grading_batches.teacher_id = ? AND grading_batches.id = ?
@@ -1063,15 +1094,16 @@ def replace_grading_submissions(
             connection.execute(
                 """
                 INSERT INTO grading_submissions (
-                  batch_id, image_id, student_name, student_identifier, crop_box_json,
+                  batch_id, image_id, student_id, student_name, student_identifier, crop_box_json,
                   extracted_answers_json, grading_result_json, score, max_score,
                   confidence, teacher_reviewed, created_at, updated_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     batch_id,
                     submission.get("image_id"),
+                    submission.get("student_id"),
                     submission.get("student_name", "").strip(),
                     submission.get("student_identifier", "").strip(),
                     json.dumps(submission.get("crop_box") or {}),
@@ -1138,7 +1170,7 @@ def update_grading_submission(
             """
             UPDATE grading_submissions
             SET student_name = ?, student_identifier = ?, extracted_answers_json = ?,
-                grading_result_json = ?, score = ?, max_score = ?, confidence = ?,
+                student_id = ?, grading_result_json = ?, score = ?, max_score = ?, confidence = ?,
                 teacher_reviewed = ?, updated_at = ?
             WHERE id = ?
             """,
@@ -1146,6 +1178,7 @@ def update_grading_submission(
                 payload.get("student_name", current.get("student_name") or "").strip(),
                 payload.get("student_identifier", current.get("student_identifier") or "").strip(),
                 json.dumps(extracted),
+                payload.get("student_id", current.get("student_id")),
                 json.dumps(result),
                 payload.get("score", current.get("score")),
                 payload.get("max_score", current.get("max_score")),
@@ -1171,7 +1204,7 @@ def save_grading_results(
                 """
                 UPDATE grading_submissions
                 SET student_name = ?, student_identifier = ?, extracted_answers_json = ?,
-                    grading_result_json = ?, score = ?, max_score = ?, confidence = ?,
+                    student_id = ?, grading_result_json = ?, score = ?, max_score = ?, confidence = ?,
                     updated_at = ?
                 WHERE id = ? AND batch_id = ?
                 """,
@@ -1179,6 +1212,7 @@ def save_grading_results(
                     submission.get("student_name", ""),
                     submission.get("student_identifier", ""),
                     json.dumps(submission.get("extracted_answers") or {}),
+                    submission.get("student_id"),
                     json.dumps(submission.get("grading_result") or {}),
                     submission.get("score"),
                     submission.get("max_score"),
@@ -1645,6 +1679,182 @@ def save_score_grid(teacher_id: int, assessment_id: int, rows: list[dict[str, An
                 ),
             )
         return get_score_grid_by_id(connection, teacher_id, assessment_id)
+
+
+def preview_grading_score_transfer(teacher_id: int, batch_id: int) -> dict[str, Any] | None:
+    with connect() as connection:
+        return _grading_score_transfer(connection, teacher_id, batch_id, apply=False)
+
+
+def transfer_grading_scores(teacher_id: int, batch_id: int) -> dict[str, Any] | None:
+    with connect() as connection:
+        return _grading_score_transfer(connection, teacher_id, batch_id, apply=True)
+
+
+def _grading_score_transfer(
+    connection: sqlite3.Connection,
+    teacher_id: int,
+    batch_id: int,
+    *,
+    apply: bool,
+) -> dict[str, Any] | None:
+    batch = get_grading_batch_by_id(connection, teacher_id, batch_id)
+    if not batch:
+        return None
+    assessment_id = batch.get("assessment_id")
+    class_id = batch.get("class_id")
+    if not assessment_id or not class_id:
+        raise ValueError("Grading batch is not linked to a class assessment")
+    assessment = get_assessment_by_id(connection, teacher_id, int(assessment_id))
+    if not assessment or int(assessment["class_id"]) != int(class_id):
+        raise ValueError("Linked assessment was not found for this class")
+    if float(batch["total_points"]) != float(assessment["max_score"]):
+        raise ValueError("Batch total points must match the assessment maximum before transfer")
+
+    students = _list_class_students_by_connection(connection, teacher_id, int(class_id))
+    score_rows = connection.execute(
+        "SELECT * FROM scores WHERE assessment_id = ?",
+        (assessment_id,),
+    ).fetchall()
+    scores_by_student = {int(row["student_id"]): dict(row) for row in score_rows}
+    submissions = list_grading_submissions_by_batch(connection, teacher_id, batch_id)
+    now = utc_now()
+    rows = []
+    saved_count = 0
+    for submission in submissions:
+        student = _match_transfer_student(submission, students)
+        existing = scores_by_student.get(int(student["id"])) if student else None
+        score = submission.get("score")
+        status_value = "ready"
+        reason = ""
+        if not submission.get("teacher_reviewed"):
+            status_value = "needs_review"
+            reason = "Teacher review is required before transfer."
+        elif not student:
+            status_value = "needs_match"
+            reason = "Match this submission to a student in the selected class."
+        elif existing and (existing.get("score") is not None or existing.get("is_absent")):
+            status_value = "skipped_existing_score"
+            reason = "This student already has a score or absent mark for the assessment."
+        elif score is None:
+            status_value = "needs_score"
+            reason = "Enter a reviewed score before transfer."
+        elif float(score) > float(assessment["max_score"]):
+            status_value = "score_exceeds_max"
+            reason = "Reviewed score exceeds the selected assessment maximum."
+
+        if apply and status_value == "ready" and student:
+            note = f"Imported from quiz photo batch #{batch_id}, submission #{submission['id']}"
+            if existing:
+                cursor = connection.execute(
+                    """
+                    UPDATE scores
+                    SET score = ?, is_absent = 0, notes = ?, updated_at = ?
+                    WHERE assessment_id = ? AND student_id = ? AND score IS NULL AND is_absent = 0
+                    """,
+                    (float(score), note, now, assessment_id, int(student["id"])),
+                )
+            else:
+                cursor = connection.execute(
+                    """
+                    INSERT OR IGNORE INTO scores (
+                      assessment_id, student_id, score, is_absent, notes, created_at, updated_at
+                    )
+                    VALUES (?, ?, ?, 0, ?, ?, ?)
+                    """,
+                    (
+                        assessment_id,
+                        int(student["id"]),
+                        float(score),
+                        note,
+                        now,
+                        now,
+                    ),
+                )
+            if cursor.rowcount:
+                saved_count += 1
+                scores_by_student[int(student["id"])] = {
+                    "student_id": int(student["id"]),
+                    "score": float(score),
+                    "is_absent": 0,
+                }
+                connection.execute(
+                    "UPDATE grading_submissions SET student_id = ?, updated_at = ? WHERE id = ?",
+                    (int(student["id"]), now, int(submission["id"])),
+                )
+                status_value = "saved"
+                reason = "Score transferred."
+            else:
+                status_value = "skipped_existing_score"
+                reason = "This student received a score before transfer was saved."
+
+        rows.append(
+            {
+                "submission_id": submission["id"],
+                "student": student,
+                "submission_name": submission.get("student_name") or "",
+                "student_identifier": submission.get("student_identifier") or "",
+                "score": score,
+                "max_score": submission.get("max_score"),
+                "teacher_reviewed": submission.get("teacher_reviewed"),
+                "status": status_value,
+                "reason": reason,
+                "existing_score": existing["score"] if existing else None,
+                "existing_is_absent": bool(existing["is_absent"]) if existing else False,
+            }
+        )
+    if apply and saved_count:
+        update_grading_batch_status(connection, teacher_id, batch_id, "transferred")
+    return {
+        "batch": get_grading_batch_by_id(connection, teacher_id, batch_id),
+        "assessment": assessment,
+        "rows": rows,
+        "saved_count": saved_count,
+    }
+
+
+def _list_class_students_by_connection(
+    connection: sqlite3.Connection, teacher_id: int, class_id: int
+) -> list[dict[str, Any]]:
+    rows = connection.execute(
+        """
+        SELECT students.*, class_enrollments.enrolled_at
+        FROM class_enrollments
+        JOIN students ON students.id = class_enrollments.student_id
+        WHERE class_enrollments.class_id = ? AND students.teacher_id = ?
+        ORDER BY students.last_name COLLATE NOCASE, students.first_name COLLATE NOCASE
+        """,
+        (class_id, teacher_id),
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def _match_transfer_student(submission: dict[str, Any], students: list[dict[str, Any]]) -> dict[str, Any] | None:
+    explicit_id = submission.get("student_id")
+    if explicit_id:
+        for student in students:
+            if int(student["id"]) == int(explicit_id):
+                return student
+    identifier = _normalize_match_text(submission.get("student_identifier"))
+    if identifier:
+        for student in students:
+            if identifier == _normalize_match_text(student.get("learner_reference_number")):
+                return student
+    name = _normalize_match_text(submission.get("student_name"))
+    if name:
+        for student in students:
+            names = {
+                _normalize_match_text(student.get("display_name")),
+                _normalize_match_text(f"{student.get('first_name', '')} {student.get('last_name', '')}"),
+                _normalize_match_text(f"{student.get('last_name', '')} {student.get('first_name', '')}"),
+            }
+            if name in names:
+                return student
+    return None
+
+
+def _normalize_match_text(value: Any) -> str:
+    return re.sub(r"\s+", " ", str(value or "").strip().casefold())
 
 
 def get_class_dashboard(teacher_id: int, class_id: int, target: float = 75.0) -> dict[str, Any] | None:

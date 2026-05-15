@@ -10,14 +10,18 @@ FILIPINO_LANGUAGE_SUBJECTS = {
 
 FILIPINO_LANGUAGE_INSTRUCTION = (
     "Write primarily in Filipino/Tagalog, using subject-appropriate Filipino terms. "
-    "Keep required format headings unchanged when specified."
+    "Use Filipino for lesson-plan framework headings and labels when a Filipino framework is provided."
 )
 
 ENGLISH_LANGUAGE_INSTRUCTION = "Write in English only."
 
 
-def language_instruction_for_subject(subject: str | None) -> str:
+def is_filipino_language_subject(subject: str | None) -> bool:
     normalized = (subject or "").strip().casefold()
-    if normalized in FILIPINO_LANGUAGE_SUBJECTS:
+    return normalized in FILIPINO_LANGUAGE_SUBJECTS
+
+
+def language_instruction_for_subject(subject: str | None) -> str:
+    if is_filipino_language_subject(subject):
         return FILIPINO_LANGUAGE_INSTRUCTION
     return ENGLISH_LANGUAGE_INSTRUCTION

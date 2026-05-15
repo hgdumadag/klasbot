@@ -39,6 +39,7 @@ const els = {
   topic: document.getElementById('topic'),
   weekNumber: document.getElementById('week-number'),
   resources: document.getElementById('resources'),
+  resourcesField: document.getElementById('resources-field'),
   draftTitle: document.getElementById('draft-title'),
   draftMeta: document.getElementById('draft-meta'),
   draftPreview: document.getElementById('draft-preview'),
@@ -131,11 +132,22 @@ function updateFormats() {
   if ([...els.format.options].some((option) => option.value === selected)) {
     els.format.value = selected;
   }
+  updateResourcesVisibility();
+}
+
+function updateResourcesVisibility() {
+  const showResources = els.kind.value === 'assessment';
+  els.resourcesField?.classList.toggle('hidden', !showResources);
+  if (!showResources) {
+    els.resources.value = '';
+  }
 }
 
 function collectInputs() {
   const grade = els.gradeLevel.value.trim();
-  const resources = els.resources.value.split(',').map((item) => item.trim()).filter(Boolean);
+  const resources = els.kind.value === 'assessment'
+    ? els.resources.value.split(',').map((item) => item.trim()).filter(Boolean)
+    : [];
   return {
     kind: els.kind.value,
     format: els.format.value,
@@ -160,6 +172,7 @@ function setFormFromInputs(inputs) {
   els.topic.value = inputs.topic || '';
   els.weekNumber.value = inputs.week_number ? String(inputs.week_number) : '';
   els.resources.value = (inputs.resources || []).join(', ');
+  updateResourcesVisibility();
 }
 
 function setEditorValue(value) {

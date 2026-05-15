@@ -65,6 +65,15 @@ def build_teaching_aid_prompt(parent_output: dict[str, Any], inputs: dict[str, A
     grade_levels = ", ".join(parent_output.get("grade_levels") or parent_inputs.get("grade_levels") or ["Not specified"])
     source_section = str(inputs.get("source_section") or "").strip()
     custom_request = str(inputs.get("custom_request") or "").strip()
+    custom_request_instruction = (
+        "A teacher custom request was provided. Apply it visibly throughout the Teaching Aid when it is practical, "
+        "and immediately after the main title add one sentence beginning 'Teacher request addressed:' that briefly "
+        "paraphrases how the aid uses the request. If the request is not practical, conflicts with the lesson, or "
+        "cannot be supported by the available context/resources, immediately after the main title add one sentence "
+        "beginning 'Teacher request not applied:' and briefly explain why."
+        if custom_request
+        else "No teacher custom request was provided. Do not add a custom-request note."
+    )
     curriculum_context = inputs.get("curriculum_context") or "No matching uploaded curriculum context was found. Use the parent lesson and teacher inputs only."
 
     return f"""You are a DepEd-aligned teaching assistant for a GIDA school in the Philippines.
@@ -93,6 +102,7 @@ Selected/source section:
 
 Teacher custom request:
 {custom_request or "None"}
+{custom_request_instruction}
 
 Saved lesson plan markdown:
 {parent_output.get("content_md") or ""}

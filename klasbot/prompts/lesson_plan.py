@@ -3,8 +3,12 @@ from __future__ import annotations
 import sqlite3
 
 from klasbot import db
-from klasbot.lesson_formats import DEFAULT_LESSON_PLAN_FORMATS, render_lesson_format_requirements
-from klasbot.prompts.language import language_instruction_for_subject
+from klasbot.lesson_formats import (
+    DEFAULT_LESSON_PLAN_FORMATS,
+    localize_lesson_format_requirements,
+    render_lesson_format_requirements,
+)
+from klasbot.prompts.language import is_filipino_language_subject, language_instruction_for_subject
 
 
 FORMAT_DESCRIPTIONS = {
@@ -37,6 +41,9 @@ def build_lesson_plan_prompt(inputs: dict) -> str:
             resources,
             curriculum_context,
         )
+        requirements = _lesson_requirements_without_teacher_resources(requirements)
+        if is_filipino_language_subject(inputs.get("subject")):
+            requirements = localize_lesson_format_requirements(requirements)
         return f"""{_lesson_plan_system_instructions(language_instruction)}
 {_format_description(format_name)}
 
@@ -44,9 +51,8 @@ Teacher inputs:
 1. Subject: {inputs.get("subject") or "Not specified"}
 2. Topic: {inputs.get("topic") or "Not specified"}
 3. Grade level(s): {grade_levels}
-4. Available resources: {resources}
-5. Format: {format_name}
-6. Selected week: {inputs.get("week_number") or "Not specified"}
+4. Format: {format_name}
+5. Selected week: {inputs.get("week_number") or "Not specified"}
 
 Uploaded curriculum context:
 {curriculum_context}
@@ -54,8 +60,25 @@ Uploaded curriculum context:
 Return markdown with exactly this structure:
 {requirements}
 """
+    generic_requirements = f"""# {format_name} Lesson Plan
+## Overview
+## Objectives
+## Materials
+## Procedure
+## Assessment
+## Adaptations
+## Teacher Notes"""
+    if is_filipino_language_subject(inputs.get("subject")):
+        generic_requirements = f"""# {format_name} Banghay-Aralin
+## Buod
+## Mga Layunin
+## Mga Kagamitan
+## Pamamaraan
+## Pagtataya
+## Mga Pag-aangkop
+## Tala ng Guro"""
     return f"""You are a DepEd-aligned teaching assistant for a GIDA school in the Philippines.
-{language_instruction} Use only the resources listed by the teacher. Do not invent DepEd codes.
+{language_instruction} Do not invent DepEd codes.
 Use the uploaded curriculum context below as the source of truth when it is available.
 
 Reference style: produce a practical {format_name} lesson plan with clear objectives, simple materials,
@@ -67,32 +90,24 @@ Teacher inputs:
 1. Subject: {inputs.get("subject") or "Not specified"}
 2. Topic: {inputs.get("topic") or "Not specified"}
 3. Grade level(s): {grade_levels}
-4. Available resources: {resources}
-5. Format: {format_name}
-6. Selected week: {inputs.get("week_number") or "Not specified"}
+4. Format: {format_name}
+5. Selected week: {inputs.get("week_number") or "Not specified"}
 
 Uploaded curriculum context:
 {curriculum_context}
 
 Return markdown with exactly these headings:
-# {format_name} Lesson Plan
-## Overview
-## Objectives
-## Materials
-## Procedure
-## Assessment
-## Adaptations
-## Teacher Notes
+{generic_requirements}
 """
 
 
 def _lesson_plan_system_instructions(language_instruction: str) -> str:
     return f"""You are a DepEd-aligned teaching assistant for a GIDA school in the Philippines.
 {language_instruction} Use the uploaded curriculum context below as the source of truth when it is available.
-Use only the resources listed by the teacher. Do not invent DepEd codes. If an LC code is not present in the uploaded curriculum context, write "LC Code: Not specified in provided curriculum context."
+Do not invent DepEd codes. If an LC code is not present in the uploaded curriculum context, write "LC Code: Not specified in provided curriculum context."
 Treat quarter curriculum context as background only. Treat the selected weekly focus and weekly competencies as the required scope.
 Do not cover the full quarter. Generate only for the selected week.
-Make the output practical for daily teaching: concrete teacher actions, learner actions, timing, formative checks, remediation, and use of available materials.
+Make the output practical for daily teaching: concrete teacher actions, learner actions, timing, formative checks, and remediation.
 For Mathematics, Science, or notation-heavy examples, you may use valid LaTeX for formulas and equations. Use inline math as $...$ and display math as $$...$$. Keep surrounding explanations in teacher-readable prose, and avoid LaTeX when plain text is clearer.
 """
 
@@ -117,6 +132,19 @@ def _format_description(format_name: str) -> str:
     )
 
 
+def _lesson_requirements_without_teacher_resources(requirements: str) -> str:
+    return (
+        requirements.replace(
+            "- List only the resources provided by the teacher and reasonable low-resource classroom materials derived from them.",
+            "- List practical materials for a low-resource classroom.",
+        )
+        .replace(
+            "Give a short follow-up task that reinforces the lesson and can be done with available home or classroom resources.",
+            "Give a short follow-up task that reinforces the lesson.",
+        )
+    )
+
+
 def build_sdlp_prompt(
     inputs: dict,
     grade_levels: str,
@@ -126,10 +154,10 @@ def build_sdlp_prompt(
     language_instruction = language_instruction_for_subject(inputs.get("subject"))
     return f"""You are a DepEd-aligned teaching assistant for a GIDA school in the Philippines.
 {language_instruction} Use the uploaded curriculum context below as the source of truth when it is available.
-Use only the resources listed by the teacher. Do not invent DepEd codes. If an LC code is not present in the uploaded curriculum context, write "LC Code: Not specified in provided curriculum context."
+Do not invent DepEd codes. If an LC code is not present in the uploaded curriculum context, write "LC Code: Not specified in provided curriculum context."
 Treat quarter curriculum context as background only. Treat the selected weekly focus and weekly competencies as the required scope.
 Do not cover the full quarter. Generate only for the selected week.
-Make the output practical for daily teaching: concrete teacher actions, learner actions, timing, formative checks, remediation, and use of available materials.
+Make the output practical for daily teaching: concrete teacher actions, learner actions, timing, formative checks, and remediation.
 For Mathematics, Science, or notation-heavy examples, you may use valid LaTeX for formulas and equations. Use inline math as $...$ and display math as $$...$$. Keep surrounding explanations in teacher-readable prose, and avoid LaTeX when plain text is clearer.
 
 Create a Semi-Detailed Lesson Plan (SDLP) using the 4As instructional format.
@@ -140,9 +168,8 @@ Teacher inputs:
 1. Subject: {inputs.get("subject") or "Not specified"}
 2. Topic: {inputs.get("topic") or "Not specified"}
 3. Grade level(s): {grade_levels}
-4. Available resources: {resources}
-5. Format: SDLP
-6. Selected week: {inputs.get("week_number") or "Not specified"}
+4. Format: SDLP
+5. Selected week: {inputs.get("week_number") or "Not specified"}
 
 Uploaded curriculum context:
 {curriculum_context}
@@ -170,7 +197,7 @@ Start with: "At the end of the lesson, the learners are expected to:"
   - Learning Competencies:
 
 ## III. Materials
-- List only the resources provided by the teacher and reasonable low-resource classroom materials derived from them.
+- List practical materials for a low-resource classroom.
 
 ## IV. Procedure (4As)
 Use the 4As sequence below. For each part, include the suggested time, Teacher's Activity, Learners' Activity, and guide questions where useful.
@@ -217,10 +244,10 @@ def build_dlp_prompt(
     language_instruction = language_instruction_for_subject(inputs.get("subject"))
     return f"""You are a DepEd-aligned teaching assistant for a GIDA school in the Philippines.
 {language_instruction} Use the uploaded curriculum context below as the source of truth when it is available.
-Use only the resources listed by the teacher. Do not invent DepEd codes. If an LC code is not present in the uploaded curriculum context, write "LC Code: Not specified in provided curriculum context."
+Do not invent DepEd codes. If an LC code is not present in the uploaded curriculum context, write "LC Code: Not specified in provided curriculum context."
 Treat quarter curriculum context as background only. Treat the selected weekly focus and weekly competencies as the required scope.
 Do not cover the full quarter. Generate only for the selected week.
-Make the output practical for daily teaching: concrete teacher actions, learner actions, timing, formative checks, remediation, and use of available materials.
+Make the output practical for daily teaching: concrete teacher actions, learner actions, timing, formative checks, and remediation.
 For Mathematics, Science, or notation-heavy examples, you may use valid LaTeX for formulas and equations. Use inline math as $...$ and display math as $$...$$. Keep surrounding explanations in teacher-readable prose, and avoid LaTeX when plain text is clearer.
 
 Create a scripted Detailed Lesson Plan (DLP) suitable for new teachers or Classroom Observation Tool (COT) use.
@@ -231,9 +258,8 @@ Teacher inputs:
 1. Subject: {inputs.get("subject") or "Not specified"}
 2. Topic: {inputs.get("topic") or "Not specified"}
 3. Grade level(s): {grade_levels}
-4. Available resources: {resources}
-5. Format: DLP
-6. Selected week: {inputs.get("week_number") or "Not specified"}
+4. Format: DLP
+5. Selected week: {inputs.get("week_number") or "Not specified"}
 
 Uploaded curriculum context:
 {curriculum_context}
@@ -300,10 +326,10 @@ def build_dll_prompt(
     language_instruction = language_instruction_for_subject(inputs.get("subject"))
     return f"""You are a DepEd-aligned teaching assistant for a GIDA school in the Philippines.
 {language_instruction} Use the uploaded curriculum context below as the source of truth when it is available.
-Use only the resources listed by the teacher. Do not invent DepEd codes. If an LC code is not present in the uploaded curriculum context, write "LC Code: Not specified in provided curriculum context."
+Do not invent DepEd codes. If an LC code is not present in the uploaded curriculum context, write "LC Code: Not specified in provided curriculum context."
 Treat quarter curriculum context as background only. Treat the selected weekly focus and weekly competencies as the required scope.
 Do not cover the full quarter. Generate only for the selected week.
-Make the output practical for daily teaching: concrete teacher actions, learner actions, timing, formative checks, remediation, and use of available materials.
+Make the output practical for daily teaching: concrete teacher actions, learner actions, timing, formative checks, and remediation.
 For Mathematics, Science, or notation-heavy examples, you may use valid LaTeX for formulas and equations. Use inline math as $...$ and display math as $$...$$. Keep surrounding explanations in teacher-readable prose, and avoid LaTeX when plain text is clearer.
 
 Create a Daily Lesson Log (DLL), which is a weekly lesson log spanning Monday to Friday for the selected week.
@@ -314,9 +340,8 @@ Teacher inputs:
 1. Subject: {inputs.get("subject") or "Not specified"}
 2. Topic: {inputs.get("topic") or "Not specified"}
 3. Grade level(s): {grade_levels}
-4. Available resources: {resources}
-5. Format: DLL
-6. Selected week: {inputs.get("week_number") or "Not specified"}
+4. Format: DLL
+5. Selected week: {inputs.get("week_number") or "Not specified"}
 
 Uploaded curriculum context:
 {curriculum_context}

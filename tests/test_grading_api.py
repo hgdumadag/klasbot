@@ -77,14 +77,54 @@ def _pdf_bytes() -> bytes:
     return buffer.getvalue()
 
 
+def _create_class_assessment(client, payload: dict) -> tuple[int, int]:
+    class_response = client.post(
+        "/api/class-records/classes",
+        json={
+            "name": f"{payload.get('grade_level', 'Grade 6')} {payload.get('subject', 'Science')}",
+            "grade_level": payload.get("grade_level", "Grade 6"),
+            "section": "A",
+            "subject": payload.get("subject", "Science"),
+            "school_year": "2026-2027",
+        },
+    )
+    assert class_response.status_code == 201
+    class_id = class_response.json()["class"]["id"]
+    assessment_response = client.post(
+        f"/api/class-records/classes/{class_id}/assessments",
+        json={
+            "title": payload.get("topic") or "Quiz Photo Assessment",
+            "assessment_type": "quiz",
+            "assessment_date": "2026-06-15",
+            "max_score": payload["total_points"],
+        },
+    )
+    assert assessment_response.status_code == 201
+    return class_id, assessment_response.json()["assessment"]["id"]
+
+
+def _create_grading_batch(client, payload: dict) -> dict:
+    class_id, assessment_id = _create_class_assessment(client, payload)
+    response = client.post(
+        "/api/grading/batches",
+        json={
+            **payload,
+            "class_id": class_id,
+            "assessment_id": assessment_id,
+        },
+    )
+    assert response.status_code == 201
+    return response.json()["batch"]
+
+
 def test_quiz_photo_grading_batch_upload_detect_grade_review_and_delete(client, monkeypatch):
     from klasbot import main
 
     monkeypatch.setattr(main, "ollama_client", FakeGradingOllama())
     login(client, "1111")
-    response = client.post(
-        "/api/grading/batches",
-        json={
+    batch = _create_grading_batch(
+        client,
+        {
             "subject": "Science",
             "grade_level": "Grade 6",
             "topic": "Human Body Systems",
@@ -97,8 +137,6 @@ def test_quiz_photo_grading_batch_upload_detect_grade_review_and_delete(client, 
             "answer_key": "1. Heart\n2. Lungs",
         },
     )
-    assert response.status_code == 201
-    batch = response.json()["batch"]
     assert batch["week_number"] == 3
     assert batch["week_topic"] == "Circulatory and respiratory system review"
 
@@ -170,9 +208,20 @@ def test_quiz_photo_grading_batch_upload_detect_grade_review_and_delete(client, 
 def test_exact_answer_grading_requires_answer_key(client):
     login(client, "1111")
 
+    class_id, assessment_id = _create_class_assessment(
+        client,
+        {
+            "subject": "Math",
+            "grade_level": "Grade 4",
+            "topic": "Fractions",
+            "total_points": 10,
+        },
+    )
     response = client.post(
         "/api/grading/batches",
         json={
+            "class_id": class_id,
+            "assessment_id": assessment_id,
             "subject": "Math",
             "grade_level": "Grade 4",
             "topic": "Fractions",
@@ -185,18 +234,90 @@ def test_exact_answer_grading_requires_answer_key(client):
     assert "answer key" in response.json()["detail"].lower()
 
 
-def test_wide_quiz_photo_detects_two_candidate_submissions(client):
+def test_reviewed_quiz_photo_scores_transfer_only_to_empty_class_scores(client):
     login(client, "1111")
+    class_response = client.post(
+        "/api/class-records/classes",
+        json={
+            "name": "Grade 6A Science",
+            "grade_level": "Grade 6",
+            "section": "A",
+            "subject": "Science",
+            "school_year": "2026-2027",
+        },
+    )
+    class_id = class_response.json()["class"]["id"]
+    student_id = client.post(
+        f"/api/class-records/classes/{class_id}/students",
+        json={"first_name": "Ana", "last_name": "Reyes", "learner_reference_number": "S-001"},
+    ).json()["student"]["id"]
+    assessment_id = client.post(
+        f"/api/class-records/classes/{class_id}/assessments",
+        json={
+            "title": "Human Body Quiz",
+            "assessment_type": "quiz",
+            "assessment_date": "2026-06-15",
+            "max_score": 2,
+        },
+    ).json()["assessment"]["id"]
     batch = client.post(
         "/api/grading/batches",
         json={
+            "class_id": class_id,
+            "assessment_id": assessment_id,
+            "total_points": 2,
+            "grading_style": "exact",
+            "questions": "1. What organ pumps blood?",
+            "answer_key": "1. Heart",
+        },
+    ).json()["batch"]
+    client.post(
+        f"/api/grading/batches/{batch['id']}/images",
+        files={"file": ("worksheet.png", _png_bytes(), "image/png")},
+    )
+    submission = client.post(f"/api/grading/batches/{batch['id']}/detect-submissions").json()["submissions"][0]
+    reviewed = client.patch(
+        f"/api/grading/submissions/{submission['id']}",
+        json={
+            "student_id": student_id,
+            "student_name": "Ana Reyes",
+            "student_identifier": "S-001",
+            "grading_result": {"items": []},
+            "score": 2,
+            "max_score": 2,
+            "teacher_reviewed": True,
+        },
+    )
+    assert reviewed.status_code == 200
+
+    preview = client.post(f"/api/grading/batches/{batch['id']}/transfer-preview")
+    assert preview.status_code == 200
+    assert preview.json()["rows"][0]["status"] == "ready"
+
+    transfer = client.post(f"/api/grading/batches/{batch['id']}/transfer-scores")
+    assert transfer.status_code == 200
+    assert transfer.json()["saved_count"] == 1
+    grid = client.get(f"/api/class-records/assessments/{assessment_id}/scores").json()
+    assert grid["rows"][0]["score"] == 2
+
+    second_transfer = client.post(f"/api/grading/batches/{batch['id']}/transfer-scores")
+    assert second_transfer.status_code == 200
+    assert second_transfer.json()["saved_count"] == 0
+    assert second_transfer.json()["rows"][0]["status"] == "skipped_existing_score"
+
+
+def test_wide_quiz_photo_detects_two_candidate_submissions(client):
+    login(client, "1111")
+    batch = _create_grading_batch(
+        client,
+        {
             "subject": "English",
             "grade_level": "Grade 5",
             "topic": "Vocabulary",
             "total_points": 5,
             "grading_style": "review_only",
         },
-    ).json()["batch"]
+    )
     client.post(
         f"/api/grading/batches/{batch['id']}/images",
         files={"file": ("wide.png", _png_bytes(2000, 800), "image/png")},
@@ -210,16 +331,16 @@ def test_wide_quiz_photo_detects_two_candidate_submissions(client):
 
 def test_quiz_photo_grading_accepts_pdf_uploads(client):
     login(client, "1111")
-    batch = client.post(
-        "/api/grading/batches",
-        json={
+    batch = _create_grading_batch(
+        client,
+        {
             "subject": "Science",
             "grade_level": "Grade 6",
             "topic": "Body Systems",
             "total_points": 5,
             "grading_style": "review_only",
         },
-    ).json()["batch"]
+    )
 
     upload = client.post(
         f"/api/grading/batches/{batch['id']}/images",
@@ -252,16 +373,16 @@ def test_quiz_photo_grading_accepts_pdf_uploads(client):
 
 def test_quiz_photo_grading_accepts_pdf_when_browser_sends_octet_stream(client):
     login(client, "1111")
-    batch = client.post(
-        "/api/grading/batches",
-        json={
+    batch = _create_grading_batch(
+        client,
+        {
             "subject": "Science",
             "grade_level": "Grade 6",
             "topic": "Body Systems",
             "total_points": 5,
             "grading_style": "review_only",
         },
-    ).json()["batch"]
+    )
 
     upload = client.post(
         f"/api/grading/batches/{batch['id']}/images",
@@ -281,9 +402,9 @@ def test_pdf_grading_sends_rendered_pages_to_ollama(client, monkeypatch):
     monkeypatch.setattr(extraction, "_encode_pdf_pages", lambda path: (["encoded-page"], []))
 
     login(client, "1111")
-    batch = client.post(
-        "/api/grading/batches",
-        json={
+    batch = _create_grading_batch(
+        client,
+        {
             "subject": "English",
             "grade_level": "Grade 6",
             "topic": "Short response",
@@ -292,7 +413,7 @@ def test_pdf_grading_sends_rendered_pages_to_ollama(client, monkeypatch):
             "grading_style": "rubric",
             "rubric": "2 points for a complete explanation.",
         },
-    ).json()["batch"]
+    )
     client.post(
         f"/api/grading/batches/{batch['id']}/images",
         files={"file": ("worksheet.pdf", _pdf_bytes(), "application/pdf")},
@@ -311,9 +432,9 @@ def test_grading_timeout_returns_manual_review_result(client, monkeypatch):
     monkeypatch.setattr(main, "ollama_client", SlowGradingOllama())
     monkeypatch.setattr(main, "OLLAMA_GRADING_TIMEOUT_SECONDS", 0.01)
     login(client, "1111")
-    batch = client.post(
-        "/api/grading/batches",
-        json={
+    batch = _create_grading_batch(
+        client,
+        {
             "subject": "Science",
             "grade_level": "Grade 6",
             "topic": "Human Body Systems",
@@ -321,7 +442,7 @@ def test_grading_timeout_returns_manual_review_result(client, monkeypatch):
             "grading_style": "exact",
             "answer_key": "1. Heart",
         },
-    ).json()["batch"]
+    )
     client.post(
         f"/api/grading/batches/{batch['id']}/images",
         files={"file": ("worksheet.png", _png_bytes(), "image/png")},

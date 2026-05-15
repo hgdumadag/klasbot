@@ -18,10 +18,14 @@ const state = {
   teachingAidEditing: false,
   csrfToken: '',
   gradingBatches: [],
+  gradingClasses: [],
+  gradingAssessments: [],
+  gradingTransferPreview: null,
   activeGradingBatch: null,
   classRecords: [],
   activeClassRecord: null,
   activeScoreAssessmentId: null,
+  demoConfig: null,
 };
 
 const formats = {
@@ -34,6 +38,8 @@ const els = {
   appView: document.getElementById('app-view'),
   loginForm: document.getElementById('login-form'),
   loginError: document.getElementById('login-error'),
+  demoLoginButton: document.getElementById('demo-login-button'),
+  demoLoginNote: document.getElementById('demo-login-note'),
   pin: document.getElementById('pin'),
   pinPad: document.getElementById('pin-pad'),
   teacherLabel: document.getElementById('teacher-label'),
@@ -86,6 +92,7 @@ const els = {
   topic: document.getElementById('topic'),
   weekNumber: document.getElementById('week-number'),
   resources: document.getElementById('resources'),
+  resourcesField: document.getElementById('resources-field'),
   curriculumMatch: document.getElementById('curriculum-match'),
   previewPromptButton: document.getElementById('preview-prompt-button'),
   promptPreview: document.getElementById('prompt-preview'),
@@ -136,10 +143,8 @@ const els = {
   gradingPanel: document.getElementById('grading-panel'),
   refreshGrading: document.getElementById('refresh-grading'),
   gradingBatchForm: document.getElementById('grading-batch-form'),
-  gradingSubject: document.getElementById('grading-subject'),
-  gradingGrade: document.getElementById('grading-grade'),
-  gradingTopic: document.getElementById('grading-topic'),
-  gradingWeekTopic: document.getElementById('grading-week-topic'),
+  gradingClass: document.getElementById('grading-class'),
+  gradingAssessment: document.getElementById('grading-assessment'),
   gradingPoints: document.getElementById('grading-points'),
   gradingStyle: document.getElementById('grading-style'),
   gradingQuestions: document.getElementById('grading-questions'),
@@ -154,9 +159,12 @@ const els = {
   gradingStatus: document.getElementById('grading-status'),
   gradingImages: document.getElementById('grading-images'),
   gradingSubmissions: document.getElementById('grading-submissions'),
+  gradingTransferReview: document.getElementById('grading-transfer-review'),
   gradingBatches: document.getElementById('grading-batches'),
   detectSubmissions: document.getElementById('detect-submissions'),
   gradeSubmissions: document.getElementById('grade-submissions'),
+  previewScoreTransfer: document.getElementById('preview-score-transfer'),
+  saveScoreTransfer: document.getElementById('save-score-transfer'),
   printGrading: document.getElementById('print-grading'),
   deleteGradingBatch: document.getElementById('delete-grading-batch'),
   classRecordsPanel: document.getElementById('class-records-panel'),
@@ -349,21 +357,22 @@ function resetTeachingAids() {
 }
 
 function setOllamaStatus(data) {
+  const providerLabel = data.provider_label || (data.provider === 'vertex_gemma' ? 'Vertex Gemma' : 'Ollama');
   const dotClass = data.ok && data.model_available ? 'status-dot--ok' : data.ok ? 'status-dot--warn' : 'status-dot--bad';
   const label = data.ok && data.model_available
     ? 'Connected'
     : data.ok
-      ? 'Ollama running, model missing'
+      ? `${providerLabel} reachable, model unavailable`
       : 'Not connected';
   const detail = data.ok
     ? data.model_available
       ? `Ready to generate with ${data.model}`
-      : `Ollama is running at ${data.base_url}, but ${data.model} is not installed`
+      : `${providerLabel} is reachable at ${data.base_url}, but ${data.model} is unavailable`
     : `${data.model} at ${data.base_url}: ${data.error || 'unavailable'}`;
 
   els.ollamaState.innerHTML = `<span class="status-dot ${dotClass}"></span><strong>${label}</strong>`;
   els.ollamaDetail.textContent = detail;
-  els.statusbarOllama.textContent = `Ollama · ${label.toLowerCase()}`;
+  els.statusbarOllama.textContent = `${providerLabel} · ${label.toLowerCase()}`;
   els.statusbarOllamaDot.className = dotClass;
   els.systemModel.textContent = data.model || 'Unknown';
   const homeModelDot = document.getElementById('home-model-dot');
@@ -374,7 +383,7 @@ function setOllamaStatus(data) {
 
 async function checkOllamaStatus() {
   els.ollamaState.innerHTML = '<span class="status-dot status-dot--unknown"></span><strong>Checking...</strong>';
-  els.ollamaDetail.textContent = 'Contacting Ollama...';
+  els.ollamaDetail.textContent = 'Checking AI provider...';
   try {
     const data = await api('/api/ollama/status');
     setOllamaStatus(data);
@@ -423,6 +432,9 @@ function showLogin() {
   els.curriculumList.innerHTML = '';
   state.libraryOutputs = [];
   state.gradingBatches = [];
+  state.gradingClasses = [];
+  state.gradingAssessments = [];
+  state.gradingTransferPreview = null;
   state.activeGradingBatch = null;
   state.classRecords = [];
   state.activeClassRecord = null;
@@ -639,81 +651,6 @@ async function loadCurriculumPacing() {
   updateDocumentChrome(collectInputs());
 }
 
-async function loadGradingCurriculumGrades() {
-  try {
-    const data = await cachedApi('/api/curriculum/grades');
-    setSelectOptions(els.gradingGrade, data.grades, data.grades.length ? 'Choose grade' : 'No active curriculum');
-    await loadGradingCurriculumSubjects();
-  } catch (error) {
-    setSelectOptions(els.gradingGrade, [], 'Curriculum unavailable');
-    setSelectOptions(els.gradingSubject, [], 'Choose subject');
-    setSelectOptions(els.gradingTopic, [], 'Choose topic');
-    setSelectOptions(els.gradingWeekTopic, [], 'Choose week topic');
-    setStatus(error.message, true);
-  }
-}
-
-async function loadGradingCurriculumSubjects() {
-  setSelectOptions(els.gradingSubject, [], 'Choose subject');
-  setSelectOptions(els.gradingTopic, [], 'Choose topic');
-  setSelectOptions(els.gradingWeekTopic, [], 'Choose week topic');
-  if (!els.gradingGrade.value) return;
-  const data = await cachedApi(`/api/curriculum/subjects?grade=${encodeURIComponent(els.gradingGrade.value)}`);
-  setSelectOptions(els.gradingSubject, data.subjects, data.subjects.length ? 'Choose subject' : 'No subjects for grade');
-}
-
-async function loadGradingCurriculumTopics() {
-  setSelectOptions(els.gradingTopic, [], 'Choose topic');
-  setSelectOptions(els.gradingWeekTopic, [], 'Choose week topic');
-  if (!els.gradingGrade.value || !els.gradingSubject.value) return;
-  const quarterData = await cachedApi(`/api/curriculum/quarters?${new URLSearchParams({
-    grade: els.gradingGrade.value,
-    subject: els.gradingSubject.value,
-  }).toString()}`);
-  const topicGroups = await Promise.all((quarterData.quarters || []).map(async (quarter) => {
-    const params = new URLSearchParams({
-      grade: els.gradingGrade.value,
-      subject: els.gradingSubject.value,
-      quarter: String(quarter),
-    });
-    const data = await cachedApi(`/api/curriculum/topics?${params.toString()}`);
-    return (data.topics || []).map((topic) => ({
-      ...topic,
-      quarter,
-      value: JSON.stringify({ quarter, topic: topic.domain }),
-    }));
-  }));
-  const topics = topicGroups.flat();
-  setSelectOptions(
-    els.gradingTopic,
-    topics,
-    topics.length ? 'Choose topic' : 'No topics',
-    (topic) => topic.value,
-    (topic) => `Q${topic.quarter} | ${topic.domain} (p. ${topic.source_pages})`,
-  );
-}
-
-async function loadGradingCurriculumWeeks() {
-  setSelectOptions(els.gradingWeekTopic, [], 'Choose week topic');
-  if (!els.gradingGrade.value || !els.gradingSubject.value || !els.gradingTopic.value) return;
-  const selection = JSON.parse(els.gradingTopic.value);
-  const params = new URLSearchParams({
-    grade: els.gradingGrade.value,
-    subject: els.gradingSubject.value,
-    quarter: String(selection.quarter),
-    topic: selection.topic,
-  });
-  const data = await cachedApi(`/api/curriculum/pacing?${params.toString()}`);
-  const weeks = data.pacing?.weeks || [];
-  setSelectOptions(
-    els.gradingWeekTopic,
-    weeks,
-    weeks.length ? 'Choose week topic' : 'No week topics',
-    (week) => JSON.stringify({ week_number: week.week_number, focus: week.focus }),
-    (week) => `Week ${week.week_number}: ${week.focus}`,
-  );
-}
-
 function weekOptionLabel(week) {
   const competencies = week.competencies || [];
   if (!competencies.length) {
@@ -749,7 +686,16 @@ function updateFormats() {
     option.textContent = format.toUpperCase();
     els.format.appendChild(option);
   });
+  updateResourcesVisibility();
   updateDocumentChrome(collectInputs());
+}
+
+function updateResourcesVisibility() {
+  const showResources = els.kind.value === 'assessment';
+  els.resourcesField?.classList.toggle('hidden', !showResources);
+  if (!showResources) {
+    els.resources.value = '';
+  }
 }
 
 function formatLabel(format) {
@@ -793,6 +739,58 @@ function setInspectorVisibility(workspace) {
   els.workspaceFrame.classList.toggle('workspace-frame--no-inspector', !showInspector);
 }
 
+function clearWorkspaceSelection() {
+  els.currentDraftButton.classList.remove('rail-item--on');
+  els.teachingAidsButton.classList.remove('rail-item--on');
+  els.libraryButton.classList.remove('rail-item--on');
+  els.gradingButton.classList.remove('rail-item--on');
+  els.classRecordsButton.classList.remove('rail-item--on');
+  els.adminToggle.classList.remove('rail-item--on');
+  els.curriculumToggle.classList.remove('rail-item--on');
+  els.formatAdminToggle.classList.remove('rail-item--on');
+}
+
+function setVisibleWorkspacePanel(panelName) {
+  els.homePanel.classList.toggle('hidden', panelName !== 'home');
+  els.draftPanel.classList.toggle('hidden', panelName !== 'draft');
+  els.documentTabs.classList.toggle('hidden', panelName !== 'draft');
+  els.teachingAidsPanel.classList.toggle('hidden', panelName !== 'teaching-aids');
+  els.libraryPanel.classList.toggle('hidden', panelName !== 'library');
+  els.gradingPanel.classList.toggle('hidden', panelName !== 'grading');
+  els.classRecordsPanel.classList.toggle('hidden', panelName !== 'class-records');
+  els.adminPanel.classList.toggle('hidden', panelName !== 'teacher-admin');
+  els.curriculumPanel.classList.toggle('hidden', panelName !== 'curriculum');
+  els.formatAdminPanel.classList.toggle('hidden', panelName !== 'plan-formats');
+}
+
+function openWorkArea(area) {
+  const labels = {
+    lesson: ['Lesson Planning', 'Choose a lesson planning action from the left menu.'],
+    class: ['Class Management', 'Choose a class management action from the left menu.'],
+    admin: ['Admin', 'Choose an admin action from the left menu.'],
+  };
+  if (area === 'admin' && !state.teacher?.is_admin) {
+    switchWorkspace('home');
+    return;
+  }
+  const [title, meta] = labels[area] || ['KlasBot Home', 'Choose a workspace.'];
+  state.activeWorkspace = 'home';
+  els.workspaceFrame.dataset.area = area;
+  els.homeButton.classList.remove('rail-primary--active');
+  els.lessonAreaButton.classList.toggle('rail-item--on', area === 'lesson');
+  els.classAreaButton.classList.toggle('rail-item--on', area === 'class');
+  els.adminAreaButton.classList.toggle('rail-item--on', area === 'admin');
+  els.lessonNavGroup.classList.toggle('hidden', area !== 'lesson');
+  els.classNavGroup.classList.toggle('hidden', area !== 'class');
+  els.adminNavGroup.classList.toggle('hidden', area !== 'admin' || !state.teacher?.is_admin);
+  setInspectorVisibility('home');
+  setVisibleWorkspacePanel('home');
+  clearWorkspaceSelection();
+  els.documentTitle.textContent = title;
+  els.documentMeta.textContent = meta;
+  document.querySelector('.breadcrumb').textContent = title;
+}
+
 function switchWorkspace(workspace) {
   if (workspaceArea(workspace) === 'admin' && !state.teacher?.is_admin) {
     workspace = 'home';
@@ -811,17 +809,9 @@ function switchWorkspace(workspace) {
   setNavigationState(workspace);
   setInspectorVisibility(workspace);
 
-  els.homePanel.classList.toggle('hidden', !isHome);
-  els.draftPanel.classList.toggle('hidden', !isDraft);
-  els.documentTabs.classList.toggle('hidden', !isDraft);
-  els.teachingAidsPanel.classList.toggle('hidden', !isTeachingAids);
-  els.libraryPanel.classList.toggle('hidden', !isLibrary);
-  els.gradingPanel.classList.toggle('hidden', !isGrading);
-  els.classRecordsPanel.classList.toggle('hidden', !isClassRecords);
-  els.adminPanel.classList.toggle('hidden', !isTeacherAdmin);
-  els.curriculumPanel.classList.toggle('hidden', !isCurriculum);
-  els.formatAdminPanel.classList.toggle('hidden', !isPlanFormats);
+  setVisibleWorkspacePanel(workspace);
 
+  clearWorkspaceSelection();
   els.currentDraftButton.classList.toggle('rail-item--on', isDraft);
   els.teachingAidsButton.classList.toggle('rail-item--on', isTeachingAids);
   els.libraryButton.classList.toggle('rail-item--on', isLibrary);
@@ -901,10 +891,12 @@ function gradingRailBadge() {
 
 function collectInputs() {
   const gradeLevels = els.gradeLevel.value ? [els.gradeLevel.value] : [];
-  const resources = els.resources.value
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
+  const resources = els.kind.value === 'assessment'
+    ? els.resources.value
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+    : [];
   return {
     kind: els.kind.value,
     format: els.format.value,
@@ -928,6 +920,7 @@ function setFormFromInputs(inputs) {
   ensureSelectValue(els.topic, inputs.topic || '');
   ensureSelectValue(els.weekNumber, inputs.week_number ? String(inputs.week_number) : '');
   els.resources.value = (inputs.resources || []).join(', ');
+  updateResourcesVisibility();
   updateDocumentChrome(inputs);
   updateCurriculumMatch();
 }
@@ -1041,7 +1034,62 @@ async function loadLibrary() {
   }
 }
 
+async function loadGradingClassChoices() {
+  const data = await api('/api/class-records/classes');
+  state.gradingClasses = data.classes || [];
+  els.gradingClass.innerHTML = '';
+  if (!state.gradingClasses.length) {
+    els.gradingClass.innerHTML = '<option value="">Create a class first</option>';
+    els.gradingAssessment.innerHTML = '<option value="">No assessments</option>';
+    els.gradingPoints.value = '';
+    return;
+  }
+  state.gradingClasses.forEach((record) => {
+    const option = document.createElement('option');
+    option.value = String(record.id);
+    option.textContent = `${record.name} | Grade ${record.grade_level}${record.section ? `-${record.section}` : ''} | ${record.subject}`;
+    els.gradingClass.appendChild(option);
+  });
+  await loadGradingAssessmentChoices();
+}
+
+async function loadGradingAssessmentChoices() {
+  const classId = Number(els.gradingClass.value);
+  els.gradingAssessment.innerHTML = '';
+  state.gradingAssessments = [];
+  if (!classId) {
+    els.gradingAssessment.innerHTML = '<option value="">Choose a class first</option>';
+    els.gradingPoints.value = '';
+    return;
+  }
+  const data = await api(`/api/class-records/classes/${classId}/assessments`);
+  state.gradingAssessments = data.assessments || [];
+  if (!state.gradingAssessments.length) {
+    els.gradingAssessment.innerHTML = '<option value="">Create an assessment in this class first</option>';
+    els.gradingPoints.value = '';
+    return;
+  }
+  state.gradingAssessments.forEach((assessment) => {
+    const option = document.createElement('option');
+    option.value = String(assessment.id);
+    option.textContent = `${assessment.title} | ${assessment.assessment_type} | Max ${assessment.max_score}`;
+    els.gradingAssessment.appendChild(option);
+  });
+  syncGradingPointsFromAssessment();
+}
+
+function selectedGradingAssessment() {
+  const assessmentId = Number(els.gradingAssessment.value);
+  return state.gradingAssessments.find((assessment) => assessment.id === assessmentId) || null;
+}
+
+function syncGradingPointsFromAssessment() {
+  const assessment = selectedGradingAssessment();
+  els.gradingPoints.value = assessment ? assessment.max_score : '';
+}
+
 async function loadGradingBatches() {
+  await loadGradingClassChoices();
   const data = await api('/api/grading/batches');
   state.gradingBatches = data.batches;
   if (state.activeGradingBatch) {
@@ -1059,17 +1107,16 @@ async function createGradingBatch(event) {
   const answerKey = els.gradingAnswerKey.value.trim();
   const rubric = els.gradingRubric.value.trim();
   const questions = els.gradingQuestions.value.trim();
-  const topicSelection = JSON.parse(els.gradingTopic.value);
-  const weekSelection = JSON.parse(els.gradingWeekTopic.value);
+  const assessment = selectedGradingAssessment();
+  if (!assessment) {
+    setGradingStatus('Choose a class assessment before creating a batch.', true);
+    return;
+  }
   const data = await api('/api/grading/batches', {
     method: 'POST',
     body: JSON.stringify({
-      subject: els.gradingSubject.value.trim(),
-      grade_level: els.gradingGrade.value.trim(),
-      topic: topicSelection.topic,
-      quarter: Number(topicSelection.quarter),
-      week_number: Number(weekSelection.week_number),
-      week_topic: weekSelection.focus,
+      class_id: Number(els.gradingClass.value),
+      assessment_id: Number(els.gradingAssessment.value),
       total_points: Number(els.gradingPoints.value),
       grading_style: els.gradingStyle.value,
       questions,
@@ -1078,8 +1125,8 @@ async function createGradingBatch(event) {
     }),
   });
   els.gradingBatchForm.reset();
+  state.gradingTransferPreview = null;
   state.activeGradingBatch = data.batch;
-  await loadGradingCurriculumGrades();
   await loadGradingBatches();
   setGradingStatus('Grading batch created. Choose quiz files and upload them.');
   setStatus('Grading batch created.');
@@ -1088,6 +1135,7 @@ async function createGradingBatch(event) {
 async function selectGradingBatch(batchId) {
   const data = await api(`/api/grading/batches/${batchId}`);
   state.activeGradingBatch = data.batch;
+  state.gradingTransferPreview = null;
   renderGradingWorkspace();
 }
 
@@ -1174,7 +1222,8 @@ async function saveGradingSubmission(submissionId) {
     body: JSON.stringify({
       student_name: card.querySelector('[data-field="student-name"]').value.trim(),
       student_identifier: card.querySelector('[data-field="student-identifier"]').value.trim(),
-      extracted_answers: {},
+      student_id: card.querySelector('[data-field="student-id"]').value ? Number(card.querySelector('[data-field="student-id"]').value) : null,
+      extracted_answers: state.activeGradingBatch.submissions.find((item) => item.id === submissionId)?.extracted_answers || {},
       grading_result: result,
       score: card.querySelector('[data-field="score"]').value ? Number(card.querySelector('[data-field="score"]').value) : null,
       max_score: card.querySelector('[data-field="max-score"]').value ? Number(card.querySelector('[data-field="max-score"]').value) : null,
@@ -1187,6 +1236,28 @@ async function saveGradingSubmission(submissionId) {
   renderGradingWorkspace();
   setGradingStatus('Submission review saved.');
   setStatus('Submission review saved.');
+}
+
+async function previewScoreTransfer() {
+  if (!state.activeGradingBatch) return;
+  const data = await api(`/api/grading/batches/${state.activeGradingBatch.id}/transfer-preview`, { method: 'POST' });
+  state.gradingTransferPreview = data;
+  renderGradingTransferReview();
+  const readyCount = (data.rows || []).filter((row) => row.status === 'ready').length;
+  setGradingStatus(`${readyCount} reviewed score${readyCount === 1 ? '' : 's'} ready to save.`);
+}
+
+async function saveScoreTransfer() {
+  if (!state.activeGradingBatch) return;
+  const data = await api(`/api/grading/batches/${state.activeGradingBatch.id}/transfer-scores`, { method: 'POST' });
+  state.gradingTransferPreview = data;
+  await selectGradingBatch(state.activeGradingBatch.id);
+  state.gradingTransferPreview = data;
+  renderGradingTransferReview();
+  setGradingStatus(`${data.saved_count || 0} score${data.saved_count === 1 ? '' : 's'} saved to the class assessment.`);
+  if (state.activeClassRecord?.class?.id === data.assessment?.class_id) {
+    await selectClassRecord(data.assessment.class_id);
+  }
 }
 
 async function printGradingBatch() {
@@ -1225,8 +1296,8 @@ function renderGradingBatches() {
   }
   els.gradingBatches.innerHTML = state.gradingBatches.map((batch) => `
     <button class="list-item" type="button" data-batch-id="${batch.id}">
-      <h3>${escapeHtml(batch.topic || 'Untitled quiz')}</h3>
-      <p>${escapeHtml(batch.subject || 'No subject')} | ${escapeHtml(batch.grade_level || 'No grade')} | ${batch.week_number ? `Week ${escapeHtml(batch.week_number)} | ` : ''}${batch.submission_count} submission(s) | ${escapeHtml(batch.status)}</p>
+      <h3>${escapeHtml(batch.assessment_title || batch.topic || 'Untitled quiz')}</h3>
+      <p>${escapeHtml(batch.class_name || 'No class')} | ${batch.submission_count} submission(s) | ${escapeHtml(batch.status)}</p>
     </button>
   `).join('');
   els.gradingBatches.querySelectorAll('[data-batch-id]').forEach((button) => {
@@ -1245,13 +1316,13 @@ function renderActiveGradingBatch() {
   els.gradingActive.classList.toggle('hidden', !batch);
   if (!batch) {
     els.gradingImages.innerHTML = '';
-    els.gradingSubmissions.innerHTML = '';
+  els.gradingSubmissions.innerHTML = '';
+  els.gradingTransferReview.innerHTML = '';
     setGradingStatus('');
     return;
   }
-  els.gradingActiveTitle.textContent = batch.topic || 'Untitled quiz';
-  const weekLabel = batch.week_number ? ` | Week ${batch.week_number}: ${batch.week_topic || 'No week topic'}` : '';
-  els.gradingActiveMeta.textContent = `${batch.subject || 'No subject'} | ${batch.grade_level || 'No grade'}${weekLabel} | ${batch.total_points} pts | ${batch.grading_style}`;
+  els.gradingActiveTitle.textContent = batch.assessment_title || batch.topic || 'Untitled quiz';
+  els.gradingActiveMeta.textContent = `${batch.class_name || 'No class'} | ${batch.total_points} pts | ${batch.grading_style}`;
   els.gradingImages.innerHTML = (batch.images || []).map((image) => `
     <article class="grading-image-card">
       <img src="/api/grading/images/${image.id}/thumbnail" alt="Uploaded quiz worksheet preview" />
@@ -1268,6 +1339,7 @@ function renderActiveGradingBatch() {
       { busyText: 'Saving...', report: setGradingStatus },
     ));
   });
+  renderGradingTransferReview();
 }
 
 function updateGradingSteps(batch = state.activeGradingBatch) {
@@ -1296,12 +1368,18 @@ function updateGradingSteps(batch = state.activeGradingBatch) {
 function renderGradingSubmissionCard(submission) {
   const result = submission.grading_result || {};
   const warningItems = (result.warnings || []).map((warning) => `<li>${escapeHtml(warning)}</li>`).join('');
+  const students = state.activeGradingBatch?.class_students || [];
+  const studentOptions = ['<option value="">Needs match</option>'].concat(students.map((student) => {
+    const selected = Number(submission.student_id || 0) === Number(student.id) ? ' selected' : '';
+    return `<option value="${student.id}"${selected}>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</option>`;
+  })).join('');
   return `
     <article class="grading-submission-card" data-submission-id="${submission.id}">
       <h4>${escapeHtml(submission.student_name || submission.student_identifier || `Submission ${submission.id}`)}</h4>
       <div class="workspace-form">
         <label>Student name <input data-field="student-name" type="text" value="${escapeHtml(submission.student_name || '')}" /></label>
         <label>Identifier <input data-field="student-identifier" type="text" value="${escapeHtml(submission.student_identifier || '')}" /></label>
+        <label>Class student <select data-field="student-id">${studentOptions}</select></label>
         <label>Score <input data-field="score" type="number" step="0.5" value="${submission.score ?? ''}" /></label>
         <label>Max <input data-field="max-score" type="number" step="0.5" value="${submission.max_score ?? ''}" /></label>
         <label>Confidence <input data-field="confidence" type="number" min="0" max="1" step="0.01" value="${submission.confidence ?? ''}" /></label>
@@ -1311,6 +1389,33 @@ function renderGradingSubmissionCard(submission) {
       ${warningItems ? `<ul class="warning-list">${warningItems}</ul>` : ''}
       <label>Structured result JSON <textarea data-field="grading-result" spellcheck="false">${escapeHtml(JSON.stringify(result, null, 2))}</textarea></label>
       <button class="primary compact" type="button" data-save-submission="${submission.id}">Save review</button>
+    </article>
+  `;
+}
+
+function renderGradingTransferReview() {
+  if (!els.gradingTransferReview) return;
+  const preview = state.gradingTransferPreview;
+  if (!preview?.rows?.length) {
+    els.gradingTransferReview.innerHTML = '';
+    return;
+  }
+  els.gradingTransferReview.innerHTML = `
+    <article class="grading-submission-card">
+      <h4>Score transfer review</h4>
+      <p class="microcopy">${escapeHtml(preview.assessment?.title || 'Assessment')} | Max ${escapeHtml(preview.assessment?.max_score ?? '')}</p>
+      <table class="grading-items">
+        <thead><tr><th>Submission</th><th>Student</th><th>Score</th><th>Status</th><th>Reason</th></tr></thead>
+        <tbody>${preview.rows.map((row) => `
+          <tr>
+            <td>${escapeHtml(row.submission_name || row.student_identifier || `Submission ${row.submission_id}`)}</td>
+            <td>${escapeHtml(row.student?.display_name || 'Needs match')}</td>
+            <td>${escapeHtml(row.score ?? '')} / ${escapeHtml(row.max_score ?? '')}</td>
+            <td>${escapeHtml(row.status)}</td>
+            <td>${escapeHtml(row.reason || '')}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>
     </article>
   `;
 }
@@ -2843,7 +2948,6 @@ async function loadCurriculumDocuments() {
         state.curriculumCache.clear();
         await loadCurriculumDocuments();
         await loadCurriculumGrades();
-        await loadGradingCurriculumGrades();
         setStatus('Curriculum activated.');
       }, { busyText: 'Activating...' }));
     item.querySelector('[data-action="deactivate"]').disabled = !curriculumDocument.active;
@@ -2852,7 +2956,6 @@ async function loadCurriculumDocuments() {
         state.curriculumCache.clear();
         await loadCurriculumDocuments();
         await loadCurriculumGrades();
-        await loadGradingCurriculumGrades();
         setStatus('Curriculum deactivated.');
       }, { busyText: 'Deactivating...' }));
     item.querySelector('[data-action="delete"]').disabled = curriculumDocument.active;
@@ -2861,7 +2964,6 @@ async function loadCurriculumDocuments() {
         state.curriculumCache.clear();
         await loadCurriculumDocuments();
         await loadCurriculumGrades();
-        await loadGradingCurriculumGrades();
         setStatus('Inactive curriculum deleted.');
       }, { busyText: 'Deleting...' }));
     els.curriculumList.appendChild(item);
@@ -2917,7 +3019,6 @@ async function savePacing(event) {
   state.curriculumCache.clear();
   renderPacingEditor(data.pacing);
   await loadCurriculumPacing();
-  await loadGradingCurriculumWeeks();
   setStatus('Weekly pacing saved.');
 }
 
@@ -2928,7 +3029,6 @@ async function resetPacing() {
   state.curriculumCache.clear();
   renderPacingEditor(data.pacing);
   await loadCurriculumPacing();
-  await loadGradingCurriculumWeeks();
   setStatus('Weekly pacing reset.');
 }
 
@@ -3057,7 +3157,6 @@ async function uploadCurriculum(event) {
   const uploadResult = await response.json();
   await loadCurriculumDocuments();
   await loadCurriculumGrades();
-  await loadGradingCurriculumGrades();
   const summary = uploadResult.document.parse_summary || {};
   setStatus(`Curriculum uploaded. Confidence ${summary.average_confidence ?? 0}; warnings ${summary.warning_count ?? 0}.`);
 }
@@ -3071,25 +3170,58 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
+async function configureDemoLogin() {
+  try {
+    const data = await api('/api/demo/config');
+    state.demoConfig = data;
+    const showDemoLogin = Boolean(data.hosted_demo && data.prefill_pin && data.demo_pin);
+    els.demoLoginButton?.classList.toggle('hidden', !showDemoLogin);
+    els.demoLoginNote?.classList.toggle('hidden', !showDemoLogin);
+    if (showDemoLogin) {
+      els.pin.value = data.demo_pin;
+      els.demoLoginNote.textContent = `${data.demo_teacher_name || 'Judge Demo'} is ready for reviewers.`;
+    }
+  } catch {
+    state.demoConfig = null;
+  }
+}
+
+async function completeLogin(pin) {
+  const data = await api('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ pin }),
+  });
+  state.teacher = data.teacher;
+  const session = await api('/api/me');
+  state.csrfToken = session.csrf_token || '';
+  els.pin.value = '';
+  showApp();
+  await Promise.all([
+    loadLibrary(),
+    loadCurriculumGrades(),
+    loadGradingClassChoices(),
+    configurePromptPreview(),
+    checkOllamaStatus(),
+  ]);
+}
+
 async function bootstrap() {
   buildPinPad();
   setupEditorBehavior();
   updateFormats();
+  await configureDemoLogin();
   try {
     const data = await api('/api/me');
     state.teacher = data.teacher;
     state.csrfToken = data.csrf_token || '';
     showApp();
-    await loadLibrary();
-    await loadGradingBatches();
-    await loadClassRecords();
-    await loadTeachers();
-    await loadCurriculumDocuments();
-    await loadLessonPlanFormats();
-    await loadCurriculumGrades();
-    await loadGradingCurriculumGrades();
-    await configurePromptPreview();
-    await checkOllamaStatus();
+    await Promise.all([
+      loadLibrary(),
+      loadCurriculumGrades(),
+      loadGradingClassChoices(),
+      configurePromptPreview(),
+      checkOllamaStatus(),
+    ]);
   } catch {
     showLogin();
   }
@@ -3099,25 +3231,21 @@ els.loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   els.loginError.textContent = '';
   await runUserAction(event, 'Logging in...', async () => {
-    const data = await api('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ pin: els.pin.value }),
-    });
-    state.teacher = data.teacher;
-    const session = await api('/api/me');
-    state.csrfToken = session.csrf_token || '';
-    els.pin.value = '';
-    showApp();
-    await loadLibrary();
-    await loadGradingBatches();
-    await loadClassRecords();
-    await loadTeachers();
-    await loadCurriculumDocuments();
-    await loadLessonPlanFormats();
-    await loadCurriculumGrades();
-    await loadGradingCurriculumGrades();
-    await configurePromptPreview();
-    await checkOllamaStatus();
+    await completeLogin(els.pin.value);
+  }, {
+    busyText: 'Logging in...',
+    report: (message, isError = false) => {
+      if (isError) {
+        els.loginError.textContent = message;
+      }
+    },
+  });
+});
+
+els.demoLoginButton?.addEventListener('click', async (event) => {
+  els.loginError.textContent = '';
+  await runUserAction(event, 'Logging in as judge demo...', async () => {
+    await completeLogin(state.demoConfig?.demo_pin || els.pin.value);
   }, {
     busyText: 'Logging in...',
     report: (message, isError = false) => {
@@ -3138,11 +3266,11 @@ els.logoutButton.addEventListener('click', (event) => {
 });
 
 els.homeButton.addEventListener('click', () => switchWorkspace('home'));
-els.lessonAreaButton.addEventListener('click', () => switchWorkspace('draft'));
-els.classAreaButton.addEventListener('click', () => openClassWorkspace(false));
+els.lessonAreaButton.addEventListener('click', () => openWorkArea('lesson'));
+els.classAreaButton.addEventListener('click', () => openWorkArea('class'));
 els.adminAreaButton.addEventListener('click', () => {
   if (state.teacher?.is_admin) {
-    openAdminWorkspace('teacher-admin', loadTeachers, els.adminToggle);
+    openWorkArea('admin');
   }
 });
 document.querySelectorAll('[data-home-action]').forEach((button) => {
@@ -3241,9 +3369,8 @@ els.gradingBatchForm.addEventListener('submit', (event) => {
   event.preventDefault();
   runUserAction(event, 'Creating grading batch...', () => createGradingBatch(event), { busyText: 'Creating...' });
 });
-els.gradingGrade.addEventListener('change', () => loadGradingCurriculumSubjects().catch((error) => setStatus(error.message, true)));
-els.gradingSubject.addEventListener('change', () => loadGradingCurriculumTopics().catch((error) => setStatus(error.message, true)));
-els.gradingTopic.addEventListener('change', () => loadGradingCurriculumWeeks().catch((error) => setStatus(error.message, true)));
+els.gradingClass.addEventListener('change', () => loadGradingAssessmentChoices().catch((error) => setStatus(error.message, true)));
+els.gradingAssessment.addEventListener('change', syncGradingPointsFromAssessment);
 els.gradingUploadForm.addEventListener('submit', (event) => {
   event.preventDefault();
   runUserAction(event, 'Uploading quiz files...', () => uploadGradingImages(event), {
@@ -3257,6 +3384,14 @@ els.detectSubmissions.addEventListener('click', (event) => runUserAction(event, 
 }));
 els.gradeSubmissions.addEventListener('click', (event) => runUserAction(event, 'Extracting answers with Ollama and proposing scores...', gradeGradingSubmissions, {
   busyText: 'Grading...',
+  report: setGradingStatus,
+}));
+els.previewScoreTransfer.addEventListener('click', (event) => runUserAction(event, 'Preparing score transfer review...', previewScoreTransfer, {
+  busyText: 'Reviewing...',
+  report: setGradingStatus,
+}));
+els.saveScoreTransfer.addEventListener('click', (event) => runUserAction(event, 'Saving reviewed scores to assessment...', saveScoreTransfer, {
+  busyText: 'Saving...',
   report: setGradingStatus,
 }));
 els.printGrading.addEventListener('click', (event) => runUserAction(event, 'Preparing grading print preview...', printGradingBatch, {

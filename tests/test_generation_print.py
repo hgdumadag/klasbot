@@ -140,7 +140,38 @@ def test_prompt_preview_enabled_for_admin(client, monkeypatch):
     assert response.status_code == 200
     data = response.json()
     assert "Science context" in data["prompt"]
+    assert "Available resources" not in data["prompt"]
     assert data["prompt_chars"] == len(data["prompt"])
+
+
+def test_generation_inputs_keep_resources_for_assessments_only():
+    from klasbot.main import _generation_inputs
+
+    lesson_inputs = _generation_inputs(
+        "lesson_plan",
+        "DLP",
+        "Science",
+        "Materials",
+        "Grade 3",
+        1,
+        1,
+        ["Grade 3"],
+        ["paper"],
+    )
+    assessment_inputs = _generation_inputs(
+        "assessment",
+        "quiz",
+        "Science",
+        "Materials",
+        "Grade 3",
+        1,
+        1,
+        ["Grade 3"],
+        ["paper"],
+    )
+
+    assert lesson_inputs["resources"] == []
+    assert assessment_inputs["resources"] == ["paper"]
 
 
 def test_generation_fallback_when_ollama_unavailable(client, monkeypatch):

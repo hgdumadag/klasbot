@@ -59,6 +59,10 @@ def test_curriculum_generation_uses_dropdown_controls():
     assert 'id="preview-prompt-button"' in index_html
     assert 'id="format-admin-panel"' in index_html
     assert "Only the structure below is editable here" in index_html
+    assert 'id="resources-field" class="hidden"' in index_html
+    assert "function updateResourcesVisibility" in app_js
+    assert "const showResources = els.kind.value === 'assessment';" in app_js
+    assert "resources: document.getElementById('resources')" in app_js
 
 
 def test_library_uses_middle_workspace_view():
@@ -80,22 +84,22 @@ def test_library_uses_middle_workspace_view():
     assert "outputMetadataText" in app_js
 
 
-def test_grading_setup_uses_curriculum_dropdown_controls():
+def test_grading_setup_uses_class_assessment_controls():
     app_js = (ROOT / "klasbot" / "static" / "app.js").read_text(encoding="utf-8")
     index_html = (ROOT / "klasbot" / "static" / "index.html").read_text(encoding="utf-8")
 
-    assert '<select id="grading-grade" required>' in index_html
-    assert '<select id="grading-subject" required>' in index_html
-    assert '<select id="grading-topic" required>' in index_html
-    assert '<select id="grading-week-topic" required>' in index_html
+    assert '<select id="grading-class" required>' in index_html
+    assert '<select id="grading-assessment" required>' in index_html
     assert 'id="grading-questions"' in index_html
     assert 'id="grading-status"' in index_html
     assert 'id="grading-upload-button"' in index_html
-    assert "loadGradingCurriculumGrades" in app_js
-    assert "loadGradingCurriculumSubjects" in app_js
-    assert "loadGradingCurriculumTopics" in app_js
-    assert "loadGradingCurriculumWeeks" in app_js
-    assert "week_topic" in app_js
+    assert 'id="preview-score-transfer"' in index_html
+    assert 'id="save-score-transfer"' in index_html
+    assert "loadGradingClassChoices" in app_js
+    assert "loadGradingAssessmentChoices" in app_js
+    assert "previewScoreTransfer" in app_js
+    assert "saveScoreTransfer" in app_js
+    assert "assessment_id" in app_js
     assert "questions" in app_js
     assert "setGradingStatus" in app_js
     assert "Upload complete" in app_js

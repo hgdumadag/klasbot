@@ -39,3 +39,14 @@ def test_package_discovery_includes_subpackages():
 
     assert "[tool.setuptools.packages.find]" in pyproject
     assert 'include = ["klasbot*"]' in pyproject
+
+
+def test_vercel_artifacts_route_fastapi_app():
+    vercel = (ROOT / "vercel.json").read_text(encoding="utf-8")
+    entrypoint = (ROOT / "api" / "index.py").read_text(encoding="utf-8")
+    requirements = (ROOT / "requirements.txt").read_text(encoding="utf-8")
+
+    assert '"destination": "/api/index.py"' in vercel
+    assert '"maxDuration": 60' in vercel
+    assert "from klasbot.main import app" in entrypoint
+    assert "google-auth" in requirements

@@ -22,8 +22,10 @@
             <label for="pin">Teacher PIN</label>
             <input id="pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" />
             <div id="pin-pad" class="pin-pad" aria-label="PIN keypad"></div>
+            <button id="demo-login-button" type="button" class="secondary hidden">Log in as Judge Demo</button>
             <button type="submit" class="primary">Log in</button>
           </form>
+          <p id="demo-login-note" class="microcopy hidden"></p>
           <p id="login-error" class="error" role="alert"></p>
         </div>
       </section>
@@ -358,20 +360,12 @@
               </div>
               <form id="grading-batch-form" class="admin-form workspace-form">
                 <label>
-                  Grade
-                  <select id="grading-grade" required></select>
+                  Class
+                  <select id="grading-class" required></select>
                 </label>
                 <label>
-                  Subject
-                  <select id="grading-subject" required></select>
-                </label>
-                <label>
-                  Topic
-                  <select id="grading-topic" required></select>
-                </label>
-                <label>
-                  Week topic
-                  <select id="grading-week-topic" required></select>
+                  Assessment
+                  <select id="grading-assessment" required></select>
                 </label>
                 <label>
                   Total points
@@ -409,6 +403,8 @@
                   <div class="button-row">
                     <button id="detect-submissions" class="secondary compact" type="button">Detect</button>
                     <button id="grade-submissions" class="secondary compact" type="button">Grade</button>
+                    <button id="preview-score-transfer" class="secondary compact" type="button">Review transfer</button>
+                    <button id="save-score-transfer" class="primary compact" type="button">Save scores</button>
                     <button id="print-grading" class="secondary compact" type="button">Print</button>
                     <button id="delete-grading-batch" class="ghost compact" type="button">Delete</button>
                   </div>
@@ -423,6 +419,7 @@
                 <p id="grading-status" class="status-line grading-status" role="status"></p>
                 <div id="grading-images" class="grading-grid"></div>
                 <div id="grading-submissions" class="grading-submissions"></div>
+                <div id="grading-transfer-review" class="grading-submissions"></div>
               </div>
               <div id="grading-batches" class="workspace-list list"></div>
             </section>
@@ -559,7 +556,7 @@
                     <option value="">Choose week</option>
                   </select>
                 </label>
-                <label>
+                <label id="resources-field" class="hidden">
                   Resources
                   <input id="resources" type="text" placeholder="paper, stones, bottle caps" />
                 </label>
@@ -572,14 +569,14 @@
 
             <section class="inspector-group">
               <div class="section-head">
-                <h2>Ollama Status</h2>
+                <h2>AI Provider Status</h2>
                 <button id="check-ollama-button" class="ghost small" type="button" onclick="window.checkOllamaStatus && window.checkOllamaStatus()">Check</button>
               </div>
               <div class="ollama-state" id="ollama-state">
                 <span class="status-dot status-dot--unknown"></span>
                 <strong>Not checked</strong>
               </div>
-              <p class="microcopy" id="ollama-detail">Checks local Ollama at the configured URL.</p>
+              <p class="microcopy" id="ollama-detail">Checks the configured AI provider.</p>
             </section>
 
             <section class="inspector-group">
@@ -604,7 +601,7 @@
         </div>
 
         <footer class="statusbar">
-          <span><i id="statusbar-ollama-dot"></i><span id="statusbar-ollama">Ollama · not checked</span></span>
+          <span><i id="statusbar-ollama-dot"></i><span id="statusbar-ollama">AI · not checked</span></span>
           <span>SQLite · local</span>
           <span>Offline mode</span>
           <span class="statusbar-right">Manual save · Week 3 MVP</span>

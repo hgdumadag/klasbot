@@ -34,22 +34,28 @@ from klasbot.auth import (
     require_admin,
 )
 from klasbot.config import (
+    HOSTED_DEMO_ENABLED,
+    KLASBOT_AI_PROVIDER,
+    KLASBOT_DEMO_ADMIN_NAME,
+    KLASBOT_DEMO_ADMIN_PIN,
+    KLASBOT_PREFILL_DEMO_PIN,
     OLLAMA_BASE_URL,
     OLLAMA_GRADING_TIMEOUT_SECONDS,
-    OLLAMA_MODEL,
-    OLLAMA_TIMEOUT_SECONDS,
     PROMPT_PREVIEW_ENABLED,
     PUBLIC_BASE_URL,
     SESSION_COOKIE_NAME,
     SHARE_TOKEN_MINUTES,
     get_share_dir,
 )
+from klasbot.ai_provider import create_ai_client, current_ai_model
+from klasbot.demo_seed import seed_demo_data
 from klasbot.grading import detection as grading_detection
 from klasbot.grading import extraction as grading_extraction
 from klasbot.grading import images as grading_images
 from klasbot.grading import reports as grading_reports
 from klasbot.grading import scoring as grading_scoring
-from klasbot.ollama_client import OllamaClient, OllamaStreamError
+from klasbot.ollama_client import OllamaStreamError
+from klasbot.vertex_gemma_client import VertexGemmaStreamError
 from klasbot.print_utils import export_pdf, print_html, render_print_html
 from klasbot.prompts import build_prompt
 from klasbot.prompts.teaching_aid import (
@@ -64,6 +70,9 @@ STATIC_DIR = Path(__file__).parent / "static"
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     db.init_db()
+    generation_attempts.clear()
+    if HOSTED_DEMO_ENABLED:
+        seed_demo_data(KLASBOT_DEMO_ADMIN_NAME, KLASBOT_DEMO_ADMIN_PIN)
     db.prune_expired_sessions()
     db.prune_mobile_pairing_tokens()
     yield
@@ -72,7 +81,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="Klasbot", version="0.1.0", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-ollama_client = OllamaClient(OLLAMA_BASE_URL, OLLAMA_TIMEOUT_SECONDS)
+ollama_client = create_ai_client()
 
 
 class LoginRequest(BaseModel):
@@ -164,6 +173,8 @@ class PacingUpdateRequest(BaseModel):
 
 
 class GradingBatchCreateRequest(BaseModel):
+    class_id: int
+    assessment_id: int
     subject: str = Field(default="", max_length=120)
     grade_level: str = Field(default="", max_length=32)
     topic: str = Field(default="", max_length=200)
@@ -178,6 +189,7 @@ class GradingBatchCreateRequest(BaseModel):
 
 
 class GradingSubmissionUpdateRequest(BaseModel):
+    student_id: Optional[int] = None
     student_name: str = Field(default="", max_length=160)
     student_identifier: str = Field(default="", max_length=80)
     extracted_answers: dict[str, Any] = Field(default_factory=dict)
@@ -331,6 +343,8 @@ def _limited_remote_response() -> HTMLResponse:
 
 @app.middleware("http")
 async def limit_remote_clients_to_share_routes(request: Request, call_next):
+    if HOSTED_DEMO_ENABLED:
+        return await call_next(request)
     path = request.url.path
     if _is_local_request(request):
         return await call_next(request)
@@ -440,15 +454,40 @@ async def me(teacher: Annotated[dict, Depends(get_current_teacher)]) -> dict:
     }
 
 
+@app.get("/api/demo/config")
+async def demo_config() -> dict:
+    return {
+        "hosted_demo": HOSTED_DEMO_ENABLED,
+        "prefill_pin": KLASBOT_PREFILL_DEMO_PIN if HOSTED_DEMO_ENABLED else False,
+        "demo_pin": KLASBOT_DEMO_ADMIN_PIN if HOSTED_DEMO_ENABLED and KLASBOT_PREFILL_DEMO_PIN else "",
+        "demo_teacher_name": KLASBOT_DEMO_ADMIN_NAME if HOSTED_DEMO_ENABLED else "",
+        "ai_provider": KLASBOT_AI_PROVIDER,
+    }
+
+
 @app.get("/api/ollama/status")
 async def ollama_status(teacher: Annotated[dict, Depends(get_current_teacher)]) -> dict:
+    model = current_ai_model()
     try:
-        return await ollama_client.status(OLLAMA_MODEL)
+        return await ollama_client.status(model)
     except httpx.HTTPError as exc:
         return {
             "ok": False,
+            "provider": KLASBOT_AI_PROVIDER,
+            "provider_label": _ai_provider_label(),
             "base_url": OLLAMA_BASE_URL,
-            "model": OLLAMA_MODEL,
+            "model": model,
+            "model_available": False,
+            "models": [],
+            "error": str(exc),
+        }
+    except Exception as exc:
+        return {
+            "ok": False,
+            "provider": KLASBOT_AI_PROVIDER,
+            "provider_label": _ai_provider_label(),
+            "base_url": getattr(ollama_client, "base_url", OLLAMA_BASE_URL),
+            "model": model,
             "model_available": False,
             "models": [],
             "error": str(exc),
@@ -640,7 +679,7 @@ def _generation_inputs(
         "quarter": quarter,
         "week_number": week_number,
         "grade_levels": clean_grades,
-        "resources": _clean_list(resources),
+        "resources": _clean_list(resources) if kind == "assessment" else [],
     }
 
 
@@ -705,9 +744,10 @@ async def _sse_tokens(inputs: dict[str, Any]):
         return
 
     prompt = _build_grounded_prompt(inputs)
+    model = current_ai_model()
     generated_content = False
     try:
-        async for token in ollama_client.stream_generate(OLLAMA_MODEL, prompt):
+        async for token in ollama_client.stream_generate(model, prompt):
             if token.strip():
                 generated_content = True
             yield _sse(token)
@@ -715,7 +755,7 @@ async def _sse_tokens(inputs: dict[str, Any]):
             yield _sse("[Ollama generation returned no content - showing fallback draft]\n\n")
             async for chunk in _placeholder_sse(inputs):
                 yield chunk
-    except (OllamaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
+    except (OllamaStreamError, VertexGemmaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
         reason = _ollama_error_message(exc)
         yield _sse(f"[Ollama generation failed - showing fallback draft]\nReason: {reason}\n\n")
         async for chunk in _placeholder_sse(inputs):
@@ -734,6 +774,12 @@ def _ollama_error_message(exc: Exception) -> str:
             pass
         return f"Ollama returned HTTP {exc.response.status_code}"
     return str(exc) or exc.__class__.__name__
+
+
+def _ai_provider_label() -> str:
+    if KLASBOT_AI_PROVIDER == "vertex_gemma":
+        return "Vertex Gemma"
+    return "Ollama"
 
 
 def _build_grounded_prompt(inputs: dict[str, Any]) -> str:
@@ -768,9 +814,10 @@ def _teaching_aid_inputs(output: dict[str, Any], payload: TeachingAidGenerateReq
 
 async def _teaching_aid_sse(output: dict[str, Any], inputs: dict[str, Any]):
     prompt = build_teaching_aid_prompt(output, inputs)
+    model = current_ai_model()
     generated_content = False
     try:
-        async for token in ollama_client.stream_generate(OLLAMA_MODEL, prompt):
+        async for token in ollama_client.stream_generate(model, prompt):
             if token.strip():
                 generated_content = True
             yield _sse(token)
@@ -778,7 +825,7 @@ async def _teaching_aid_sse(output: dict[str, Any], inputs: dict[str, Any]):
             label = teaching_aid_label(inputs.get("aid_type") or "")
             yield _sse(f"[Ollama generation returned no content - showing fallback {label}]\n\n")
             yield _sse(_fallback_teaching_aid(output, inputs))
-    except (OllamaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
+    except (OllamaStreamError, VertexGemmaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
         reason = _ollama_error_message(exc)
         label = teaching_aid_label(inputs.get("aid_type") or "")
         yield _sse(f"[Ollama generation failed - showing fallback {label}]\nReason: {reason}\n\n")
@@ -789,8 +836,11 @@ async def _teaching_aid_sse(output: dict[str, Any], inputs: dict[str, Any]):
 def _fallback_teaching_aid(output: dict[str, Any], inputs: dict[str, Any]) -> str:
     label = teaching_aid_label(inputs.get("aid_type") or "")
     topic = output.get("topic") or "the lesson topic"
+    custom_request = str(inputs.get("custom_request") or "").strip()
+    custom_note = f"Teacher request addressed: {custom_request}\n" if custom_request else ""
     if inputs.get("aid_type") == "worked_example":
         return f"""# Worked Example
+{custom_note}
 
 ## Problem
 Create a simple example about {topic} using the available classroom materials.
@@ -821,6 +871,7 @@ Learners may jump to an answer without matching it to the given information.
 Give one similar item with smaller numbers or a simpler situation, then ask learners to solve it independently.
 """
     return f"""# {label}
+{custom_note}
 
 Use this Teaching Aid with the saved lesson on {topic}.
 
@@ -1453,7 +1504,10 @@ async def grading_batches_create(
     payload_dict = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
     if payload.grading_style == "exact" and not grading_scoring.parse_answer_key(payload.answer_key, payload.total_points):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Exact-answer grading needs an answer key")
-    batch = db.create_grading_batch(teacher["id"], payload_dict)
+    try:
+        batch = db.create_grading_batch(teacher["id"], payload_dict)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     return {"batch": batch}
 
 
@@ -1543,7 +1597,7 @@ async def grading_batch_grade(
             result = await asyncio.wait_for(
                 grading_extraction.extract_and_grade_submission(
                     ollama_client=ollama_client,
-                    model=OLLAMA_MODEL,
+                    model=current_ai_model(),
                     batch=batch,
                     submission=submission,
                     image=images_by_id.get(submission.get("image_id")),
@@ -1575,6 +1629,31 @@ async def grading_submission_update(
     if not submission:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading submission not found")
     return {"submission": submission}
+
+
+@app.post("/api/grading/batches/{batch_id}/transfer-preview")
+async def grading_batch_transfer_preview(
+    batch_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    preview = db.preview_grading_score_transfer(teacher["id"], batch_id)
+    if not preview:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading batch not found")
+    return preview
+
+
+@app.post("/api/grading/batches/{batch_id}/transfer-scores")
+async def grading_batch_transfer_scores(
+    batch_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    try:
+        result = db.transfer_grading_scores(teacher["id"], batch_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    if not result:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Grading batch not found")
+    return result
 
 
 @app.delete("/api/grading/batches/{batch_id}")

@@ -430,6 +430,22 @@ def test_remote_clients_can_only_open_share_routes(client):
     assert api_response.status_code == 403
 
 
+def test_hosted_demo_mode_allows_remote_login(client, monkeypatch):
+    from fastapi.testclient import TestClient
+    from klasbot import main
+
+    monkeypatch.setattr(main, "HOSTED_DEMO_ENABLED", True)
+    remote_client = TestClient(main.app, base_url="https://klasbot-demo.vercel.app", client=("203.0.113.10", 52344))
+
+    full_app = remote_client.get("/")
+    assert full_app.status_code == 200
+    assert "KlasBot" in full_app.text
+
+    login_response = remote_client.post("/api/auth/login", json={"pin": "1111"})
+    assert login_response.status_code == 200
+    assert login_response.json()["teacher"]["is_admin"] is True
+
+
 def test_mobile_pairing_allows_remote_teacher_library_access(client):
     from fastapi.testclient import TestClient
     from klasbot.main import app
