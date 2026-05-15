@@ -20,6 +20,12 @@ class BrokenOllama:
         raise httpx.ConnectError("offline")
 
 
+class EmptyOllama:
+    async def stream_generate(self, model, prompt):
+        if False:
+            yield ""
+
+
 class StatusOllama:
     async def status(self, model):
         return {
@@ -150,6 +156,23 @@ def test_generation_fallback_when_ollama_unavailable(client, monkeypatch):
         body = response.read().decode()
 
     assert "Ollama generation failed" in body
+    assert "# Draft Lesson Plan" in body
+
+
+def test_generation_fallback_when_ollama_returns_blank(client, monkeypatch):
+    from klasbot import main
+
+    login(client)
+    monkeypatch.setattr(main, "ollama_client", EmptyOllama())
+
+    with client.stream(
+        "GET",
+        "/api/generate/stream?kind=lesson_plan&format=DLL&subject=Math&topic=Fractions",
+    ) as response:
+        body = response.read().decode()
+
+    assert response.status_code == 200
+    assert "Ollama generation returned no content" in body
     assert "# Draft Lesson Plan" in body
 
 

@@ -3,7 +3,8 @@ const state = {
   currentInputs: null,
   currentOutputId: null,
   currentOutput: null,
-  activeWorkspace: 'draft',
+  activeWorkspace: 'home',
+  activeClassTab: 'dashboard',
   draftView: 'preview',
   libraryOutputs: [],
   libraryFiltersCollapsed: false,
@@ -11,6 +12,7 @@ const state = {
   curriculumCache: new Map(),
   lessonPlanFormats: [],
   teachingAids: [],
+  teachingAidTargetId: null,
   currentTeachingAid: null,
   teachingAidDraft: null,
   teachingAidEditing: false,
@@ -36,7 +38,20 @@ const els = {
   pinPad: document.getElementById('pin-pad'),
   teacherLabel: document.getElementById('teacher-label'),
   logoutButton: document.getElementById('logout-button'),
+  workspaceFrame: document.getElementById('workspace-frame'),
+  inspector: document.getElementById('inspector'),
+  homePanel: document.getElementById('home-panel'),
+  homeButton: document.getElementById('home-button'),
+  lessonAreaButton: document.getElementById('lesson-area-button'),
+  classAreaButton: document.getElementById('class-area-button'),
+  adminAreaButton: document.getElementById('admin-area-button'),
+  adminHomeCard: document.getElementById('admin-home-card'),
+  lessonNavGroup: document.getElementById('lesson-nav-group'),
+  classNavGroup: document.getElementById('class-nav-group'),
+  adminNavGroup: document.getElementById('admin-nav-group'),
   currentDraftButton: document.getElementById('current-draft-button'),
+  teachingAidsButton: document.getElementById('teaching-aids-button'),
+  assessmentButton: document.getElementById('assessment-button'),
   libraryButton: document.getElementById('library-button'),
   classRecordsButton: document.getElementById('class-records-button'),
   gradingButton: document.getElementById('grading-button'),
@@ -85,6 +100,8 @@ const els = {
   shareExpiry: document.getElementById('share-expiry'),
   teachingAidsPanel: document.getElementById('teaching-aids-panel'),
   teachingAidsStatus: document.getElementById('teaching-aids-status'),
+  teachingAidTarget: document.getElementById('teaching-aid-target'),
+  teachingAidTargetMeta: document.getElementById('teaching-aid-target-meta'),
   teachingAidRequest: document.getElementById('teaching-aid-request'),
   teachingAidsList: document.getElementById('teaching-aids-list'),
   teachingAidEditorPanel: document.getElementById('teaching-aid-editor-panel'),
@@ -324,6 +341,7 @@ function hideSharePanel() {
 
 function resetTeachingAids() {
   state.teachingAids = [];
+  state.teachingAidTargetId = null;
   state.currentTeachingAid = null;
   state.teachingAidDraft = null;
   if (els.teachingAidRequest) els.teachingAidRequest.value = '';
@@ -348,6 +366,10 @@ function setOllamaStatus(data) {
   els.statusbarOllama.textContent = `Ollama · ${label.toLowerCase()}`;
   els.statusbarOllamaDot.className = dotClass;
   els.systemModel.textContent = data.model || 'Unknown';
+  const homeModelDot = document.getElementById('home-model-dot');
+  const homeModelLabel = document.getElementById('home-model-label');
+  if (homeModelDot) homeModelDot.className = `status-dot ${dotClass}`;
+  if (homeModelLabel) homeModelLabel.textContent = data.model ? `${label} · ${data.model}` : label;
 }
 
 async function checkOllamaStatus() {
@@ -386,11 +408,14 @@ async function configurePromptPreview() {
 function showLogin() {
   els.loginView.classList.remove('hidden');
   els.appView.classList.add('hidden');
+  els.homePanel.classList.add('hidden');
   els.gradingPanel.classList.add('hidden');
   els.classRecordsPanel.classList.add('hidden');
   els.adminPanel.classList.add('hidden');
   els.curriculumPanel.classList.add('hidden');
   els.formatAdminPanel.classList.add('hidden');
+  els.adminAreaButton.classList.add('hidden');
+  els.adminHomeCard.classList.add('hidden');
   els.adminToggle.classList.add('hidden');
   els.curriculumToggle.classList.add('hidden');
   els.formatAdminToggle.classList.add('hidden');
@@ -402,6 +427,7 @@ function showLogin() {
   state.classRecords = [];
   state.activeClassRecord = null;
   state.activeScoreAssessmentId = null;
+  state.activeClassTab = 'dashboard';
 }
 
 function showApp() {
@@ -409,6 +435,8 @@ function showApp() {
   els.appView.classList.remove('hidden');
   els.teacherLabel.textContent = `${state.teacher.name}${state.teacher.is_admin ? ' | Admin' : ''}`;
   const isAdmin = Boolean(state.teacher.is_admin);
+  els.adminAreaButton.classList.toggle('hidden', !isAdmin);
+  els.adminHomeCard.classList.toggle('hidden', !isAdmin);
   els.adminToggle.classList.toggle('hidden', !isAdmin);
   els.curriculumToggle.classList.toggle('hidden', !isAdmin);
   els.formatAdminToggle.classList.toggle('hidden', !isAdmin);
@@ -420,6 +448,7 @@ function showApp() {
     els.curriculumList.innerHTML = '';
     state.lessonPlanFormats = [];
   }
+  switchWorkspace('home');
 }
 
 async function api(path, options = {}) {
@@ -734,9 +763,44 @@ function formatLabel(format) {
   return labels[format] || format || 'Draft';
 }
 
+function workspaceArea(workspace) {
+  if (['draft', 'teaching-aids', 'library'].includes(workspace)) return 'lesson';
+  if (['grading', 'class-records'].includes(workspace)) return 'class';
+  if (['teacher-admin', 'curriculum', 'plan-formats'].includes(workspace)) return 'admin';
+  return 'home';
+}
+
+function setNavigationState(workspace) {
+  const area = workspaceArea(workspace);
+  const isHome = workspace === 'home';
+  const isLesson = area === 'lesson';
+  const isClass = area === 'class';
+  const isAdmin = area === 'admin';
+
+  els.workspaceFrame.dataset.area = area;
+  els.homeButton.classList.toggle('rail-primary--active', isHome);
+  els.lessonAreaButton.classList.toggle('rail-item--on', isLesson);
+  els.classAreaButton.classList.toggle('rail-item--on', isClass);
+  els.adminAreaButton.classList.toggle('rail-item--on', isAdmin);
+  els.lessonNavGroup.classList.toggle('hidden', !isLesson);
+  els.classNavGroup.classList.toggle('hidden', !isClass);
+  els.adminNavGroup.classList.toggle('hidden', !isAdmin || !state.teacher?.is_admin);
+}
+
+function setInspectorVisibility(workspace) {
+  const showInspector = workspace === 'draft';
+  els.inspector.classList.toggle('hidden', !showInspector);
+  els.workspaceFrame.classList.toggle('workspace-frame--no-inspector', !showInspector);
+}
+
 function switchWorkspace(workspace) {
+  if (workspaceArea(workspace) === 'admin' && !state.teacher?.is_admin) {
+    workspace = 'home';
+  }
   state.activeWorkspace = workspace;
+  const isHome = workspace === 'home';
   const isDraft = workspace === 'draft';
+  const isTeachingAids = workspace === 'teaching-aids';
   const isLibrary = workspace === 'library';
   const isGrading = workspace === 'grading';
   const isClassRecords = workspace === 'class-records';
@@ -744,8 +808,13 @@ function switchWorkspace(workspace) {
   const isCurriculum = workspace === 'curriculum';
   const isPlanFormats = workspace === 'plan-formats';
 
+  setNavigationState(workspace);
+  setInspectorVisibility(workspace);
+
+  els.homePanel.classList.toggle('hidden', !isHome);
   els.draftPanel.classList.toggle('hidden', !isDraft);
   els.documentTabs.classList.toggle('hidden', !isDraft);
+  els.teachingAidsPanel.classList.toggle('hidden', !isTeachingAids);
   els.libraryPanel.classList.toggle('hidden', !isLibrary);
   els.gradingPanel.classList.toggle('hidden', !isGrading);
   els.classRecordsPanel.classList.toggle('hidden', !isClassRecords);
@@ -754,6 +823,7 @@ function switchWorkspace(workspace) {
   els.formatAdminPanel.classList.toggle('hidden', !isPlanFormats);
 
   els.currentDraftButton.classList.toggle('rail-item--on', isDraft);
+  els.teachingAidsButton.classList.toggle('rail-item--on', isTeachingAids);
   els.libraryButton.classList.toggle('rail-item--on', isLibrary);
   els.gradingButton.classList.toggle('rail-item--on', isGrading);
   els.classRecordsButton.classList.toggle('rail-item--on', isClassRecords);
@@ -763,35 +833,48 @@ function switchWorkspace(workspace) {
   setRailBadge(els.libraryButton, isLibrary ? 'Open' : `${state.libraryOutputs.length}`);
   setRailBadge(els.gradingButton, isGrading ? 'Open' : gradingRailBadge());
 
-  if (isLibrary) {
+  if (isHome) {
+    els.documentTitle.textContent = 'KlasBot Home';
+    els.documentMeta.textContent = state.teacher?.is_admin
+      ? 'Choose Lesson Planning, Class Management, or Admin.'
+      : 'Choose Lesson Planning or Class Management.';
+    document.querySelector('.breadcrumb').textContent = 'Home';
+  } else if (isLibrary) {
     els.documentTitle.textContent = 'My Library';
-    els.documentMeta.textContent = 'Saved lesson plans, quizzes, and exams grouped by subject.';
-    document.querySelector('.breadcrumb').textContent = 'Workspace / My Library';
+    els.documentMeta.textContent = 'Saved lesson plans, quizzes, exams, and teaching aids grouped by subject.';
+    document.querySelector('.breadcrumb').textContent = 'Lesson Planning / My Library';
     renderLibraryView();
+  } else if (isTeachingAids) {
+    els.documentTitle.textContent = 'Teaching Aids';
+    els.documentMeta.textContent = teachingAidTargetId()
+      ? 'Generate, edit, copy into the lesson, print, or share attached classroom materials.'
+      : 'Open or save a lesson plan before generating attached classroom materials.';
+    document.querySelector('.breadcrumb').textContent = 'Lesson Planning / Teaching Aids';
+    renderTeachingAids();
   } else if (isGrading) {
     els.documentTitle.textContent = 'Grade Quiz Photo';
     els.documentMeta.textContent = 'Upload worksheet photos, confirm submissions, and review item-level scores.';
-    document.querySelector('.breadcrumb').textContent = 'Workspace / Grade Quiz Photo';
+    document.querySelector('.breadcrumb').textContent = 'Class Management / Grade Quiz Photo';
     renderGradingWorkspace();
   } else if (isClassRecords) {
-    els.documentTitle.textContent = 'Class Records';
-    els.documentMeta.textContent = 'Manage class rosters, assessments, scores, and dashboard summaries.';
-    document.querySelector('.breadcrumb').textContent = 'Workspace / Class Records';
+    els.documentTitle.textContent = 'Class Management';
+    els.documentMeta.textContent = 'Create classes, manage rosters, enter scores, and review performance.';
+    document.querySelector('.breadcrumb').textContent = 'Class Management / All Classes';
     renderClassRecordsWorkspace();
   } else if (isTeacherAdmin) {
     els.documentTitle.textContent = 'Teacher Admin';
     els.documentMeta.textContent = 'Add teachers and manage shared kiosk access.';
-    document.querySelector('.breadcrumb').textContent = 'Workspace / Teacher Admin';
+    document.querySelector('.breadcrumb').textContent = 'Admin / Teacher Admin';
   } else if (isCurriculum) {
     els.documentTitle.textContent = 'Curriculum';
     els.documentMeta.textContent = 'Upload, activate, deactivate, and delete curriculum sources.';
-    document.querySelector('.breadcrumb').textContent = 'Workspace / Curriculum';
+    document.querySelector('.breadcrumb').textContent = 'Admin / Curriculum';
   } else if (isPlanFormats) {
     els.documentTitle.textContent = 'Plan Formats';
     els.documentMeta.textContent = 'Edit the lesson plan format requirements used in LLM prompts.';
-    document.querySelector('.breadcrumb').textContent = 'Workspace / Plan Formats';
+    document.querySelector('.breadcrumb').textContent = 'Admin / Plan Formats';
   } else {
-    document.querySelector('.breadcrumb').textContent = 'Workspace / Current Draft';
+    document.querySelector('.breadcrumb').textContent = 'Lesson Planning / Current Draft';
     updateDocumentChrome(state.currentInputs || collectInputs());
   }
 }
@@ -950,6 +1033,9 @@ async function loadLibrary() {
   state.libraryOutputs = data.outputs;
   updateLibraryFilters();
   renderLibraryView();
+  if (state.activeWorkspace === 'teaching-aids') {
+    renderTeachingAids();
+  }
   if (els.libraryButton) {
     setRailBadge(els.libraryButton, state.activeWorkspace === 'library' ? 'Open' : `${data.outputs.length}`);
   }
@@ -1293,6 +1379,7 @@ async function selectClassRecord(classId) {
     students: students.students || [],
     assessments: assessments.assessments || [],
   };
+  state.activeClassTab = state.activeClassTab || 'dashboard';
   renderClassRecordsWorkspace();
 }
 
@@ -1400,6 +1487,69 @@ function renderClassRecordDetail() {
     return;
   }
   const dashboard = active.dashboard || {};
+  const activeTab = state.activeClassTab || 'dashboard';
+  const classAverage = formatPercent(dashboard.class_average);
+  const tabs = [
+    ['dashboard', 'Dashboard'],
+    ['students', 'Students'],
+    ['assessments', 'Assessments'],
+    ['performance', 'Student Performance'],
+  ];
+  const tabButtons = tabs.map(([value, label]) => `
+    <button class="class-tab${activeTab === value ? ' class-tab--on' : ''}" type="button" data-class-tab="${value}">${label}</button>
+  `).join('');
+  const tabPanels = {
+    dashboard: `
+      <section class="class-tab-panel">
+        <div class="metric-grid">
+          <article><span>Class average</span><strong>${classAverage}</strong></article>
+          <article><span>Students</span><strong>${dashboard.student_count || 0}</strong></article>
+          <article><span>Assessments</span><strong>${dashboard.assessment_count || 0}</strong></article>
+          <article><span>Missing/absent</span><strong>${dashboard.missing_or_absent_count || 0}</strong></article>
+        </div>
+        <div class="class-dashboard-grid">
+          <article>
+            <h4>Next actions</h4>
+            <button class="secondary compact" type="button" data-jump-class-tab="students">Add Students</button>
+            <button class="secondary compact" type="button" data-jump-class-tab="assessments">Create Assessments</button>
+          </article>
+          <article>
+            <h4>Performance snapshot</h4>
+            ${renderPerformanceTable((dashboard.students || []).slice(0, 5))}
+          </article>
+        </div>
+      </section>
+    `,
+    students: `
+      <section class="class-tab-panel">
+        <div class="class-tab-panel__head">
+          <h4>Add Students</h4>
+          <p class="microcopy">Build the roster for this class before entering scores.</p>
+        </div>
+        ${renderStudentForm()}
+        ${renderStudentTable(active.students || [])}
+      </section>
+    `,
+    assessments: `
+      <section class="class-tab-panel">
+        <div class="class-tab-panel__head">
+          <h4>Create Assessments</h4>
+          <p class="microcopy">Add quizzes, exams, projects, or other score columns.</p>
+        </div>
+        ${renderAssessmentForm()}
+        ${renderAssessmentTable(active.assessments || [])}
+      </section>
+    `,
+    performance: `
+      <section class="class-tab-panel">
+        <div class="class-tab-panel__head">
+          <h4>Student Performance</h4>
+          <p class="microcopy">Use the indicators to spot learners who may need follow-up.</p>
+        </div>
+        ${renderPerformanceTable(dashboard.students || [])}
+      </section>
+    `,
+  };
   els.classRecordDetail.innerHTML = `
     <div class="class-detail-head">
       <div>
@@ -1411,30 +1561,25 @@ function renderClassRecordDetail() {
         <button class="ghost compact" type="button" data-refresh-active>Refresh</button>
       </div>
     </div>
-    <div class="metric-grid">
-      <article><span>Class average</span><strong>${formatPercent(dashboard.class_average)}</strong></article>
-      <article><span>Students</span><strong>${dashboard.student_count || 0}</strong></article>
-      <article><span>Assessments</span><strong>${dashboard.assessment_count || 0}</strong></article>
-      <article><span>Missing/absent</span><strong>${dashboard.missing_or_absent_count || 0}</strong></article>
+    <div class="class-record-tabs" role="tablist" aria-label="Class workspace">
+      ${tabButtons}
     </div>
-    <div class="class-record-tabs">
-      <section>
-        <h4>Students</h4>
-        ${renderStudentForm()}
-        ${renderStudentTable(active.students || [])}
-      </section>
-      <section>
-        <h4>Assessments</h4>
-        ${renderAssessmentForm()}
-        ${renderAssessmentTable(active.assessments || [])}
-      </section>
-      <section>
-        <h4>Performance</h4>
-        ${renderPerformanceTable(dashboard.students || [])}
-      </section>
-    </div>
+    ${tabPanels[activeTab] || tabPanels.dashboard}
     <div id="score-entry-host"></div>
   `;
+  els.classRecordDetail.querySelectorAll('[data-class-tab]').forEach((button) => {
+    button.addEventListener('click', () => {
+      state.activeClassTab = button.dataset.classTab;
+      state.activeScoreAssessmentId = null;
+      renderClassRecordsWorkspace();
+    });
+  });
+  els.classRecordDetail.querySelectorAll('[data-jump-class-tab]').forEach((button) => {
+    button.addEventListener('click', () => {
+      state.activeClassTab = button.dataset.jumpClassTab;
+      renderClassRecordsWorkspace();
+    });
+  });
   els.classRecordDetail.querySelector('[data-refresh-active]').addEventListener('click', (event) => runUserAction(
     event,
     'Refreshing class details...',
@@ -1444,14 +1589,15 @@ function renderClassRecordDetail() {
   els.classRecordDetail.querySelector('[data-close-active-class]').addEventListener('click', () => {
     state.activeClassRecord = null;
     state.activeScoreAssessmentId = null;
+    state.activeClassTab = 'dashboard';
     renderClassRecordsWorkspace();
     setStatus('Class workspace closed.');
   });
-  els.classRecordDetail.querySelector('[data-student-form]').addEventListener('submit', (event) => {
+  els.classRecordDetail.querySelector('[data-student-form]')?.addEventListener('submit', (event) => {
     event.preventDefault();
     runUserAction(event, 'Adding student...', () => addClassStudent(event), { busyText: 'Adding...' });
   });
-  els.classRecordDetail.querySelector('[data-assessment-form]').addEventListener('submit', (event) => {
+  els.classRecordDetail.querySelector('[data-assessment-form]')?.addEventListener('submit', (event) => {
     event.preventDefault();
     runUserAction(event, 'Creating assessment...', () => addClassAssessment(event), { busyText: 'Creating...' });
   });
@@ -2028,24 +2174,89 @@ async function openOutput(output) {
   state.currentOutputId = output.id;
   state.currentOutput = output;
   state.currentInputs = output.inputs;
+  setTeachingAidTarget(output);
   setFormFromInputs(output.inputs);
   setEditorValue(output.content_md);
   setDraftView('preview');
-  await loadTeachingAids(output.id);
+  if (output.kind === 'lesson_plan') {
+    await loadTeachingAids(output.id);
+  } else {
+    resetTeachingAids();
+  }
   setStatus('Saved output opened.');
 }
 
-function newLesson() {
+function newLesson(kind = 'lesson_plan') {
   switchWorkspace('draft');
   state.currentInputs = null;
   state.currentOutputId = null;
   state.currentOutput = null;
   resetTeachingAids();
   els.generateForm.reset();
+  els.kind.value = kind;
   updateFormats();
   setEditorValue('');
   setDraftView('preview');
-  setStatus('New draft ready.');
+  setStatus(kind === 'assessment' ? 'New assessment draft ready.' : 'New lesson plan draft ready.');
+}
+
+function openLessonWorkspace(kind = 'lesson_plan') {
+  newLesson(kind);
+  requestAnimationFrame(() => els.gradeLevel?.focus());
+}
+
+async function openTeachingAidsWorkspace() {
+  switchWorkspace('teaching-aids');
+  if (state.currentOutput?.kind === 'lesson_plan') {
+    setTeachingAidTarget(state.currentOutput);
+  }
+  if (!state.libraryOutputs.length) {
+    await loadLibrary();
+  }
+  const targetId = teachingAidTargetId();
+  if (targetId) {
+    await loadTeachingAids(targetId);
+  } else {
+    renderTeachingAids();
+  }
+  setStatus(targetId ? `Teaching Aids ready for ${teachingAidTargetLabel(teachingAidTargetOutput())}.` : 'Open or save a lesson before generating Teaching Aids.');
+}
+
+function openClassWorkspace(focusCreate = false) {
+  switchWorkspace('class-records');
+  runUserAction(els.classRecordsButton, 'Loading class records...', loadClassRecords, { busyText: 'Loading...' });
+  if (focusCreate) {
+    requestAnimationFrame(() => els.classRecordName?.focus());
+  }
+}
+
+function openAdminWorkspace(workspace, loader, control) {
+  switchWorkspace(workspace);
+  if (state.teacher?.is_admin) {
+    runUserAction(control, 'Loading admin workspace...', loader, { busyText: 'Loading...' });
+  }
+}
+
+function handleHomeAction(action) {
+  const actions = {
+    'lesson-plan': () => openLessonWorkspace('lesson_plan'),
+    assessment: () => openLessonWorkspace('assessment'),
+    'teaching-aids': () => runUserAction(els.teachingAidsButton, 'Opening Teaching Aids...', openTeachingAidsWorkspace, { busyText: 'Opening...' }),
+    library: () => {
+      switchWorkspace('library');
+      runUserAction(els.libraryButton, 'Loading library...', loadLibrary, { busyText: 'Loading...' });
+    },
+    'create-class': () => openClassWorkspace(true),
+    'grade-quiz': () => {
+      switchWorkspace('grading');
+      runUserAction(els.gradingButton, 'Loading grading batches...', loadGradingBatches, { busyText: 'Loading...' });
+    },
+    'all-classes': () => openClassWorkspace(false),
+    'teacher-admin': () => openAdminWorkspace('teacher-admin', loadTeachers, els.adminToggle),
+    curriculum: () => openAdminWorkspace('curriculum', loadCurriculumDocuments, els.curriculumToggle),
+    'plan-formats': () => openAdminWorkspace('plan-formats', loadLessonPlanFormats, els.formatAdminToggle),
+  };
+  actions[action]?.();
 }
 
 async function saveDraft() {
@@ -2060,6 +2271,7 @@ async function saveDraft() {
         body: JSON.stringify({ content_md: normalizeLineEndings(els.editor.value) }),
       });
       state.currentOutput = data.output;
+      setTeachingAidTarget(data.output);
       setStatus('Saved edits.');
     } catch (error) {
       if (!/not found/i.test(error.message || '')) {
@@ -2083,6 +2295,7 @@ async function createDraftRecord() {
   });
   state.currentOutputId = data.output.id;
   state.currentOutput = data.output;
+  setTeachingAidTarget(data.output);
   await loadTeachingAids(data.output.id);
   setStatus('Saved to library.');
 }
@@ -2170,11 +2383,75 @@ function teachingAidLabel(type) {
   return teachingAidLabels[type] || 'Teaching Aid';
 }
 
-async function loadTeachingAids(outputId = state.currentOutputId) {
-  if (!outputId || state.currentInputs?.kind !== 'lesson_plan') {
+function lessonPlanOutputs() {
+  const outputs = [...state.libraryOutputs];
+  if (state.currentOutput?.kind === 'lesson_plan' && !outputs.some((output) => output.id === state.currentOutput.id)) {
+    outputs.unshift(state.currentOutput);
+  }
+  return outputs.filter((output) => output.kind === 'lesson_plan');
+}
+
+function teachingAidTargetOutput() {
+  const targetId = state.teachingAidTargetId || (state.currentOutput?.kind === 'lesson_plan' ? state.currentOutput.id : null);
+  if (!targetId) return null;
+  if (state.currentOutput?.id === targetId) return state.currentOutput;
+  return lessonPlanOutputs().find((output) => output.id === targetId) || null;
+}
+
+function teachingAidTargetId() {
+  return teachingAidTargetOutput()?.id || null;
+}
+
+function teachingAidTargetLabel(output) {
+  if (!output) return 'No target lesson';
+  const grades = outputGrades(output).join(', ') || 'No grade';
+  const updated = output.updated_at ? ` | Updated ${String(output.updated_at).slice(0, 16).replace('T', ' ')}` : '';
+  return `${output.topic || 'Untitled lesson'} | ${output.subject || 'No subject'} | ${grades}${updated}`;
+}
+
+function setTeachingAidTarget(output) {
+  if (output?.kind === 'lesson_plan') {
+    state.teachingAidTargetId = output.id;
+  }
+}
+
+function renderTeachingAidTargets() {
+  if (!els.teachingAidTarget) return;
+  const lessons = lessonPlanOutputs();
+  const currentTarget = teachingAidTargetOutput();
+  els.teachingAidTarget.innerHTML = '';
+  if (!lessons.length) {
+    const option = document.createElement('option');
+    option.value = '';
+    option.textContent = 'No saved lessons';
+    els.teachingAidTarget.appendChild(option);
+    els.teachingAidTarget.disabled = true;
+    if (els.teachingAidTargetMeta) {
+      els.teachingAidTargetMeta.textContent = 'Open or save a lesson plan before generating Teaching Aids.';
+    }
+    return;
+  }
+  lessons.forEach((output) => {
+    const option = document.createElement('option');
+    option.value = String(output.id);
+    option.textContent = teachingAidTargetLabel(output);
+    els.teachingAidTarget.appendChild(option);
+  });
+  const target = currentTarget || lessons[0];
+  state.teachingAidTargetId = target.id;
+  els.teachingAidTarget.disabled = false;
+  els.teachingAidTarget.value = String(target.id);
+  if (els.teachingAidTargetMeta) {
+    els.teachingAidTargetMeta.textContent = `Copy and saved aids will target: ${teachingAidTargetLabel(target)}.`;
+  }
+}
+
+async function loadTeachingAids(outputId = teachingAidTargetId()) {
+  if (!outputId) {
     resetTeachingAids();
     return;
   }
+  state.teachingAidTargetId = Number(outputId);
   const data = await api(`/api/library/${outputId}/teaching-aids`);
   state.teachingAids = data.teaching_aids || [];
   renderTeachingAids();
@@ -2184,17 +2461,22 @@ function renderTeachingAids() {
   if (!els.teachingAidsPanel || !els.teachingAidsStatus || !els.teachingAidsList) {
     return;
   }
-  const savedLesson = Boolean(state.currentOutputId);
-  const isLessonPlan = (state.currentInputs?.kind || els.kind.value) === 'lesson_plan';
-  els.teachingAidsPanel.classList.toggle('hidden', !isLessonPlan);
+  renderTeachingAidTargets();
+  const targetId = teachingAidTargetId();
+  const savedLesson = Boolean(targetId);
+  if (state.activeWorkspace === 'teaching-aids') {
+    els.documentMeta.textContent = savedLesson
+      ? 'Generate, edit, copy into the lesson, print, or share attached classroom materials.'
+      : 'Open or save a lesson plan before generating attached classroom materials.';
+  }
   els.teachingAidsStatus.textContent = savedLesson
     ? 'Choose an aid type, add an optional request, then edit the generated material before printing or sharing.'
-    : 'Save the lesson plan to generate attached classroom materials.';
+    : 'Open or save a lesson plan to generate attached classroom materials.';
   document.querySelectorAll('[data-aid-type]').forEach((button) => {
-    button.disabled = !savedLesson || !isLessonPlan || state.generating;
+    button.disabled = !savedLesson || state.generating;
   });
   els.teachingAidsList.innerHTML = '';
-  if (!savedLesson || !isLessonPlan) {
+  if (!savedLesson) {
     els.teachingAidEditorPanel?.classList.add('hidden');
     return;
   }
@@ -2222,6 +2504,17 @@ function openTeachingAid(aid) {
   state.teachingAidDraft = null;
   state.teachingAidEditing = false;
   renderTeachingAidEditor();
+}
+
+async function selectTeachingAidTarget(outputId) {
+  const targetId = Number(outputId);
+  if (!targetId) return;
+  state.teachingAidTargetId = targetId;
+  state.currentTeachingAid = null;
+  state.teachingAidDraft = null;
+  state.teachingAidEditing = false;
+  await loadTeachingAids(targetId);
+  setStatus(`Teaching Aid target set to ${teachingAidTargetLabel(teachingAidTargetOutput())}.`);
 }
 
 function renderTeachingAidEditor() {
@@ -2298,10 +2591,11 @@ async function readSseStream(response, onData) {
 }
 
 async function generateTeachingAid(aidType) {
-  if (!state.currentOutputId) {
+  if (!teachingAidTargetId() && state.currentInputs?.kind === 'lesson_plan') {
     await saveDraft();
   }
-  if (!state.currentOutputId) {
+  const targetId = teachingAidTargetId();
+  if (!targetId) {
     setStatus('Save the lesson before generating Teaching Aids.', true);
     return;
   }
@@ -2316,7 +2610,7 @@ async function generateTeachingAid(aidType) {
   state.teachingAidEditing = true;
   renderTeachingAidEditor();
   setStatus(`Generating ${title}...`);
-  const response = await fetch(`/api/library/${state.currentOutputId}/teaching-aids/stream`, {
+  const response = await fetch(`/api/library/${targetId}/teaching-aids/stream`, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
@@ -2340,12 +2634,17 @@ async function generateTeachingAid(aidType) {
 
 async function saveTeachingAid() {
   const aid = state.currentTeachingAid || state.teachingAidDraft;
+  const targetId = teachingAidTargetId();
   if (!aid || !els.teachingAidEditor.value.trim()) {
     setStatus('No Teaching Aid to save.', true);
     return;
   }
+  if (!targetId) {
+    setStatus('Choose a target lesson before saving the Teaching Aid.', true);
+    return;
+  }
   if (state.currentTeachingAid) {
-    const data = await api(`/api/library/${state.currentOutputId}/teaching-aids/${state.currentTeachingAid.id}`, {
+    const data = await api(`/api/library/${targetId}/teaching-aids/${state.currentTeachingAid.id}`, {
       method: 'PUT',
       body: JSON.stringify({
         title: els.teachingAidTitle.value.trim() || teachingAidLabel(aid.aid_type),
@@ -2354,7 +2653,7 @@ async function saveTeachingAid() {
     });
     state.currentTeachingAid = data.teaching_aid;
   } else {
-    const data = await api(`/api/library/${state.currentOutputId}/teaching-aids`, {
+    const data = await api(`/api/library/${targetId}/teaching-aids`, {
       method: 'POST',
       body: JSON.stringify({
         aid_type: aid.aid_type,
@@ -2370,18 +2669,23 @@ async function saveTeachingAid() {
   await loadTeachingAids();
   openTeachingAid(state.currentTeachingAid);
   setTeachingAidEditMode(false);
-  setStatus('Teaching Aid saved.');
+  setStatus(`Teaching Aid saved for ${teachingAidTargetLabel(teachingAidTargetOutput())}.`);
 }
 
 async function printTeachingAid() {
   const aid = state.currentTeachingAid || state.teachingAidDraft;
+  const targetId = teachingAidTargetId();
   const content = normalizeLineEndings(els.teachingAidEditor.value || aid?.content_md || '').trim();
   if (!aid || !content) {
     setStatus('No Teaching Aid to print.', true);
     return;
   }
+  if (!targetId) {
+    setStatus('Choose a target lesson before printing.', true);
+    return;
+  }
   const payload = state.currentTeachingAid && !state.teachingAidEditing
-    ? { output_id: state.currentOutputId, teaching_aid_id: state.currentTeachingAid.id }
+    ? { output_id: targetId, teaching_aid_id: state.currentTeachingAid.id }
     : {
         content_md: content,
         metadata: { ...collectInputs(), format: 'Teaching Aid', title: els.teachingAidTitle.value.trim() || teachingAidLabel(aid.aid_type) },
@@ -2420,29 +2724,61 @@ async function shareTeachingAid() {
   if (!state.currentTeachingAid) {
     await saveTeachingAid();
   }
+  const targetId = teachingAidTargetId();
   if (!state.currentTeachingAid) {
     setStatus('Save the Teaching Aid before sharing.', true);
     return;
   }
-  const data = await api(`/api/library/${state.currentOutputId}/teaching-aids/${state.currentTeachingAid.id}/share`, {
+  if (!targetId) {
+    setStatus('Choose a target lesson before sharing.', true);
+    return;
+  }
+  const data = await api(`/api/library/${targetId}/teaching-aids/${state.currentTeachingAid.id}/share`, {
     method: 'POST',
     body: JSON.stringify({ expires_minutes: 15 }),
   });
   showShareResult(data);
 }
 
-function copyTeachingAidIntoLesson() {
+async function copyTeachingAidIntoLesson() {
+  const targetId = teachingAidTargetId();
   const title = els.teachingAidTitle.value.trim() || 'Teaching Aid';
   const content = normalizeLineEndings(els.teachingAidEditor.value).trim();
   if (!content) return;
-  els.editor.value = `${normalizeLineEndings(els.editor.value).trim()}\n\n---\n\n# ${title}\n\n${content}\n`;
-  renderDraftPreview();
-  setStatus('Teaching Aid copied into the lesson draft.');
+  if (!targetId) {
+    setStatus('Choose a target lesson before copying.', true);
+    return;
+  }
+  const targetData = await api(`/api/library/${targetId}`);
+  const target = targetData.output;
+  const updatedContent = `${normalizeLineEndings(target.content_md).trim()}\n\n---\n\n# ${title}\n\n${content}\n`;
+  const data = await api(`/api/library/${targetId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ content_md: updatedContent }),
+  });
+  const updatedOutput = data.output;
+  const existingIndex = state.libraryOutputs.findIndex((output) => output.id === updatedOutput.id);
+  if (existingIndex >= 0) {
+    state.libraryOutputs[existingIndex] = updatedOutput;
+  } else {
+    state.libraryOutputs.unshift(updatedOutput);
+  }
+  if (state.currentOutputId === targetId) {
+    state.currentOutput = updatedOutput;
+    state.currentInputs = updatedOutput.inputs;
+    els.editor.value = updatedOutput.content_md;
+    renderDraftPreview();
+  }
+  updateLibraryFilters();
+  renderTeachingAidTargets();
+  setStatus(`Teaching Aid copied and saved to ${teachingAidTargetLabel(updatedOutput)}.`);
 }
 
 async function deleteTeachingAid() {
   if (!state.currentTeachingAid) return;
-  await api(`/api/library/${state.currentOutputId}/teaching-aids/${state.currentTeachingAid.id}`, { method: 'DELETE' });
+  const targetId = teachingAidTargetId();
+  if (!targetId) return;
+  await api(`/api/library/${targetId}/teaching-aids/${state.currentTeachingAid.id}`, { method: 'DELETE' });
   state.currentTeachingAid = null;
   await loadTeachingAids();
   setStatus('Teaching Aid deleted.');
@@ -2801,6 +3137,18 @@ els.logoutButton.addEventListener('click', (event) => {
   }, { busyText: 'Logging out...' });
 });
 
+els.homeButton.addEventListener('click', () => switchWorkspace('home'));
+els.lessonAreaButton.addEventListener('click', () => switchWorkspace('draft'));
+els.classAreaButton.addEventListener('click', () => openClassWorkspace(false));
+els.adminAreaButton.addEventListener('click', () => {
+  if (state.teacher?.is_admin) {
+    openAdminWorkspace('teacher-admin', loadTeachers, els.adminToggle);
+  }
+});
+document.querySelectorAll('[data-home-action]').forEach((button) => {
+  button.addEventListener('click', () => handleHomeAction(button.dataset.homeAction));
+});
+
 els.adminToggle.addEventListener('click', () => {
   switchWorkspace('teacher-admin');
   runUserAction(els.adminToggle, 'Loading teacher admin...', loadTeachers, { busyText: 'Loading...' });
@@ -2867,6 +3215,8 @@ els.libraryFiltersToggle.addEventListener('click', () => {
 els.previewTab.addEventListener('click', () => setDraftView('preview'));
 els.editTab.addEventListener('click', () => setDraftView('edit'));
 els.currentDraftButton.addEventListener('click', () => switchWorkspace('draft'));
+els.teachingAidsButton.addEventListener('click', (event) => runUserAction(event, 'Opening Teaching Aids...', openTeachingAidsWorkspace, { busyText: 'Opening...' }));
+els.assessmentButton.addEventListener('click', () => openLessonWorkspace('assessment'));
 els.gradingButton.addEventListener('click', () => {
   switchWorkspace('grading');
   runUserAction(els.gradingButton, 'Loading grading batches...', loadGradingBatches, { busyText: 'Loading...' });
@@ -2928,7 +3278,7 @@ els.deleteGradingBatch.addEventListener('click', (event) => runUserAction(event,
   control.addEventListener('input', renderLibraryView);
   control.addEventListener('change', renderLibraryView);
 });
-els.newLessonButton.addEventListener('click', newLesson);
+els.newLessonButton.addEventListener('click', () => openLessonWorkspace('lesson_plan'));
 els.previewPromptButton.addEventListener('click', () => {
   runUserAction(els.previewPromptButton, 'Building prompt preview...', previewPrompt, { busyText: 'Previewing...' });
 });
@@ -2972,8 +3322,11 @@ els.saveTeachingAid?.addEventListener('click', (event) => runUserAction(event, '
 els.editTeachingAid?.addEventListener('click', () => setTeachingAidEditMode(!state.teachingAidEditing));
 els.printTeachingAid?.addEventListener('click', (event) => runUserAction(event, 'Printing Teaching Aid...', printTeachingAid, { busyText: 'Printing...' }));
 els.shareTeachingAid?.addEventListener('click', (event) => runUserAction(event, 'Creating Teaching Aid share link...', shareTeachingAid, { busyText: 'Sharing...' }));
-els.copyTeachingAid?.addEventListener('click', copyTeachingAidIntoLesson);
+els.copyTeachingAid?.addEventListener('click', (event) => runUserAction(event, 'Copying Teaching Aid into lesson...', copyTeachingAidIntoLesson, { busyText: 'Copying...' }));
 els.deleteTeachingAid?.addEventListener('click', (event) => runUserAction(event, 'Deleting Teaching Aid...', deleteTeachingAid, { busyText: 'Deleting...' }));
+els.teachingAidTarget?.addEventListener('change', (event) => {
+  runUserAction(event, 'Changing Teaching Aid target...', () => selectTeachingAidTarget(event.target.value), { busyText: 'Changing...' });
+});
 els.mobilePairButton.addEventListener('click', (event) => runUserAction(event, 'Creating mobile pairing code...', createMobilePairingToken, { busyText: 'Pairing...' }));
 
 updateLibraryFilterVisibility();

@@ -31,11 +31,11 @@
       <section id="app-view" class="app-view hidden">
         <div class="window-chrome">
           <div class="traffic-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-          <div class="window-title">KlasBot — Lesson Workspace</div>
+          <div class="window-title">KlasBot — Teacher Workspace</div>
           <div class="connection-state">Offline-first · Pi kiosk</div>
         </div>
 
-        <div class="workspace-frame">
+        <div id="workspace-frame" class="workspace-frame workspace-frame--no-inspector" data-area="home">
           <aside class="sidebar">
             <div class="brand-row sidebar-brand">
               <div class="brand-mark">K</div>
@@ -45,14 +45,41 @@
               </div>
             </div>
 
-            <button id="new-lesson-button" class="rail-primary" type="button">New Lesson Plan</button>
+            <button id="home-button" class="rail-primary rail-primary--home" type="button">
+              <span class="nav-icon nav-icon--home" aria-hidden="true"></span>
+              Home
+            </button>
 
-            <nav class="rail-section" aria-label="Workspace">
-              <h2>Workspace</h2>
-              <button id="current-draft-button" class="rail-item rail-item--on" type="button">Current Draft <span>*</span></button>
+            <nav class="rail-section" aria-label="Work areas">
+              <h2>Work Areas</h2>
+              <button id="lesson-area-button" class="rail-item rail-area-item" type="button">
+                <span class="rail-label"><span class="nav-icon nav-icon--lesson" aria-hidden="true"></span>Lesson Planning</span>
+              </button>
+              <button id="class-area-button" class="rail-item rail-area-item" type="button">
+                <span class="rail-label"><span class="nav-icon nav-icon--class" aria-hidden="true"></span>Class Management</span>
+              </button>
+              <button id="admin-area-button" class="rail-item rail-area-item hidden" type="button">
+                <span class="rail-label"><span class="nav-icon nav-icon--admin" aria-hidden="true"></span>Admin</span>
+              </button>
+            </nav>
+
+            <nav id="lesson-nav-group" class="rail-section rail-subsection hidden" aria-label="Lesson Planning">
+              <h2>Lesson Planning</h2>
+              <button id="new-lesson-button" class="rail-item" type="button">Generate Lesson Plan <span>Draft</span></button>
+              <button id="assessment-button" class="rail-item" type="button">Generate Assessment <span>Quiz</span></button>
+              <button id="current-draft-button" class="rail-item" type="button">Current Draft <span>*</span></button>
+              <button id="teaching-aids-button" class="rail-item" type="button">Teaching Aids <span>Lesson</span></button>
               <button id="library-button" class="rail-item" type="button">My Library <span>Open</span></button>
+            </nav>
+
+            <nav id="class-nav-group" class="rail-section rail-subsection hidden" aria-label="Class Management">
+              <h2>Class Management</h2>
+              <button id="class-records-button" class="rail-item" type="button">All Classes <span>New</span></button>
               <button id="grading-button" class="rail-item" type="button">Grade Quiz Photo <span>Batch</span></button>
-              <button id="class-records-button" class="rail-item" type="button">Class Records <span>New</span></button>
+            </nav>
+
+            <nav id="admin-nav-group" class="rail-section rail-subsection hidden" aria-label="Admin">
+              <h2>Admin</h2>
               <button id="admin-toggle" class="rail-item hidden" type="button">Teacher Admin <span>Admin</span></button>
               <button id="curriculum-toggle" class="rail-item hidden" type="button">Curriculum <span>Upload</span></button>
               <button id="format-admin-toggle" class="rail-item hidden" type="button">Plan Formats <span>Admin</span></button>
@@ -70,9 +97,9 @@
           <section class="document-workspace">
             <header class="document-head">
               <div>
-                <div class="breadcrumb">Workspace / Current Draft</div>
-                <h1 id="document-title">Untitled Lesson Plan</h1>
-                <p id="document-meta">Choose details in the right panel, then generate a draft.</p>
+                <div class="breadcrumb">Home</div>
+                <h1 id="document-title">KlasBot Home</h1>
+                <p id="document-meta">Choose Lesson Planning, Class Management, or Admin.</p>
               </div>
               <button id="logout-button" class="ghost" type="button">Log out</button>
             </header>
@@ -83,6 +110,67 @@
               <button id="print-button" class="tab" type="button">Print</button>
               <button id="share-button" class="tab" type="button">Share</button>
             </div>
+
+            <section id="home-panel" class="home-panel">
+              <div class="home-intro">
+                <div>
+                  <h2>Choose a workspace</h2>
+                  <p>Start with the area that matches the work in front of you.</p>
+                </div>
+                <div class="home-status-strip">
+                  <span><i class="status-dot status-dot--ok"></i>Offline ready</span>
+                  <span><i id="home-model-dot" class="status-dot status-dot--unknown"></i><span id="home-model-label">Model not checked</span></span>
+                </div>
+              </div>
+
+              <div class="home-grid" aria-label="KlasBot work areas">
+                <article class="home-card home-card--lesson" data-home-area="lesson">
+                  <div class="home-card__head">
+                    <span class="home-card__icon nav-icon nav-icon--lesson" aria-hidden="true"></span>
+                    <div>
+                      <h3>Lesson Planning</h3>
+                      <p>Generate lesson plans, assessments, teaching aids, and reuse saved work.</p>
+                    </div>
+                  </div>
+                  <div class="home-action-grid">
+                    <button class="home-action" type="button" data-home-action="lesson-plan">Generate Lesson Plan</button>
+                    <button class="home-action" type="button" data-home-action="assessment">Generate Assessment</button>
+                    <button class="home-action" type="button" data-home-action="teaching-aids">Teaching Aids</button>
+                    <button class="home-action" type="button" data-home-action="library">My Library</button>
+                  </div>
+                </article>
+
+                <article class="home-card home-card--class" data-home-area="class">
+                  <div class="home-card__head">
+                    <span class="home-card__icon nav-icon nav-icon--class" aria-hidden="true"></span>
+                    <div>
+                      <h3>Class Management</h3>
+                      <p>Create classes, grade quiz photos, and monitor class performance.</p>
+                    </div>
+                  </div>
+                  <div class="home-action-grid">
+                    <button class="home-action" type="button" data-home-action="create-class">Create Class</button>
+                    <button class="home-action" type="button" data-home-action="grade-quiz">Grade Quiz Photo</button>
+                    <button class="home-action" type="button" data-home-action="all-classes">All Classes</button>
+                  </div>
+                </article>
+
+                <article id="admin-home-card" class="home-card home-card--admin hidden" data-home-area="admin">
+                  <div class="home-card__head">
+                    <span class="home-card__icon nav-icon nav-icon--admin" aria-hidden="true"></span>
+                    <div>
+                      <h3>Admin</h3>
+                      <p>Manage teachers, curriculum uploads, and lesson plan formats.</p>
+                    </div>
+                  </div>
+                  <div class="home-action-grid">
+                    <button class="home-action" type="button" data-home-action="teacher-admin">Teacher Admin</button>
+                    <button class="home-action" type="button" data-home-action="curriculum">Curriculum Upload and Editing</button>
+                    <button class="home-action" type="button" data-home-action="plan-formats">Plan Formats</button>
+                  </div>
+                </article>
+              </div>
+            </section>
 
             <section id="draft-panel" class="paper-panel">
               <div class="format-banner">
@@ -110,47 +198,52 @@
                 <a id="share-link" href="#" target="_blank" rel="noopener"></a>
                 <p id="share-expiry" class="microcopy"></p>
               </div>
-              <section id="teaching-aids-panel" class="teaching-aids-panel">
-                <div class="teaching-aids-head">
-                  <div>
-                    <h3>Teaching Aids</h3>
-                    <p id="teaching-aids-status" class="microcopy">Save the lesson plan to generate attached classroom materials.</p>
-                  </div>
-                  <div class="teaching-aids-flow" aria-label="Teaching Aids workflow">
-                    <span>Generate</span>
-                    <span>Edit</span>
-                    <span>Print or share</span>
+            </section>
+
+            <section id="teaching-aids-panel" class="workspace-panel teaching-aids-panel hidden">
+              <div class="workspace-panel__head teaching-aids-head">
+                <div>
+                  <h2>Teaching Aids</h2>
+                  <p id="teaching-aids-status" class="microcopy">Save the lesson plan to generate attached classroom materials.</p>
+                </div>
+                <div class="teaching-aids-flow" aria-label="Teaching Aids workflow">
+                  <span>Generate</span>
+                  <span>Edit</span>
+                  <span>Copy, print, or share</span>
+                </div>
+              </div>
+              <label class="teaching-aid-target">
+                Target lesson
+                <select id="teaching-aid-target"></select>
+                <span id="teaching-aid-target-meta" class="microcopy">Recently opened lesson will be used by default.</span>
+              </label>
+              <div class="teaching-aid-actions">
+                <button class="teaching-aid-action" data-aid-type="worked_example" type="button"><strong>Worked Example</strong><span>Teacher-led model with steps</span></button>
+                <button class="teaching-aid-action" data-aid-type="guided_practice" type="button"><strong>Guided Practice</strong><span>Board-ready student tasks</span></button>
+                <button class="teaching-aid-action" data-aid-type="answer_key" type="button"><strong>Answer Key</strong><span>Answers and scoring notes</span></button>
+                <button class="teaching-aid-action" data-aid-type="board_notes" type="button"><strong>Board Notes</strong><span>Chalkboard sequence</span></button>
+                <button class="teaching-aid-action" data-aid-type="remediation" type="button"><strong>Remediation</strong><span>Simpler reteaching support</span></button>
+              </div>
+              <label class="teaching-aid-request">
+                Custom request
+                <input id="teaching-aid-request" type="text" placeholder="Optional: focus on AA similarity, use bottle caps, make easier examples" />
+              </label>
+              <div id="teaching-aids-list" class="teaching-aids-list"></div>
+              <div id="teaching-aid-editor-panel" class="teaching-aid-editor-panel hidden">
+                <div class="teaching-aid-editor-head">
+                  <input id="teaching-aid-title" class="hidden" type="text" aria-label="Teaching Aid title" />
+                  <div class="button-row">
+                    <button id="edit-teaching-aid" class="secondary compact" type="button">Edit</button>
+                    <button id="save-teaching-aid" class="primary compact hidden" type="button">Save Aid</button>
+                    <button id="print-teaching-aid" class="secondary compact" type="button">Print Aid</button>
+                    <button id="share-teaching-aid" class="secondary compact" type="button">Share Aid</button>
+                    <button id="copy-teaching-aid" class="secondary compact" type="button">Copy Into Lesson</button>
+                    <button id="delete-teaching-aid" class="ghost compact" type="button">Delete</button>
                   </div>
                 </div>
-                <div class="teaching-aid-actions">
-                  <button class="teaching-aid-action" data-aid-type="worked_example" type="button"><strong>Worked Example</strong><span>Teacher-led model with steps</span></button>
-                  <button class="teaching-aid-action" data-aid-type="guided_practice" type="button"><strong>Guided Practice</strong><span>Board-ready student tasks</span></button>
-                  <button class="teaching-aid-action" data-aid-type="answer_key" type="button"><strong>Answer Key</strong><span>Answers and scoring notes</span></button>
-                  <button class="teaching-aid-action" data-aid-type="board_notes" type="button"><strong>Board Notes</strong><span>Chalkboard sequence</span></button>
-                  <button class="teaching-aid-action" data-aid-type="remediation" type="button"><strong>Remediation</strong><span>Simpler reteaching support</span></button>
-                </div>
-                <label class="teaching-aid-request">
-                  Custom request
-                  <input id="teaching-aid-request" type="text" placeholder="Optional: focus on AA similarity, use bottle caps, make easier examples" />
-                </label>
-                <div id="teaching-aids-list" class="teaching-aids-list"></div>
-                <div id="teaching-aid-editor-panel" class="teaching-aid-editor-panel hidden">
-                  <div class="teaching-aid-editor-head">
-                    <input id="teaching-aid-title" class="hidden" type="text" aria-label="Teaching Aid title" />
-                    <div class="button-row">
-                      <button id="edit-teaching-aid" class="secondary compact" type="button">Edit</button>
-                      <button id="save-teaching-aid" class="primary compact hidden" type="button">Save Aid</button>
-                      <button id="print-teaching-aid" class="secondary compact" type="button">Print Aid</button>
-                      <button id="share-teaching-aid" class="secondary compact" type="button">Share Aid</button>
-                      <button id="copy-teaching-aid" class="secondary compact" type="button">Copy Into Lesson</button>
-                      <button id="delete-teaching-aid" class="ghost compact" type="button">Delete</button>
-                    </div>
-                  </div>
-                  <textarea id="teaching-aid-editor" class="hidden" spellcheck="true"></textarea>
-                  <article id="teaching-aid-preview" class="draft-preview"></article>
-                </div>
-              </section>
-              <p id="status-line" class="status-line" role="status"></p>
+                <textarea id="teaching-aid-editor" class="hidden" spellcheck="true"></textarea>
+                <article id="teaching-aid-preview" class="draft-preview"></article>
+              </div>
             </section>
 
             <section id="library-panel" class="library-panel hidden">
@@ -425,9 +518,11 @@
                 </div>
               </form>
             </section>
+
+            <p id="status-line" class="status-line" role="status"></p>
           </section>
 
-          <aside class="inspector">
+          <aside id="inspector" class="inspector">
             <section class="inspector-group inspector-group--accent">
               <h2>Generate Draft</h2>
               <form id="generate-form" class="generation-form">
@@ -518,6 +613,6 @@
     </main>
 
     <script src="/static/vendor/katex/katex.min.js"></script>
-    <script src="/static/app.js?v=20260513-teaching-aids-print-preview"></script>
+    <script src="/static/app.js?v=20260514-teaching-aids-workspace"></script>
   </body>
 </html>

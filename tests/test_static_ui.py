@@ -10,9 +10,33 @@ def test_non_admin_login_forces_admin_panel_closed():
     app_js = (ROOT / "klasbot" / "static" / "app.js").read_text(encoding="utf-8")
 
     assert "const isAdmin = Boolean(state.teacher.is_admin);" in app_js
+    assert "els.adminAreaButton.classList.toggle('hidden', !isAdmin);" in app_js
+    assert "els.adminHomeCard.classList.toggle('hidden', !isAdmin);" in app_js
     assert "els.adminPanel.classList.add('hidden');" in app_js
     assert "els.formatAdminPanel.classList.add('hidden');" in app_js
     assert "els.teacherList.innerHTML = '';" in app_js
+
+
+def test_desktop_home_hub_is_role_aware_default_workspace():
+    app_js = (ROOT / "klasbot" / "static" / "app.js").read_text(encoding="utf-8")
+    index_html = (ROOT / "klasbot" / "static" / "index.html").read_text(encoding="utf-8")
+    styles_css = (ROOT / "klasbot" / "static" / "styles.css").read_text(encoding="utf-8")
+
+    assert "activeWorkspace: 'home'" in app_js
+    assert "switchWorkspace('home');" in app_js
+    assert 'id="home-panel"' in index_html
+    assert 'id="home-button"' in index_html
+    assert 'id="lesson-area-button"' in index_html
+    assert 'id="class-area-button"' in index_html
+    assert 'id="admin-area-button" class="rail-item rail-area-item hidden"' in index_html
+    assert 'id="admin-home-card" class="home-card home-card--admin hidden"' in index_html
+    assert "Lesson Planning" in index_html
+    assert "Class Management" in index_html
+    assert ">Admin<" in index_html
+    assert "related" not in index_html.lower()
+    assert "workspace-frame--no-inspector" in styles_css
+    assert "setInspectorVisibility" in app_js
+    assert "const showInspector = workspace === 'draft';" in app_js
 
 
 def test_curriculum_generation_uses_dropdown_controls():
@@ -88,9 +112,16 @@ def test_class_records_forms_do_not_overflow_workspace():
     assert 'class="record-field--notes"' in app_js
     assert "class-records-panel--detail" in app_js
     assert "data-close-active-class" in app_js
+    assert "data-class-tab" in app_js
+    assert "Dashboard" in app_js
+    assert "Add Students" in app_js
+    assert "Create Assessments" in app_js
+    assert "Student Performance" in app_js
     assert ".class-record-create-form" in styles_css
     assert ".class-records-panel--detail .class-record-create-panel" in styles_css
     assert ".class-records-panel--detail .class-records-layout" in styles_css
+    assert ".class-tab--on" in styles_css
+    assert ".class-dashboard-grid" in styles_css
     assert ".inline-record-form .record-field--title" in styles_css
     assert ".inline-record-form input," in styles_css
     assert "min-width: 0;" in styles_css
@@ -121,6 +152,10 @@ def test_desktop_teaching_aids_static_controls():
     styles_css = (ROOT / "klasbot" / "static" / "styles.css").read_text(encoding="utf-8")
 
     assert "Teaching Aids" in index_html
+    assert 'id="teaching-aids-button"' in index_html
+    assert 'id="teaching-aids-panel" class="workspace-panel teaching-aids-panel hidden"' in index_html
+    assert 'id="teaching-aid-target"' in index_html
+    assert 'id="teaching-aid-target-meta"' in index_html
     for aid_type in ["worked_example", "guided_practice", "answer_key", "board_notes", "remediation"]:
         assert f'data-aid-type="{aid_type}"' in index_html
     assert 'id="teaching-aid-editor"' in index_html
@@ -131,8 +166,15 @@ def test_desktop_teaching_aids_static_controls():
     assert "/teaching-aids/stream" in app_js
     assert "source_section" in app_js
     assert "aid_type" in app_js
+    assert "teachingAidTargetId" in app_js
+    assert "function openTeachingAidsWorkspace" in app_js
+    assert "function renderTeachingAidTargets" in app_js
+    assert "function selectTeachingAidTarget" in app_js
+    assert "switchWorkspace('teaching-aids')" in app_js
+    assert "/api/library/${targetId}" in app_js
     assert "function generateTeachingAid" in app_js
     assert ".teaching-aids-panel" in styles_css
+    assert ".teaching-aid-target" in styles_css
 
 
 def test_admin_tools_use_middle_workspace_views():
@@ -143,9 +185,9 @@ def test_admin_tools_use_middle_workspace_views():
     assert 'id="curriculum-panel" class="workspace-panel hidden"' in index_html
     assert 'id="format-admin-panel" class="workspace-panel hidden"' in index_html
     assert 'id="format-admin-message"' in index_html
-    assert "Workspace / Current Draft" in index_html
+    assert "KlasBot Home" in index_html
     assert "My Library / Current Draft" not in index_html
-    assert "document.querySelector('.breadcrumb').textContent = 'Workspace / Current Draft';" in app_js
+    assert "document.querySelector('.breadcrumb').textContent = 'Lesson Planning / Current Draft';" in app_js
     assert 'id="admin-panel" class="inspector-group hidden"' not in index_html
     assert 'id="curriculum-panel" class="inspector-group hidden"' not in index_html
     assert 'id="format-admin-panel" class="inspector-group hidden"' not in index_html
