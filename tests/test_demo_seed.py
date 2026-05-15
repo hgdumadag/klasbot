@@ -15,21 +15,28 @@ def test_demo_seed_creates_admin_and_sample_classes_idempotently(tmp_path, monke
     teachers = db.list_teachers()
     assert len([teacher for teacher in teachers if teacher["name"] == "Judge Demo"]) == 1
     assert find_teacher_by_pin("1111")["name"] == "Judge Demo"
-    assert len(first["classes"]) == len(second["classes"]) == 3
+    assert len(first["classes"]) == len(second["classes"]) == 4
     class_records = db.list_class_records(int(first["teacher"]["id"]))
-    assert len(class_records) == 3
-    assert {class_record["student_count"] for class_record in class_records} == {10}
+    assert len(class_records) == 4
+    expected_student_counts = {
+        "Grade 4 - English": 10,
+        "Grade 5 - Mathematics": 10,
+        "Grade 6 - Science": 10,
+        "Grade 7 - Araling Panlipunan": 40,
+    }
+    assert {class_record["name"]: class_record["student_count"] for class_record in class_records} == expected_student_counts
     for class_record in class_records:
+        expected_student_count = expected_student_counts[class_record["name"]]
         students = db.list_class_students(int(first["teacher"]["id"]), int(class_record["id"]))
         assert students is not None
-        assert len(students) == 10
+        assert len(students) == expected_student_count
         assessments = db.list_class_assessments(int(first["teacher"]["id"]), int(class_record["id"]))
         assert assessments is not None
         assert len(assessments) == 3
         for assessment in assessments:
             grid = db.get_score_grid(int(first["teacher"]["id"]), int(assessment["id"]))
             assert grid is not None
-            assert len(grid["rows"]) == 10
+            assert len(grid["rows"]) == expected_student_count
             assert all(row["score"] is not None for row in grid["rows"])
 
 
