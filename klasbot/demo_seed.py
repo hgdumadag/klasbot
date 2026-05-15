@@ -29,6 +29,7 @@ SAMPLE_CLASSES = [
         "assessments": [
             ("Quiz 1: Matter and Its Properties", "quiz", "2026-04-02", 20),
             ("Performance Task: Simple Investigation", "performance_task", "2026-04-24", 30),
+            ("Unit Test: Earth Systems", "exam", "2026-05-10", 50),
         ],
     },
     {
@@ -52,6 +53,7 @@ SAMPLE_CLASSES = [
         "assessments": [
             ("Quiz 1: Fractions and Decimals", "quiz", "2026-04-03", 20),
             ("Unit Test: Number Patterns", "exam", "2026-05-09", 50),
+            ("Performance Task: Market Day Budget", "performance_task", "2026-05-23", 30),
         ],
     },
     {
@@ -75,6 +77,7 @@ SAMPLE_CLASSES = [
         "assessments": [
             ("Reading Check: Main Idea and Details", "quiz", "2026-04-05", 15),
             ("Writing Task: Friendly Letter", "performance_task", "2026-04-26", 25),
+            ("Quarter Test: Reading and Language", "exam", "2026-05-11", 40),
         ],
     },
 ]

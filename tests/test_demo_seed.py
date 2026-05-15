@@ -23,6 +23,14 @@ def test_demo_seed_creates_admin_and_sample_classes_idempotently(tmp_path, monke
         students = db.list_class_students(int(first["teacher"]["id"]), int(class_record["id"]))
         assert students is not None
         assert len(students) == 10
+        assessments = db.list_class_assessments(int(first["teacher"]["id"]), int(class_record["id"]))
+        assert assessments is not None
+        assert len(assessments) == 3
+        for assessment in assessments:
+            grid = db.get_score_grid(int(first["teacher"]["id"]), int(assessment["id"]))
+            assert grid is not None
+            assert len(grid["rows"]) == 10
+            assert all(row["score"] is not None for row in grid["rows"])
 
 
 def test_demo_seed_finds_curriculum_json_from_working_directory(tmp_path, monkeypatch):
