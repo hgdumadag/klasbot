@@ -87,6 +87,13 @@ const els = {
   helpProviderLabel: document.getElementById('help-provider-label'),
   helpProviderDetail: document.getElementById('help-provider-detail'),
   helpCheckProvider: document.getElementById('help-check-provider'),
+  helpSearchInput: document.getElementById('help-search-input'),
+  helpSearchClear: document.getElementById('help-search-clear'),
+  helpEmptyState: document.getElementById('help-empty-state'),
+  helpAnswerToolbar: document.querySelector('.help-answer-toolbar'),
+  helpCopyAnswer: document.getElementById('help-copy-answer'),
+  helpClearAnswer: document.getElementById('help-clear-answer'),
+  helpFollowupAnswer: document.getElementById('help-followup-answer'),
   curriculumUploadForm: document.getElementById('curriculum-upload-form'),
   curriculumList: document.getElementById('curriculum-list'),
   refreshCurriculum: document.getElementById('refresh-curriculum'),
@@ -751,6 +758,29 @@ function fillHelpQuestion(question) {
   setHelpStatus('Question ready. Review it, then ask KlasBot.');
 }
 
+const HELP_ANSWER_EMPTY_TEXT = 'KlasBot Help answer appears here. Pick an example or type your own question above.';
+
+function renderHelpAnswerEmpty(text = HELP_ANSWER_EMPTY_TEXT) {
+  if (!els.helpAnswer) return;
+  els.helpAnswer.replaceChildren();
+  const empty = document.createElement('div');
+  empty.className = 'draft-preview__empty';
+  empty.textContent = text;
+  els.helpAnswer.appendChild(empty);
+}
+
+function setHelpAnswerToolbarVisible(visible) {
+  if (els.helpAnswerToolbar) {
+    els.helpAnswerToolbar.hidden = !visible;
+  }
+}
+
+function clearHelpAnswer() {
+  renderHelpAnswerEmpty();
+  setHelpAnswerToolbarVisible(false);
+  setHelpStatus('');
+}
+
 async function generateClassInsights() {
   const panel = els.classRecordDetail.querySelector('.class-insights-panel');
   if (!panel) return;
@@ -775,8 +805,10 @@ async function askHelpQuestion() {
     return;
   }
   await ensureHelpProviderReady();
-  els.helpAnswer.innerHTML = '<div class="draft-preview__empty">Asking KlasBot Help...</div>';
+  renderHelpAnswerEmpty('Asking KlasBot Help...');
+  setHelpAnswerToolbarVisible(false);
   setHelpStatus('Asking KlasBot Help...');
+  state.lastHelpQuestion = question;
   const data = await api('/api/help/ask', {
     method: 'POST',
     body: JSON.stringify({
@@ -785,6 +817,7 @@ async function askHelpQuestion() {
     }),
   });
   els.helpAnswer.innerHTML = markdownToHtml(data.answer || '');
+  setHelpAnswerToolbarVisible(true);
   setHelpStatus(`Answered with ${data.model}.`);
 }
 
@@ -3880,6 +3913,10 @@ els.logoutButton.addEventListener('click', (event) => {
     await api('/api/auth/logout', { method: 'POST' });
     state.teacher = null;
     state.csrfToken = '';
+    state.lastHelpQuestion = '';
+    if (els.helpQuestion) els.helpQuestion.value = '';
+    if (els.helpSearchInput) els.helpSearchInput.value = '';
+    if (typeof clearHelpAnswer === 'function') clearHelpAnswer();
     showLogin();
   }, { busyText: 'Logging out...' });
 });
@@ -3919,6 +3956,124 @@ els.helpCheckProvider.addEventListener('click', (event) => {
     }
   });
 });
+
+// --- Help TOC chips: jump to a topic, open it, and flash it ---
+document.querySelectorAll('[data-topic-jump]').forEach((chip) => {
+  chip.addEventListener('click', () => {
+    const key = chip.dataset.topicJump;
+    const target = document.querySelector(`.help-topic[data-topic="${key}"]`);
+    if (!target) return;
+    target.open = true;
+    target.classList.remove('help-topic--flash');
+    void target.offsetWidth; // restart animation
+    target.classList.add('help-topic--flash');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => target.classList.remove('help-topic--flash'), 900);
+  });
+});
+
+// --- Help search: filter topics by title + body text ---
+function applyHelpSearch(rawQuery) {
+  const query = (rawQuery || '').trim().toLowerCase();
+  const topics = document.querySelectorAll('.help-topic');
+  let visibleCount = 0;
+  const adminVisible = Boolean(state.teacher?.is_admin);
+  topics.forEach((topic) => {
+    // Respect the admin-only gate even during search.
+    if (topic.classList.contains('help-admin-only') && !adminVisible) {
+      topic.classList.add('help-topic--hidden');
+      return;
+    }
+    if (!query) {
+      topic.classList.remove('help-topic--hidden');
+      visibleCount += 1;
+      return;
+    }
+    const haystack = (topic.textContent || '').toLowerCase();
+    const matches = haystack.includes(query);
+    topic.classList.toggle('help-topic--hidden', !matches);
+    if (matches) {
+      visibleCount += 1;
+      topic.open = true;
+    }
+  });
+  if (els.helpEmptyState) {
+    els.helpEmptyState.hidden = visibleCount !== 0;
+  }
+  if (els.helpSearchClear) {
+    els.helpSearchClear.hidden = !query;
+  }
+}
+
+if (els.helpSearchInput) {
+  els.helpSearchInput.addEventListener('input', (event) => {
+    applyHelpSearch(event.target.value);
+  });
+}
+
+if (els.helpSearchClear) {
+  els.helpSearchClear.addEventListener('click', () => {
+    if (!els.helpSearchInput) return;
+    els.helpSearchInput.value = '';
+    applyHelpSearch('');
+    els.helpSearchInput.focus();
+  });
+}
+
+// --- Help answer toolbar buttons ---
+if (els.helpCopyAnswer) {
+  els.helpCopyAnswer.addEventListener('click', async () => {
+    const text = els.helpAnswer?.innerText?.trim();
+    if (!text) {
+      setHelpStatus('No answer to copy yet.', true);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setHelpStatus('Answer copied to clipboard.');
+    } catch (_err) {
+      setHelpStatus('Copy failed. Select the answer text manually.', true);
+    }
+  });
+}
+
+if (els.helpClearAnswer) {
+  els.helpClearAnswer.addEventListener('click', () => {
+    clearHelpAnswer();
+  });
+}
+
+if (els.helpFollowupAnswer) {
+  els.helpFollowupAnswer.addEventListener('click', () => {
+    const previous = state.lastHelpQuestion;
+    const prefix = previous ? `Follow-up to: "${previous}"\n\n` : '';
+    els.helpQuestion.value = prefix;
+    els.helpQuestion.focus();
+    const len = els.helpQuestion.value.length;
+    els.helpQuestion.setSelectionRange(len, len);
+    setHelpStatus('Type your follow-up, then ask KlasBot.');
+  });
+}
+
+// --- Help language preference persistence ---
+const HELP_LANG_KEY = 'klasbot:help:lang';
+if (els.helpLanguage) {
+  try {
+    const savedLang = localStorage.getItem(HELP_LANG_KEY);
+    if (savedLang && Array.from(els.helpLanguage.options).some((opt) => opt.value === savedLang)) {
+      els.helpLanguage.value = savedLang;
+    }
+  } catch (_err) {
+    // localStorage may be unavailable on some kiosks; ignore.
+  }
+  els.helpLanguage.addEventListener('change', () => {
+    try {
+      localStorage.setItem(HELP_LANG_KEY, els.helpLanguage.value);
+    } catch (_err) {
+      // Ignore storage failures.
+    }
+  });
+}
 
 els.adminToggle.addEventListener('click', () => {
   switchWorkspace('teacher-admin');

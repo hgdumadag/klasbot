@@ -539,111 +539,306 @@
               <div class="workspace-panel__head">
                 <div>
                   <h2>Help</h2>
-                  <p>Use these instructions offline, or ask KlasBot a question about using the app.</p>
+                  <p>Read the offline guide, jump to a topic, or ask KlasBot a question about using the app.</p>
                 </div>
               </div>
+
+              <div class="help-toolbar" role="search">
+                <label class="help-search">
+                  <span class="help-search__icon" aria-hidden="true">⌕</span>
+                  <input
+                    id="help-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Search help topics (e.g. attendance, quiz photo, PIN)"
+                    aria-label="Search help topics"
+                  />
+                  <button id="help-search-clear" class="help-search__clear" type="button" hidden aria-label="Clear search">×</button>
+                </label>
+                <nav class="help-toc" aria-label="Help topics">
+                  <button class="help-toc__chip" type="button" data-topic-jump="start">Start</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="lesson">Lesson</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="aids">Teaching Aids</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="library">My Library</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="class">Class</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="attendance">Attendance</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="performance">Performance</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="insights">AI Insights</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="quiz">Quiz Photo</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="share">Share &amp; Mobile</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="ai-status">AI Status</button>
+                  <button class="help-toc__chip help-admin-only hidden" type="button" data-topic-jump="admin">Admin</button>
+                  <button class="help-toc__chip" type="button" data-topic-jump="trouble">Troubleshooting</button>
+                </nav>
+              </div>
+
               <div class="help-layout">
                 <section class="help-guide" aria-label="KlasBot instructions">
-                  <article class="help-topic">
-                    <h3>Start and Session</h3>
-                    <ol>
-                      <li>Log in with your teacher PIN.</li>
-                      <li>Choose Lesson Planning, Class Management, or Help from Home or the left menu.</li>
-                      <li>Use Log out when finished because the kiosk may be shared by other teachers.</li>
-                    </ol>
-                  </article>
-                  <article class="help-topic">
-                    <h3>Lesson Planning</h3>
-                    <ol>
-                      <li>Open Generate Lesson Plan or Generate Assessment.</li>
-                      <li>Choose the output, format, grade, subject, quarter, topic, and week.</li>
-                      <li>Generate the draft, then review it in Preview or Edit source.</li>
-                      <li>Save the draft to My Library before printing, sharing, or creating Teaching Aids.</li>
-                    </ol>
-                  </article>
-                  <article class="help-topic">
-                    <h3>Teaching Aids and Library</h3>
-                    <ol>
-                      <li>Save or open a lesson plan first.</li>
-                      <li>Open Teaching Aids and choose the target lesson.</li>
-                      <li>Generate a worked example, guided practice, answer key, board notes, or remediation aid.</li>
-                      <li>Edit, save, copy into the lesson, print, or share the aid.</li>
-                    </ol>
-                  </article>
-                  <article class="help-topic">
-                    <h3>Class Management</h3>
-                    <ol>
-                      <li>Create a class with grade, section, subject, and school year.</li>
-                      <li>Add students, create assessments, enter scores, and save daily attendance.</li>
-                      <li>Use the dashboard and performance tabs after scores or attendance have been saved.</li>
-                    </ol>
-                  </article>
-                  <article class="help-topic">
-                    <h3>Grade Quiz Photo</h3>
-                    <ol>
-                      <li>Create a class assessment before starting a grading batch.</li>
-                      <li>Open Grade Quiz Photo, choose the class and assessment, then create the batch.</li>
-                      <li>Upload quiz photos or PDFs, detect submissions, and run grading.</li>
-                      <li>Review each score, mark reviewed submissions, preview transfer, then save scores.</li>
-                    </ol>
-                  </article>
-                  <article class="help-topic help-admin-only hidden">
-                    <h3>Admin Tools</h3>
-                    <ol>
-                      <li>Use Teacher Admin to add teachers, reset PINs, and grant admin access.</li>
-                      <li>Use Curriculum to upload, activate, deactivate, delete, and pace curriculum sources.</li>
-                      <li>Use Plan Formats to edit the visible DLP, SDLP, and DLL structures.</li>
-                    </ol>
-                  </article>
-                  <article class="help-topic">
-                    <h3>Troubleshooting</h3>
-                    <ul>
-                      <li>If curriculum choices are missing, ask an admin to check uploaded and active curriculum.</li>
-                      <li>If the AI is unavailable, check AI Provider Status or try again after the model is ready.</li>
-                      <li>If printing is unavailable, use Share to create a short-lived QR or link.</li>
-                    </ul>
-                  </article>
+                  <p id="help-empty-state" class="help-empty-state" hidden>No help topics match your search. Try a different word or clear the search.</p>
+
+                  <details class="help-topic help-topic--start" data-topic="start" open>
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">●</span>
+                      <span class="help-topic__title">Start and Session</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ol>
+                        <li>Log in with your teacher PIN. Admins use a PIN too.</li>
+                        <li>From Home or the left rail, open Lesson Planning, Class Management, Help, or Admin (admins only).</li>
+                        <li>Watch the small AI status dot in your teacher card and on Home to confirm the model is ready before you generate.</li>
+                        <li>Use Log out at the top-right when you finish, because the kiosk is shared by other teachers.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--lesson" data-topic="lesson">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">✎</span>
+                      <span class="help-topic__title">Lesson Planning</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ol>
+                        <li>Open Generate Lesson Plan (DLP, SDLP, or DLL) or Generate Assessment (quiz or exam).</li>
+                        <li>Choose the output, format, grade, subject, quarter, topic, and week. For assessments, also fill the Resources field that appears.</li>
+                        <li>Generate the draft, then review it in Preview or open Edit source to tweak the markdown directly.</li>
+                        <li>Save the draft to My Library before printing, sharing, or creating Teaching Aids from it.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--lesson" data-topic="aids">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">✚</span>
+                      <span class="help-topic__title">Teaching Aids</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ol>
+                        <li>Save or open a lesson plan first — Teaching Aids attach to a saved lesson.</li>
+                        <li>Open Teaching Aids and choose the target lesson.</li>
+                        <li>Generate a Worked Example, Guided Practice, Answer Key, Board Notes, or Remediation aid. Add a custom request if you need a specific angle.</li>
+                        <li>Edit, save, copy into the lesson, print, share, or delete the aid as needed.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--lesson" data-topic="library">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">▤</span>
+                      <span class="help-topic__title">My Library</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ol>
+                        <li>Open My Library to see your saved lesson plans, quizzes, exams, and teaching aids grouped by subject.</li>
+                        <li>Use the filter row to search by keyword and narrow by type, subject, grade, format, or sort order.</li>
+                        <li>Open any saved item to restore it to the draft workspace, where you can edit, regenerate, print, share, or delete it.</li>
+                        <li>Your library is private to your login — other teachers cannot see your saved outputs.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--class" data-topic="class">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">◉</span>
+                      <span class="help-topic__title">Class Management</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ol>
+                        <li>Open All Classes and create a class with a name, grade, optional section, subject, and school year.</li>
+                        <li>Add students to the roster, create assessments, and enter scores per assessment.</li>
+                        <li>Use the class detail tabs — Dashboard, Add Students, Create Assessments, Daily Attendance, Attendance Performance, Student Performance, and AI Insights.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--class" data-topic="attendance">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">☑</span>
+                      <span class="help-topic__title">Daily Attendance</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ol>
+                        <li>Open a class and choose the Daily Attendance tab.</li>
+                        <li>Pick a date with the date picker. Each student row can be marked Present, Absent, or Late.</li>
+                        <li>Save the day to commit the marks. Saved attendance feeds the Attendance Performance tab and AI Insights.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--class" data-topic="performance">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">▲</span>
+                      <span class="help-topic__title">Performance Views</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ul>
+                        <li><strong>Dashboard</strong> — quick summary widgets for the class once scores or attendance exist.</li>
+                        <li><strong>Student Performance</strong> — each student's scores across every assessment in the class.</li>
+                        <li><strong>Attendance Performance</strong> — present/absent/late counts and rates per student and across the class.</li>
+                        <li>If a view is blank, save assessments, enter scores, or save attendance first — the views read directly from saved data.</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--class" data-topic="insights">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">★</span>
+                      <span class="help-topic__title">AI Insights</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ol>
+                        <li>Open a class and choose the AI Insights tab.</li>
+                        <li>Generate Insights asks KlasBot to summarize the class using saved scores and attendance, so make sure the AI status is green first.</li>
+                        <li>Insights stay loaded while you switch tabs within the same session, so re-opening Insights does not regenerate the answer.</li>
+                        <li>If the result says there is nothing to summarize, add students, save scores, and save attendance, then try again.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--class" data-topic="quiz">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">▢</span>
+                      <span class="help-topic__title">Grade Quiz Photo</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ol>
+                        <li>Create a class assessment first — Grade Quiz Photo transfers scores into it.</li>
+                        <li>Open Grade Quiz Photo, pick the class and assessment, then create the batch with total points, grading style, questions, and answer key.</li>
+                        <li>Upload quiz photos or PDFs, then follow the flow: <strong>Detect → Grade → Review → Save</strong>.</li>
+                        <li>Open each submission, adjust the score if needed, and mark it Reviewed. Only reviewed submissions transfer.</li>
+                        <li>Preview the transfer, then Save scores to write reviewed scores into the assessment.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--lesson" data-topic="share">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">⇄</span>
+                      <span class="help-topic__title">Share &amp; Mobile Companion</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ol>
+                        <li>Click Share on a saved draft or teaching aid to generate a short-lived QR code and link.</li>
+                        <li>On a phone or tablet on the same trusted Wi-Fi, scan the QR to open the mobile companion view.</li>
+                        <li>The mobile companion has Draft, Library, and Generate tabs only — Class Management, Admin, and Help live on the kiosk.</li>
+                        <li>If the link expires or the device loses Wi-Fi, redo the Share/pair step.</li>
+                      </ol>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--ai" data-topic="ai-status">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">⬢</span>
+                      <span class="help-topic__title">AI Provider Status</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ul>
+                        <li><span class="status-dot status-dot--ok"></span> <strong>Green</strong> — provider connected and the model is ready to generate.</li>
+                        <li><span class="status-dot status-dot--warn"></span> <strong>Amber</strong> — provider is reachable but the model is unavailable. Wait for it to load, then retry.</li>
+                        <li><span class="status-dot status-dot--bad"></span> <strong>Red</strong> — provider is not connected. Generation and Ask KlasBot will fail.</li>
+                        <li><span class="status-dot status-dot--unknown"></span> <strong>Gray</strong> — status has not been checked yet.</li>
+                        <li>Press <strong>Check AI</strong> in the Ask KlasBot panel to re-run the check at any time.</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--admin help-admin-only hidden" data-topic="admin">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">◆</span>
+                      <span class="help-topic__title">Admin Tools</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ul>
+                        <li><strong>Teacher Admin</strong> — add teachers, assign or reset PINs, grant admin access.</li>
+                        <li><strong>Curriculum</strong> — upload PDFs with optional subject/version, activate/deactivate, delete, and edit or reset the 10-week pacing in the pacing editor.</li>
+                        <li><strong>Plan Formats</strong> — edit the visible markdown structure for DLP, SDLP, and DLL outputs. KlasBot adds teacher inputs and curriculum context automatically.</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-topic help-topic--trouble" data-topic="trouble">
+                    <summary class="help-topic__head">
+                      <span class="help-topic__icon" aria-hidden="true">!</span>
+                      <span class="help-topic__title">Troubleshooting</span>
+                      <span class="help-topic__chevron" aria-hidden="true">▾</span>
+                    </summary>
+                    <div class="help-topic__body">
+                      <ul>
+                        <li>Curriculum choices missing → ask an admin to check uploaded and active curriculum.</li>
+                        <li>AI unavailable → press Check AI here or wait for the model to come back, then retry.</li>
+                        <li>Printing unavailable → use Share to create a short-lived QR or link and print from another device.</li>
+                        <li>AI Insights, Dashboard, or Performance widgets blank → save scores and attendance first.</li>
+                        <li>Kiosk feels slow → confirm other teachers have logged out and the AI status is green.</li>
+                      </ul>
+                    </div>
+                  </details>
                 </section>
 
                 <section class="help-assistant" aria-label="Ask KlasBot Help">
-                  <div class="help-assistant__head">
+                  <header class="help-assistant__head">
                     <div>
                       <h3>Ask KlasBot</h3>
                       <p class="microcopy">Ask one question about using the app. Answers use the selected language.</p>
                     </div>
-                    <label>
-                      Language
+                    <label class="help-assistant__lang">
+                      <span>Language</span>
                       <select id="help-language">
                         <option value="en">English</option>
                         <option value="fil">Filipino</option>
                       </select>
                     </label>
-                  </div>
+                  </header>
+
                   <div class="help-provider-status">
-                    <div>
-                      <span id="help-provider-dot" class="status-dot status-dot--unknown"></span>
+                    <span id="help-provider-dot" class="status-dot status-dot--unknown" aria-hidden="true"></span>
+                    <div class="help-provider-status__text">
                       <strong id="help-provider-label">AI not checked</strong>
-                      <p id="help-provider-detail" class="microcopy">Check the configured AI provider before asking for help.</p>
+                      <p id="help-provider-detail" class="microcopy">Check the AI provider before asking.</p>
                     </div>
                     <button id="help-check-provider" class="ghost compact" type="button">Check AI</button>
                   </div>
+
+                  <div class="help-examples" aria-label="Example help questions">
+                    <span class="help-examples__label">Try:</span>
+                    <button class="help-example-chip" type="button" data-help-example="How do I create and print a lesson plan?">Lesson plan</button>
+                    <button class="help-example-chip" type="button" data-help-example="How do I generate teaching aids from a saved lesson?">Teaching Aids</button>
+                    <button class="help-example-chip" type="button" data-help-example="How do I grade quiz photos and save scores?">Quiz photos</button>
+                    <button class="help-example-chip" type="button" data-help-example="How do I see AI Insights for a class?">AI Insights</button>
+                    <button class="help-example-chip help-admin-only hidden" type="button" data-help-example="How do I add a teacher and reset a PIN?">Admin PINs</button>
+                  </div>
+
                   <form id="help-ask-form" class="help-ask-form">
                     <label>
-                      Question
-                      <textarea id="help-question" class="admin-textarea" maxlength="1200" placeholder="Example: How do I save reviewed quiz photo scores to a class assessment?"></textarea>
+                      <span class="help-ask-form__label">Your question</span>
+                      <textarea id="help-question" class="admin-textarea" maxlength="1200" rows="4" placeholder="Example: How do I save reviewed quiz photo scores to a class assessment?"></textarea>
                     </label>
-                    <button id="help-ask-button" class="primary" type="submit">Ask KlasBot</button>
+                    <div class="help-ask-form__row">
+                      <p id="help-status" class="status-line" role="status"></p>
+                      <button id="help-ask-button" class="primary" type="submit">Ask KlasBot</button>
+                    </div>
                   </form>
-                  <div class="help-examples" aria-label="Example help questions">
-                    <button class="secondary compact" type="button" data-help-example="How do I create and print a lesson plan?">Lesson plan</button>
-                    <button class="secondary compact" type="button" data-help-example="How do I generate teaching aids from a saved lesson?">Teaching Aids</button>
-                    <button class="secondary compact" type="button" data-help-example="How do I grade quiz photos and save scores?">Quiz photos</button>
-                    <button class="secondary compact help-admin-only hidden" type="button" data-help-example="How do I add a teacher and reset a PIN?">Admin PINs</button>
+
+                  <div class="help-answer-wrap">
+                    <div class="help-answer-toolbar" hidden>
+                      <button id="help-copy-answer" class="ghost compact" type="button">Copy</button>
+                      <button id="help-followup-answer" class="ghost compact" type="button">Ask follow-up</button>
+                      <button id="help-clear-answer" class="ghost compact" type="button">Clear</button>
+                    </div>
+                    <article id="help-answer" class="draft-preview help-answer" aria-live="polite">
+                      <div class="draft-preview__empty">KlasBot Help answer appears here. Pick an example or type your own question above.</div>
+                    </article>
                   </div>
-                  <p id="help-status" class="status-line" role="status"></p>
-                  <article id="help-answer" class="draft-preview help-answer">
-                    <div class="draft-preview__empty">KlasBot Help answer appears here.</div>
-                  </article>
                 </section>
               </div>
             </section>
