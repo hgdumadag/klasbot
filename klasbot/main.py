@@ -1517,7 +1517,7 @@ async def class_records_attendance_save(
 async def class_records_attendance_summary(
     class_id: int,
     teacher: Annotated[dict, Depends(get_current_teacher)],
-    days: int = Query(default=30, ge=1, le=60),
+    days: int = Query(default=220, ge=1, le=220),
 ) -> dict:
     summary = db.get_attendance_summary(teacher["id"], class_id, days)
     if not summary:

@@ -1481,7 +1481,7 @@ async function selectClassRecord(classId) {
     api(`/api/class-records/classes/${classId}/students`),
     api(`/api/class-records/classes/${classId}/assessments`),
     api(`/api/class-records/classes/${classId}/attendance?attendance_date=${encodeURIComponent(attendanceDate)}`),
-    api(`/api/class-records/classes/${classId}/attendance/summary?days=30`),
+    api(`/api/class-records/classes/${classId}/attendance/summary?days=220`),
   ]);
   state.activeClassRecord = {
     class: data.class,
@@ -1591,7 +1591,7 @@ async function saveAttendance(event) {
     method: 'PUT',
     body: JSON.stringify({ attendance_date: attendanceDate, rows }),
   });
-  const summary = await api(`/api/class-records/classes/${classId}/attendance/summary?days=30`);
+  const summary = await api(`/api/class-records/classes/${classId}/attendance/summary?days=220`);
   state.activeAttendanceDate = grid.attendance_date;
   state.activeClassRecord = {
     ...state.activeClassRecord,
@@ -1661,17 +1661,17 @@ function renderClassRecordDetail() {
           <article><span>Missing/absent</span><strong>${dashboard.missing_or_absent_count || 0}</strong></article>
         </div>
         <div class="class-dashboard-grid">
-          <article>
+          ${renderClassDashboardGraphs(dashboard, active.attendanceSummary)}
+          <div class="class-dashboard-actions">
             <h4>Next actions</h4>
-            <button class="secondary compact" type="button" data-jump-class-tab="students">Add Students</button>
-            <button class="secondary compact" type="button" data-jump-class-tab="attendance">Take Attendance</button>
-            <button class="secondary compact" type="button" data-jump-class-tab="attendance_performance">Review Attendance</button>
-            <button class="secondary compact" type="button" data-jump-class-tab="assessments">Create Assessments</button>
-          </article>
-          <article>
-            <h4>Performance snapshot</h4>
-            ${renderPerformanceTable((dashboard.students || []).slice(0, 5))}
-          </article>
+            <div class="button-row">
+              <button class="secondary compact" type="button" data-jump-class-tab="students">Add Students</button>
+              <button class="secondary compact" type="button" data-jump-class-tab="attendance">Take Attendance</button>
+              <button class="secondary compact" type="button" data-jump-class-tab="attendance_performance">Review Attendance</button>
+              <button class="secondary compact" type="button" data-jump-class-tab="assessments">Create Assessments</button>
+              <button class="secondary compact" type="button" data-jump-class-tab="performance">Review Performance</button>
+            </div>
+          </div>
         </div>
       </section>
     `,
@@ -1801,6 +1801,26 @@ function renderClassRecordDetail() {
       });
     });
   });
+  syncAttendanceTableScrollers();
+  syncPerformanceTableScrollers();
+}
+
+function renderClassDashboardGraphs(dashboard, attendanceSummary) {
+  const attendanceStudents = attendanceSummary?.students || [];
+  return `
+    <section class="class-dashboard-section">
+      <div class="class-tab-panel__head">
+        <h4>Attendance Performance</h4>
+      </div>
+      ${renderAttendancePerformanceDashboard(attendanceStudents)}
+    </section>
+    <section class="class-dashboard-section">
+      <div class="class-tab-panel__head">
+        <h4>Student Performance</h4>
+      </div>
+      ${renderPerformanceDashboard(dashboard)}
+    </section>
+  `;
 }
 
 function renderStudentForm() {
@@ -1915,46 +1935,27 @@ function renderAttendancePerformance(summary) {
     `;
   }
   return `
-    ${renderAttendancePerformanceDashboard(students, daySummaries)}
-    ${renderAttendancePerformanceTable(students, dates)}
+    ${renderAttendancePerformanceDashboard(students)}
+    ${renderAttendancePerformanceTable(students, dates, daySummaries)}
   `;
 }
 
-function renderAttendancePerformanceDashboard(students, daySummaries) {
+function renderAttendancePerformanceDashboard(students) {
   return `
     <div class="attendance-performance-dashboard">
       <article>
-        <h4>Daily attendance rates</h4>
-        ${renderAttendanceDayBars(daySummaries)}
+        <h4>Student attendance bands</h4>
+        ${renderAttendanceBandPie(students)}
       </article>
       <article>
-        <h4>Student attendance bands</h4>
-        ${renderAttendanceBandBars(students)}
+        <h4>Present vs absent</h4>
+        ${renderPresentAbsentPie(students)}
       </article>
     </div>
   `;
 }
 
-function renderAttendanceDayBars(daySummaries) {
-  if (!daySummaries.length) return '<p class="microcopy">No saved attendance dates yet.</p>';
-  return `
-    <div class="bar-chart">
-      ${daySummaries.map((day) => {
-        const rate = Number(day.attendance_rate || 0);
-        const low = rate < 90;
-        return `
-          <div class="bar-row">
-            <span>${escapeHtml(formatShortDate(day.attendance_date))}</span>
-            <div class="bar-track" aria-hidden="true"><i class="${low ? 'bar-fill--low' : ''}" style="width: ${Math.max(0, Math.min(100, rate))}%"></i></div>
-            <strong class="${low ? 'performance-value--low' : ''}">${formatPercent(day.attendance_rate)}</strong>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
-}
-
-function renderAttendanceBandBars(students) {
+function renderAttendanceBandPie(students) {
   const summaries = students.map(studentAttendanceSummary);
   const buckets = [
     ['95-100%', summaries.filter((summary) => summary.rate !== null && summary.rate >= 95).length],
@@ -1963,46 +1964,93 @@ function renderAttendanceBandBars(students) {
     ['0-74%', summaries.filter((summary) => summary.rate !== null && summary.rate < 75).length],
     ['No data', summaries.filter((summary) => summary.rate === null).length],
   ];
-  const maxCount = Math.max(1, ...buckets.map(([, count]) => count));
+  return renderPieSummary(buckets, {
+    emptyLabel: 'No student attendance data yet.',
+    lowLabels: ['0-74%'],
+  });
+}
+
+function renderPresentAbsentPie(students) {
+  const summaries = students.map(studentAttendanceSummary);
+  const present = summaries.reduce((total, summary) => total + summary.present + summary.late, 0);
+  const absent = summaries.reduce((total, summary) => total + summary.absent, 0);
+  return renderPieSummary([
+    ['Present', present],
+    ['Absent', absent],
+  ], {
+    emptyLabel: 'No present or absent marks yet.',
+    lowLabels: ['Absent'],
+  });
+}
+
+function renderPieSummary(items, options = {}) {
+  const total = items.reduce((sum, [, count]) => sum + Number(count || 0), 0);
+  if (!total) return `<p class="microcopy">${escapeHtml(options.emptyLabel || 'No data yet.')}</p>`;
+  const colors = ['var(--green-700)', 'var(--danger)', 'var(--amber-700)', 'var(--slate-800)', 'var(--ink-500)'];
+  let cursor = 0;
+  const segments = items.map(([label, count], index) => {
+    const value = Number(count || 0);
+    const start = cursor;
+    const end = cursor + (value / total) * 100;
+    cursor = end;
+    return `${colors[index % colors.length]} ${start}% ${end}%`;
+  });
   return `
-    <div class="bar-chart">
-      ${buckets.map(([label, count]) => {
-        const low = label === '75-89%' || label === '0-74%';
-        return `
-          <div class="bar-row">
-            <span>${escapeHtml(label)}</span>
-            <div class="bar-track" aria-hidden="true"><i class="${low ? 'bar-fill--low' : ''}" style="width: ${Math.round((count / maxCount) * 100)}%"></i></div>
-            <strong class="${low && count ? 'performance-value--low' : ''}">${count}</strong>
-          </div>
-        `;
-      }).join('')}
+    <div class="pie-summary">
+      <div class="pie-chart" style="background: conic-gradient(${segments.join(', ')})" role="img" aria-label="Distribution chart"></div>
+      <div class="pie-legend">
+        ${items.map(([label, count], index) => {
+          const low = (options.lowLabels || []).includes(label) && count;
+          const percent = total ? roundToOne((Number(count || 0) / total) * 100) : null;
+          return `
+            <div class="pie-legend-row">
+              <span><i style="background: ${colors[index % colors.length]}"></i>${escapeHtml(label)}</span>
+              <strong class="${low ? 'performance-value--low' : ''}">${count} <small>${formatPercent(percent)}</small></strong>
+            </div>
+          `;
+        }).join('')}
+      </div>
     </div>
   `;
 }
 
-function renderAttendancePerformanceTable(students, dates) {
-  const tableMinWidth = Math.max(900, 520 + dates.length * 92);
+function renderAttendancePerformanceTable(students, dates, daySummaries = []) {
+  const tableMinWidth = Math.max(900, 520 + dates.length * 96);
+  const daySummaryByDate = new Map(daySummaries.map((day) => [day.attendance_date, day]));
   return `
     <section class="attendance-performance">
       <div class="class-tab-panel__head">
         <h4>Daily Attendance by Student</h4>
-        <p class="microcopy">Present and late count toward attendance rate; absent is highlighted for follow-up.</p>
+        <p class="microcopy">Present and late count toward attendance rate; daily averages below 75% are highlighted.</p>
       </div>
-      <div class="table-scroll"><table class="records-table attendance-performance-table" style="min-width: ${tableMinWidth}px">
-        <thead><tr>
-          <th>Student</th>
-          <th>Rate</th>
-          <th>Present</th>
-          <th>Late</th>
-          <th>Absent</th>
-          ${dates.map((date) => `<th>${escapeHtml(formatShortDate(date))}</th>`).join('')}
-        </tr></thead>
+      <div class="table-scroll-control" data-attendance-scroll-top>
+        <input type="range" min="0" max="0" value="0" aria-label="Daily attendance horizontal scroll" />
+      </div>
+      <div class="table-scroll" data-attendance-scroll-main><table class="records-table attendance-performance-table" style="min-width: ${tableMinWidth}px">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Rate</th>
+            <th>Present</th>
+            <th>Late</th>
+            <th>Absent</th>
+            ${dates.map((date) => `<th>${escapeHtml(formatShortDate(date))}</th>`).join('')}
+          </tr>
+          <tr class="attendance-average-row">
+            <th colspan="5">Daily average</th>
+            ${dates.map((date) => {
+              const rate = daySummaryByDate.get(date)?.attendance_rate ?? null;
+              const low = rate !== null && Number(rate) < 75;
+              return `<th class="${low ? 'performance-value--low' : ''}">${formatPercent(rate)}</th>`;
+            }).join('')}
+          </tr>
+        </thead>
         <tbody>${students.map((student) => {
           const summary = studentAttendanceSummary(student);
           return `
             <tr>
               <td>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</td>
-              <td class="${summary.rate !== null && summary.rate < 90 ? 'performance-value--low' : ''}">${formatPercent(summary.rate)}</td>
+              <td class="${summary.rate !== null && summary.rate < 75 ? 'performance-value--low' : ''}">${formatPercent(summary.rate)}</td>
               <td>${summary.present}</td>
               <td>${summary.late}</td>
               <td class="${summary.absent ? 'performance-value--low' : ''}">${summary.absent}</td>
@@ -2013,6 +2061,13 @@ function renderAttendancePerformanceTable(students, dates) {
       </table></div>
     </section>
   `;
+}
+
+function syncAttendanceTableScrollers() {
+  const topScroller = els.classRecordDetail.querySelector('[data-attendance-scroll-top] input');
+  const mainScroller = els.classRecordDetail.querySelector('[data-attendance-scroll-main]');
+  if (!topScroller || !mainScroller) return;
+  syncRangeTableScroller(topScroller, mainScroller);
 }
 
 function studentAttendanceSummary(student) {
@@ -2093,26 +2148,47 @@ function renderPerformanceTable(students, options = {}) {
   const assessments = options.assessments || [];
   const showAssessmentResults = Boolean(options.showAssessmentResults && assessments.length);
   const tableMinWidth = showAssessmentResults ? Math.max(760, 380 + assessments.length * 150) : 620;
+  const studentAverages = students
+    .map((student) => student.average_percentage)
+    .filter((value) => value !== null && value !== undefined)
+    .map(Number);
+  const classAverage = studentAverages.length
+    ? roundToOne(studentAverages.reduce((total, value) => total + value, 0) / studentAverages.length)
+    : null;
   return `
-    <div class="table-scroll"><table class="records-table performance-table" style="min-width: ${tableMinWidth}px">
-      <thead><tr>
-        <th>Student</th>
-        ${showAssessmentResults ? assessments.map((assessment) => `
-          <th>
-            <span class="assessment-column-title">${escapeHtml(assessment.title)}</span>
-            <small>Max ${formatNumber(assessment.max_score)}</small>
-          </th>
-        `).join('') : ''}
-        <th>Average</th>
-        <th>Indicator</th>
-      </tr></thead>
+    <div class="table-scroll-control" data-performance-scroll-top>
+      <input type="range" min="0" max="0" value="0" aria-label="Student performance horizontal scroll" />
+    </div>
+    <div class="table-scroll" data-performance-scroll-main><table class="records-table performance-table" style="min-width: ${tableMinWidth}px">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Average</th>
+          ${showAssessmentResults ? assessments.map((assessment) => `
+            <th>
+              <span class="assessment-column-title">${escapeHtml(assessment.title)}</span>
+              <small>Max ${formatNumber(assessment.max_score)}</small>
+            </th>
+          `).join('') : ''}
+          <th>Indicator</th>
+        </tr>
+        <tr class="performance-average-row">
+          <th>Assessment average</th>
+          <th class="${isBelowTarget(classAverage) ? 'performance-value--low' : ''}">${formatPercent(classAverage)}</th>
+          ${showAssessmentResults ? assessments.map((assessment) => {
+            const low = isBelowTarget(assessment.average_percentage);
+            return `<th class="${low ? 'performance-value--low' : ''}">${formatPercent(assessment.average_percentage)}</th>`;
+          }).join('') : ''}
+          <th></th>
+        </tr>
+      </thead>
       <tbody>${students.map((student) => `
         <tr>
           <td>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</td>
+          <td class="${isBelowTarget(student.average_percentage) ? 'performance-value--low' : ''}">${formatPercent(student.average_percentage)}</td>
           ${showAssessmentResults ? assessments.map((assessment) => renderAssessmentResultCell(
             (student.assessment_results || []).find((result) => Number(result.assessment_id) === Number(assessment.id)),
           )).join('') : ''}
-          <td class="${isBelowTarget(student.average_percentage) ? 'performance-value--low' : ''}">${formatPercent(student.average_percentage)}</td>
           <td><span class="status-pill">${escapeHtml(student.status_indicator)}</span></td>
         </tr>
       `).join('')}</tbody>
@@ -2121,43 +2197,26 @@ function renderPerformanceTable(students, options = {}) {
 }
 
 function renderPerformanceDashboard(dashboard) {
-  const assessments = dashboard.assessments || [];
   const students = dashboard.students || [];
   return `
     <div class="performance-dashboard">
       <article>
-        <h4>Assessment averages</h4>
-        ${renderAssessmentAverageBars(assessments, dashboard.target_percentage ?? 75)}
+        <h4>Student average bands</h4>
+        ${renderStudentDistributionPie(students)}
       </article>
       <article>
-        <h4>Student average bands</h4>
-        ${renderStudentDistributionBars(students)}
+        <h4>Top 5 students</h4>
+        ${renderStudentRankList(students, 'top')}
+      </article>
+      <article>
+        <h4>Bottom 5 students</h4>
+        ${renderStudentRankList(students, 'bottom')}
       </article>
     </div>
   `;
 }
 
-function renderAssessmentAverageBars(assessments, target) {
-  if (!assessments.length) return '<p class="microcopy">No assessments yet.</p>';
-  return `
-    <div class="bar-chart">
-      ${assessments.map((assessment) => {
-        const average = assessment.average_percentage;
-        const width = average === null || average === undefined ? 0 : Math.max(0, Math.min(100, Number(average)));
-        const low = average !== null && average !== undefined && Number(average) < Number(target);
-        return `
-          <div class="bar-row">
-            <span title="${escapeHtml(assessment.title)}">${escapeHtml(assessment.title)}</span>
-            <div class="bar-track" aria-hidden="true"><i class="${low ? 'bar-fill--low' : ''}" style="width: ${width}%"></i></div>
-            <strong class="${low ? 'performance-value--low' : ''}">${formatPercent(average)}</strong>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
-}
-
-function renderStudentDistributionBars(students) {
+function renderStudentDistributionPie(students) {
   const buckets = [
     ['90-100%', students.filter((student) => Number(student.average_percentage) >= 90).length],
     ['75-89%', students.filter((student) => Number(student.average_percentage) >= 75 && Number(student.average_percentage) < 90).length],
@@ -2165,21 +2224,51 @@ function renderStudentDistributionBars(students) {
     ['0-59%', students.filter((student) => student.average_percentage !== null && student.average_percentage !== undefined && Number(student.average_percentage) < 60).length],
     ['No data', students.filter((student) => student.average_percentage === null || student.average_percentage === undefined).length],
   ];
-  const maxCount = Math.max(1, ...buckets.map(([, count]) => count));
+  return renderPieSummary(buckets, {
+    emptyLabel: 'No student performance data yet.',
+    lowLabels: ['60-74%', '0-59%'],
+  });
+}
+
+function renderStudentRankList(students, direction) {
+  const ranked = students
+    .filter((student) => student.average_percentage !== null && student.average_percentage !== undefined)
+    .sort((a, b) => Number(b.average_percentage) - Number(a.average_percentage));
+  const selected = direction === 'bottom' ? ranked.slice(-5).reverse() : ranked.slice(0, 5);
+  if (!selected.length) return '<p class="microcopy">No student averages yet.</p>';
   return `
-    <div class="bar-chart">
-      ${buckets.map(([label, count]) => {
-        const low = label === '60-74%' || label === '0-59%';
+    <ol class="rank-list">
+      ${selected.map((student) => {
+        const average = Number(student.average_percentage);
         return `
-          <div class="bar-row">
-            <span>${escapeHtml(label)}</span>
-            <div class="bar-track" aria-hidden="true"><i class="${low ? 'bar-fill--low' : ''}" style="width: ${Math.round((count / maxCount) * 100)}%"></i></div>
-            <strong class="${low && count ? 'performance-value--low' : ''}">${count}</strong>
-          </div>
+          <li>
+            <span>${escapeHtml(student.display_name || `${student.first_name} ${student.last_name}`)}</span>
+            <strong class="${isBelowTarget(average) ? 'performance-value--low' : ''}">${formatPercent(average)}</strong>
+          </li>
         `;
       }).join('')}
-    </div>
+    </ol>
   `;
+}
+
+function syncPerformanceTableScrollers() {
+  const topScroller = els.classRecordDetail.querySelector('[data-performance-scroll-top] input');
+  const mainScroller = els.classRecordDetail.querySelector('[data-performance-scroll-main]');
+  if (!topScroller || !mainScroller) return;
+  syncRangeTableScroller(topScroller, mainScroller);
+}
+
+function syncRangeTableScroller(rangeInput, tableScroller) {
+  const maxScroll = Math.max(0, tableScroller.scrollWidth - tableScroller.clientWidth);
+  rangeInput.max = String(maxScroll);
+  rangeInput.disabled = maxScroll === 0;
+  rangeInput.value = String(Math.min(Number(rangeInput.value || 0), maxScroll));
+  rangeInput.addEventListener('input', () => {
+    tableScroller.scrollLeft = Number(rangeInput.value || 0);
+  });
+  tableScroller.addEventListener('scroll', () => {
+    rangeInput.value = String(Math.round(tableScroller.scrollLeft));
+  });
 }
 
 function renderAssessmentResultCell(result) {

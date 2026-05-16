@@ -1786,7 +1786,7 @@ def save_attendance_grid(
         return get_attendance_grid_by_date(connection, teacher_id, class_id, attendance_date)
 
 
-def get_attendance_summary(teacher_id: int, class_id: int, limit: int = 30) -> dict[str, Any] | None:
+def get_attendance_summary(teacher_id: int, class_id: int, limit: int = 220) -> dict[str, Any] | None:
     with connect() as connection:
         class_record = get_class_record_by_id(connection, teacher_id, class_id)
         if not class_record:
@@ -1801,7 +1801,7 @@ def get_attendance_summary(teacher_id: int, class_id: int, limit: int = 30) -> d
             ORDER BY attendance_date DESC
             LIMIT ?
             """,
-            (class_id, max(1, min(int(limit or 30), 60))),
+            (class_id, max(1, min(int(limit or 220), 220))),
         ).fetchall()
         dates = [row["attendance_date"] for row in date_rows]
         records_by_student_date: dict[tuple[int, str], dict[str, Any]] = {}

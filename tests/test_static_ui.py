@@ -125,9 +125,28 @@ def test_class_records_forms_do_not_overflow_workspace():
     assert "renderAttendanceCapture" in app_js
     assert "renderAttendancePerformance" in app_js
     assert "renderAttendancePerformanceDashboard" in app_js
+    assert "renderAttendanceBandPie" in app_js
+    assert "renderPresentAbsentPie" in app_js
+    assert "Daily attendance rates" not in app_js
+    assert "attendance-average-row" in app_js
+    assert "data-attendance-scroll-top" in app_js
+    assert "syncAttendanceTableScrollers" in app_js
+    assert "syncRangeTableScroller" in app_js
+    assert "days=220" in app_js
     assert "data-attendance-form" in app_js
     assert "Student Performance" in app_js
+    assert "renderClassDashboardGraphs" in app_js
+    assert "class-dashboard-actions" in app_js
+    assert "Performance snapshot" not in app_js
+    assert app_js.index("renderClassDashboardGraphs(dashboard, active.attendanceSummary)") < app_js.index("class-dashboard-actions")
     assert "renderPerformanceDashboard" in app_js
+    assert "renderStudentDistributionPie" in app_js
+    assert "renderStudentRankList" in app_js
+    assert "syncPerformanceTableScrollers" in app_js
+    assert "Assessment averages" not in app_js
+    assert "performance-average-row" in app_js
+    assert "<th>Student</th>\n          <th>Average</th>" in app_js
+    assert "data-performance-scroll-top" in app_js
     assert "renderAssessmentResultCell" in app_js
     assert "score-cell--low" in app_js
     assert ".class-record-create-form" in styles_css
@@ -135,11 +154,20 @@ def test_class_records_forms_do_not_overflow_workspace():
     assert ".class-records-panel--detail .class-records-layout" in styles_css
     assert ".class-tab--on" in styles_css
     assert ".class-dashboard-grid" in styles_css
+    assert ".class-dashboard-section" in styles_css
+    assert ".class-dashboard-actions" in styles_css
     assert ".attendance-toolbar" in styles_css
     assert ".attendance-performance-dashboard" in styles_css
     assert ".attendance-performance-table" in styles_css
+    assert ".pie-summary" in styles_css
+    assert ".pie-chart" in styles_css
+    assert ".attendance-average-row th" in styles_css
+    assert ".table-scroll-control" in styles_css
+    assert '.table-scroll-control input[type="range"]' in styles_css
     assert ".attendance-status--absent" in styles_css
     assert ".performance-dashboard" in styles_css
+    assert ".performance-average-row th" in styles_css
+    assert ".rank-list" in styles_css
     assert ".bar-track" in styles_css
     assert ".score-cell--low" in styles_css
     assert ".inline-record-form .record-field--title" in styles_css
