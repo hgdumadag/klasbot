@@ -5,6 +5,16 @@ from urllib.parse import parse_qs, urlsplit
 from tests.conftest import login
 
 
+class HelpChatClient:
+    def __init__(self, answer: str = "Use Help.") -> None:
+        self.answer = answer
+        self.messages = []
+
+    async def chat(self, model, messages, format=None):
+        self.messages.append({"model": model, "messages": messages, "format": format})
+        return self.answer
+
+
 def test_login_logout_and_me(client):
     response = client.get("/api/me")
     assert response.status_code == 401
@@ -49,6 +59,94 @@ def test_non_admin_cannot_manage_teachers(client):
     response = client.get("/api/admin/teachers")
 
     assert response.status_code == 403
+
+
+def test_help_ask_requires_login(client):
+    response = client.post("/api/help/ask", json={"question": "How do I print?", "language": "en"})
+
+    assert response.status_code == 401
+
+
+def test_help_ask_validates_question(client):
+    login(client, "2222")
+
+    response = client.post("/api/help/ask", json={"question": "   ", "language": "en"})
+    assert response.status_code == 400
+
+    response = client.post("/api/help/ask", json={"question": "x" * 1201, "language": "en"})
+    assert response.status_code == 422
+
+
+def test_help_ask_teacher_prompt_excludes_admin_scope(client, monkeypatch):
+    from klasbot import main
+
+    fake = HelpChatClient("Open Lesson Planning, then Generate Lesson Plan.")
+    monkeypatch.setattr(main, "ollama_client", fake)
+    login(client, "2222")
+
+    response = client.post("/api/help/ask", json={"question": "How do I make a lesson?", "language": "en"})
+
+    assert response.status_code == 200
+    assert response.json()["answer"] == "Open Lesson Planning, then Generate Lesson Plan."
+    prompt = fake.messages[0]["messages"][0]["content"]
+    assert "Answer in English." in prompt
+    assert "The current user is a teacher." in prompt
+    assert "The current user is an admin." not in prompt
+    assert "Do not give instructions for Admin tools" in prompt
+    assert "App description:" in prompt
+
+
+def test_help_ask_prompt_defines_board_notes(client, monkeypatch):
+    from klasbot import main
+
+    fake = HelpChatClient("Board Notes are chalkboard-ready teaching notes.")
+    monkeypatch.setattr(main, "ollama_client", fake)
+    login(client, "2222")
+
+    response = client.post("/api/help/ask", json={"question": "What is Board Notes?", "language": "en"})
+
+    assert response.status_code == 200
+    prompt = fake.messages[0]["messages"][0]["content"]
+    assert "Board Notes are chalkboard-ready teaching notes" in prompt
+    assert "board sequence" in prompt
+
+
+def test_help_ask_is_allowed_for_remote_session_requests(client, monkeypatch):
+    from klasbot import main
+
+    fake = HelpChatClient("Use the Help workspace.")
+    monkeypatch.setattr(main, "ollama_client", fake)
+    login(client, "2222")
+    csrf = client.get("/api/me").json()["csrf_token"]
+    monkeypatch.setattr(main, "LOCAL_CLIENT_HOSTS", set())
+
+    response = client.post(
+        "/api/help/ask",
+        json={"question": "What is Board Notes?", "language": "en"},
+        headers={"host": "192.168.1.20", "x-klasbot-csrf": csrf},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["answer"] == "Use the Help workspace."
+
+
+def test_help_ask_admin_prompt_includes_admin_scope_and_filipino(client, monkeypatch):
+    from klasbot import main
+
+    fake = HelpChatClient("Buksan ang Teacher Admin.")
+    monkeypatch.setattr(main, "ollama_client", fake)
+    login(client, "1111")
+
+    response = client.post("/api/help/ask", json={"question": "Paano mag reset ng PIN?", "language": "fil"})
+
+    assert response.status_code == 200
+    assert response.json()["language"] == "fil"
+    assert response.json()["answer"] == "Buksan ang Teacher Admin."
+    prompt = fake.messages[0]["messages"][0]["content"]
+    assert "Answer in Filipino/Tagalog." in prompt
+    assert "The current user is an admin." in prompt
+    assert "Teacher Admin lets admins add teacher accounts" in prompt
+    assert fake.messages[0]["messages"][1]["content"] == "Paano mag reset ng PIN?"
 
 
 def test_admin_can_update_lesson_plan_format_used_by_prompt(client):
@@ -684,3 +782,136 @@ def test_expired_share_link_fails(client):
     response = client.get(f"/share/{share['token']}/download")
 
     assert response.status_code == 410
+
+
+# --- Insights tests ---
+
+class InsightsChatClient:
+    def __init__(self, answer: str = "## Class Snapshot\n- All good.") -> None:
+        self.answer = answer
+        self.call_count = 0
+
+    async def chat(self, model, messages, format=None):
+        self.call_count += 1
+        return self.answer
+
+
+def _seed_class_with_scores(client) -> int:
+    login(client, "2222")
+    class_id = client.post(
+        "/api/class-records/classes",
+        json={"name": "Math 6A", "grade_level": "6", "subject": "Math", "school_year": "2026-2027"},
+    ).json()["class"]["id"]
+    s1 = client.post(f"/api/class-records/classes/{class_id}/students", json={"first_name": "Ana", "last_name": "Santos"}).json()["student"]["id"]
+    s2 = client.post(f"/api/class-records/classes/{class_id}/students", json={"first_name": "Ben", "last_name": "Reyes"}).json()["student"]["id"]
+    a_id = client.post(
+        f"/api/class-records/classes/{class_id}/assessments",
+        json={"title": "Quiz 1", "assessment_type": "quiz", "assessment_date": "2026-06-15", "max_score": 20},
+    ).json()["assessment"]["id"]
+    client.put(
+        f"/api/class-records/assessments/{a_id}/scores",
+        json={"scores": [{"student_id": s1, "score": 14}, {"student_id": s2, "score": 18}]},
+    )
+    return class_id
+
+
+def test_build_insights_messages_includes_signal():
+    from klasbot.prompts.insights import build_insights_messages
+
+    class_record = {"name": "Math 6A", "grade_level": "6", "section": "A", "subject": "Math", "school_year": "2026-2027"}
+    dashboard = {
+        "target_percentage": 75.0,
+        "student_count": 2,
+        "assessment_count": 1,
+        "class_average": 80.0,
+        "highest_assessment_average": 90.0,
+        "lowest_assessment_average": 70.0,
+        "below_target_count": 1,
+        "missing_or_absent_count": 0,
+        "assessments": [{"title": "Quiz 1", "assessment_type": "quiz", "assessment_date": "2026-06-15", "average_percentage": 70.0, "completion_count": 2}],
+        "students": [
+            {
+                "display_name": "Ana Santos",
+                "average_percentage": 65.0,
+                "status_indicator": "Watch",
+                "absent_count": 0,
+                "missing_count": 0,
+                "assessment_results": [{"title": "Quiz 1", "percentage": 65.0, "is_below_target": True, "is_absent": False, "is_missing": False}],
+            },
+            {
+                "display_name": "Ben Reyes",
+                "average_percentage": 90.0,
+                "status_indicator": "On Track",
+                "absent_count": 0,
+                "missing_count": 0,
+                "assessment_results": [{"title": "Quiz 1", "percentage": 90.0, "is_below_target": False, "is_absent": False, "is_missing": False}],
+            },
+        ],
+    }
+    messages = build_insights_messages(class_record, dashboard)
+
+    assert len(messages) == 2
+    system = messages[0]["content"]
+    user = messages[1]["content"]
+    assert messages[0]["role"] == "system"
+    assert messages[1]["role"] == "user"
+    assert "## Class Snapshot" in system
+    assert "## Students to Watch" in system
+    assert "## Assessment Concerns" in system
+    assert "## Suggested Actions" in system
+    assert "Ana Santos" in user
+    assert "Ben Reyes" in user
+    assert "Quiz 1" in user
+    assert "70.0%" in user or "70%" in user
+
+
+def test_class_insights_endpoint_returns_briefing(client, monkeypatch):
+    from klasbot import main
+
+    fake = InsightsChatClient("## Class Snapshot\n- Class average is 80%.\n\n## Students to Watch\n- Ana Santos: avg 70.0%\n\n## Assessment Concerns\n- Nothing to flag.\n\n## Suggested Actions\n- Schedule a check-in with Ana.")
+    monkeypatch.setattr(main, "ollama_client", fake)
+    class_id = _seed_class_with_scores(client)
+
+    response = client.post(f"/api/class-records/classes/{class_id}/insights")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["empty"] is False
+    assert "## Class Snapshot" in body["answer"]
+    assert body["model"] is not None
+    assert fake.call_count == 1
+
+
+def test_class_insights_empty_class_short_circuits(client, monkeypatch):
+    from klasbot import main
+
+    fake = InsightsChatClient()
+    monkeypatch.setattr(main, "ollama_client", fake)
+    login(client, "2222")
+    class_id = client.post(
+        "/api/class-records/classes",
+        json={"name": "Empty Class", "grade_level": "5", "subject": "Science", "school_year": "2026-2027"},
+    ).json()["class"]["id"]
+
+    response = client.post(f"/api/class-records/classes/{class_id}/insights")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["empty"] is True
+    assert "Add students" in body["answer"]
+    assert fake.call_count == 0
+
+
+def test_class_insights_rejects_foreign_class(client, monkeypatch):
+    from klasbot import main
+
+    fake = InsightsChatClient()
+    monkeypatch.setattr(main, "ollama_client", fake)
+    class_id = _seed_class_with_scores(client)
+
+    client.post("/api/auth/logout")
+    login(client, "1111")
+
+    response = client.post(f"/api/class-records/classes/{class_id}/insights")
+
+    assert response.status_code == 404

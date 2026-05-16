@@ -49,6 +49,7 @@ const els = {
   inspector: document.getElementById('inspector'),
   homePanel: document.getElementById('home-panel'),
   homeButton: document.getElementById('home-button'),
+  helpButton: document.getElementById('help-button'),
   lessonAreaButton: document.getElementById('lesson-area-button'),
   classAreaButton: document.getElementById('class-area-button'),
   adminAreaButton: document.getElementById('admin-area-button'),
@@ -75,6 +76,17 @@ const els = {
   formatAdminTitle: document.getElementById('format-admin-title'),
   formatAdminRequirements: document.getElementById('format-admin-requirements'),
   resetFormat: document.getElementById('reset-format'),
+  helpPanel: document.getElementById('help-panel'),
+  helpLanguage: document.getElementById('help-language'),
+  helpAskForm: document.getElementById('help-ask-form'),
+  helpQuestion: document.getElementById('help-question'),
+  helpAskButton: document.getElementById('help-ask-button'),
+  helpStatus: document.getElementById('help-status'),
+  helpAnswer: document.getElementById('help-answer'),
+  helpProviderDot: document.getElementById('help-provider-dot'),
+  helpProviderLabel: document.getElementById('help-provider-label'),
+  helpProviderDetail: document.getElementById('help-provider-detail'),
+  helpCheckProvider: document.getElementById('help-check-provider'),
   curriculumUploadForm: document.getElementById('curriculum-upload-form'),
   curriculumList: document.getElementById('curriculum-list'),
   refreshCurriculum: document.getElementById('refresh-curriculum'),
@@ -199,6 +211,12 @@ const els = {
 function setStatus(message, isError = false) {
   els.statusLine.textContent = message;
   els.statusLine.style.color = isError ? 'var(--danger)' : 'var(--accent-strong)';
+}
+
+function setHelpStatus(message, isError = false) {
+  if (!els.helpStatus) return;
+  els.helpStatus.textContent = message;
+  els.helpStatus.style.color = isError ? 'var(--danger)' : 'var(--accent-strong)';
 }
 
 function actionControlFromEvent(event) {
@@ -380,6 +398,9 @@ function setOllamaStatus(data) {
   const homeModelLabel = document.getElementById('home-model-label');
   if (homeModelDot) homeModelDot.className = `status-dot ${dotClass}`;
   if (homeModelLabel) homeModelLabel.textContent = data.model ? `${label} · ${data.model}` : label;
+  if (els.helpProviderDot) els.helpProviderDot.className = `status-dot ${dotClass}`;
+  if (els.helpProviderLabel) els.helpProviderLabel.textContent = label;
+  if (els.helpProviderDetail) els.helpProviderDetail.textContent = detail;
 }
 
 async function checkOllamaStatus() {
@@ -388,14 +409,28 @@ async function checkOllamaStatus() {
   try {
     const data = await api('/api/ollama/status');
     setOllamaStatus(data);
+    return data;
   } catch (error) {
-    setOllamaStatus({
+    const data = {
       ok: false,
       base_url: 'unknown',
       model: 'unknown',
       error: error.message,
-    });
+    };
+    setOllamaStatus(data);
+    return data;
   }
+}
+
+async function ensureHelpProviderReady() {
+  setHelpStatus('Checking AI provider...');
+  const data = await checkOllamaStatus();
+  if (!data?.ok || !data?.model_available) {
+    const providerLabel = data?.provider_label || data?.provider || 'AI provider';
+    const reason = data?.error || (data?.ok ? `${data.model || 'Configured model'} is unavailable` : 'provider is not reachable');
+    throw new Error(`${providerLabel} is not ready: ${reason}`);
+  }
+  return data;
 }
 
 window.checkOllamaStatus = checkOllamaStatus;
@@ -424,6 +459,7 @@ function showLogin() {
   els.adminPanel.classList.add('hidden');
   els.curriculumPanel.classList.add('hidden');
   els.formatAdminPanel.classList.add('hidden');
+  els.helpPanel.classList.add('hidden');
   els.adminAreaButton.classList.add('hidden');
   els.adminHomeCard.classList.add('hidden');
   els.adminToggle.classList.add('hidden');
@@ -454,6 +490,7 @@ function showApp() {
   els.adminToggle.classList.toggle('hidden', !isAdmin);
   els.curriculumToggle.classList.toggle('hidden', !isAdmin);
   els.formatAdminToggle.classList.toggle('hidden', !isAdmin);
+  renderHelpRoleVisibility();
   if (!isAdmin) {
     els.adminPanel.classList.add('hidden');
     els.curriculumPanel.classList.add('hidden');
@@ -700,6 +737,56 @@ function updateResourcesVisibility() {
   }
 }
 
+function renderHelpRoleVisibility() {
+  const isAdmin = Boolean(state.teacher?.is_admin);
+  document.querySelectorAll('.help-admin-only').forEach((node) => {
+    node.classList.toggle('hidden', !isAdmin);
+  });
+}
+
+function fillHelpQuestion(question) {
+  switchWorkspace('help');
+  els.helpQuestion.value = question || '';
+  els.helpQuestion.focus();
+  setHelpStatus('Question ready. Review it, then ask KlasBot.');
+}
+
+async function generateClassInsights() {
+  const panel = els.classRecordDetail.querySelector('.class-insights-panel');
+  if (!panel) return;
+  const output = panel.querySelector('.class-insights-output');
+  const statusEl = panel.querySelector('.class-insights-status');
+  output.innerHTML = '<div class="draft-preview__empty">Generating insights…</div>';
+  statusEl.textContent = 'Generating…';
+  const classId = state.activeClassRecord?.class?.id;
+  const data = await api(`/api/class-records/classes/${classId}/insights`, { method: 'POST' });
+  output.innerHTML = markdownToHtml(data.answer || '');
+  statusEl.textContent = data.empty
+    ? 'No insights yet — add students and scores first.'
+    : `Generated with ${data.model}.`;
+}
+
+async function askHelpQuestion() {
+  const question = els.helpQuestion.value.trim();
+  if (!question) {
+    setHelpStatus('Enter a help question first.', true);
+    els.helpQuestion.focus();
+    return;
+  }
+  await ensureHelpProviderReady();
+  els.helpAnswer.innerHTML = '<div class="draft-preview__empty">Asking KlasBot Help...</div>';
+  setHelpStatus('Asking KlasBot Help...');
+  const data = await api('/api/help/ask', {
+    method: 'POST',
+    body: JSON.stringify({
+      question,
+      language: els.helpLanguage.value || 'en',
+    }),
+  });
+  els.helpAnswer.innerHTML = markdownToHtml(data.answer || '');
+  setHelpStatus(`Answered with ${data.model}.`);
+}
+
 function formatLabel(format) {
   const labels = {
     DLP: 'Detailed Lesson Plan',
@@ -715,18 +802,21 @@ function workspaceArea(workspace) {
   if (['draft', 'teaching-aids', 'library'].includes(workspace)) return 'lesson';
   if (['grading', 'class-records'].includes(workspace)) return 'class';
   if (['teacher-admin', 'curriculum', 'plan-formats'].includes(workspace)) return 'admin';
+  if (workspace === 'help') return 'help';
   return 'home';
 }
 
 function setNavigationState(workspace) {
   const area = workspaceArea(workspace);
   const isHome = workspace === 'home';
+  const isHelp = workspace === 'help';
   const isLesson = area === 'lesson';
   const isClass = area === 'class';
   const isAdmin = area === 'admin';
 
   els.workspaceFrame.dataset.area = area;
   els.homeButton.classList.toggle('rail-primary--active', isHome);
+  els.helpButton.classList.toggle('rail-primary--active', isHelp);
   els.lessonAreaButton.classList.toggle('rail-item--on', isLesson);
   els.classAreaButton.classList.toggle('rail-item--on', isClass);
   els.adminAreaButton.classList.toggle('rail-item--on', isAdmin);
@@ -756,6 +846,7 @@ function setVisibleWorkspacePanel(panelName) {
   els.homePanel.classList.toggle('hidden', panelName !== 'home');
   els.draftPanel.classList.toggle('hidden', panelName !== 'draft');
   els.documentTabs.classList.toggle('hidden', panelName !== 'draft');
+  els.helpPanel.classList.toggle('hidden', panelName !== 'help');
   els.teachingAidsPanel.classList.toggle('hidden', panelName !== 'teaching-aids');
   els.libraryPanel.classList.toggle('hidden', panelName !== 'library');
   els.gradingPanel.classList.toggle('hidden', panelName !== 'grading');
@@ -779,6 +870,7 @@ function openWorkArea(area) {
   state.activeWorkspace = 'home';
   els.workspaceFrame.dataset.area = area;
   els.homeButton.classList.remove('rail-primary--active');
+  els.helpButton.classList.remove('rail-primary--active');
   els.lessonAreaButton.classList.toggle('rail-item--on', area === 'lesson');
   els.classAreaButton.classList.toggle('rail-item--on', area === 'class');
   els.adminAreaButton.classList.toggle('rail-item--on', area === 'admin');
@@ -799,6 +891,7 @@ function switchWorkspace(workspace) {
   }
   state.activeWorkspace = workspace;
   const isHome = workspace === 'home';
+  const isHelp = workspace === 'help';
   const isDraft = workspace === 'draft';
   const isTeachingAids = workspace === 'teaching-aids';
   const isLibrary = workspace === 'library';
@@ -831,6 +924,11 @@ function switchWorkspace(workspace) {
       ? 'Choose Lesson Planning, Class Management, or Admin.'
       : 'Choose Lesson Planning or Class Management.';
     document.querySelector('.breadcrumb').textContent = 'Home';
+  } else if (isHelp) {
+    els.documentTitle.textContent = 'Help';
+    els.documentMeta.textContent = 'Offline instructions and grounded answers about using KlasBot.';
+    document.querySelector('.breadcrumb').textContent = 'Help';
+    renderHelpRoleVisibility();
   } else if (isLibrary) {
     els.documentTitle.textContent = 'My Library';
     els.documentMeta.textContent = 'Saved lesson plans, quizzes, exams, and teaching aids grouped by subject.';
@@ -1647,6 +1745,7 @@ function renderClassRecordDetail() {
     ['attendance_performance', 'Attendance Performance'],
     ['assessments', 'Assessments'],
     ['performance', 'Student Performance'],
+    ['insights', 'Insights'],
   ];
   const tabButtons = tabs.map(([value, label]) => `
     <button class="class-tab${activeTab === value ? ' class-tab--on' : ''}" type="button" data-class-tab="${value}">${label}</button>
@@ -1726,6 +1825,23 @@ function renderClassRecordDetail() {
         })}
       </section>
     `,
+    insights: `
+      <section class="class-tab-panel">
+        <div class="class-tab-panel__head">
+          <h4>AI Insights</h4>
+          <p class="microcopy">Generate an actionable briefing from current class data. Each click re-runs the AI model against the latest scores, attendance, and assessments.</p>
+        </div>
+        <div class="class-insights-panel">
+          <div class="class-insights-toolbar">
+            <button class="primary compact" type="button" data-class-insights-generate>Generate Insights</button>
+            <span class="class-insights-status microcopy"></span>
+          </div>
+          <div class="class-insights-output draft-preview">
+            <div class="draft-preview__empty">Click <strong>Generate Insights</strong> to summarize this class with AI.</div>
+          </div>
+        </div>
+      </section>
+    `,
   };
   els.classRecordDetail.innerHTML = `
     <div class="class-detail-head">
@@ -1800,6 +1916,9 @@ function renderClassRecordDetail() {
         select.value = status;
       });
     });
+  });
+  els.classRecordDetail.querySelector('[data-class-insights-generate]')?.addEventListener('click', (event) => {
+    runUserAction(event, 'Generating insights…', generateClassInsights, { busyText: 'Generating…' });
   });
   syncAttendanceTableScrollers();
   syncPerformanceTableScrollers();
@@ -2852,6 +2971,7 @@ function handleHomeAction(action) {
     'teacher-admin': () => openAdminWorkspace('teacher-admin', loadTeachers, els.adminToggle),
     curriculum: () => openAdminWorkspace('curriculum', loadCurriculumDocuments, els.curriculumToggle),
     'plan-formats': () => openAdminWorkspace('plan-formats', loadLessonPlanFormats, els.formatAdminToggle),
+    help: () => switchWorkspace('help'),
   };
   actions[action]?.();
 }
@@ -3758,6 +3878,7 @@ els.logoutButton.addEventListener('click', (event) => {
 });
 
 els.homeButton.addEventListener('click', () => switchWorkspace('home'));
+els.helpButton.addEventListener('click', () => switchWorkspace('help'));
 els.lessonAreaButton.addEventListener('click', () => openWorkArea('lesson'));
 els.classAreaButton.addEventListener('click', () => openWorkArea('class'));
 els.adminAreaButton.addEventListener('click', () => {
@@ -3767,6 +3888,29 @@ els.adminAreaButton.addEventListener('click', () => {
 });
 document.querySelectorAll('[data-home-action]').forEach((button) => {
   button.addEventListener('click', () => handleHomeAction(button.dataset.homeAction));
+});
+document.querySelectorAll('[data-help-example]').forEach((button) => {
+  button.addEventListener('click', () => fillHelpQuestion(button.dataset.helpExample));
+});
+
+els.helpAskForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  await runUserAction(event, 'Asking KlasBot Help...', askHelpQuestion, {
+    busyText: 'Asking...',
+    report: setHelpStatus,
+  });
+});
+els.helpCheckProvider.addEventListener('click', (event) => {
+  runUserAction(event, 'Checking AI provider...', checkOllamaStatus, {
+    busyText: 'Checking...',
+    report: setHelpStatus,
+  }).then((data) => {
+    if (data?.ok && data?.model_available) {
+      setHelpStatus(`AI ready: ${data.model}.`);
+    } else if (data) {
+      setHelpStatus(data.error || 'AI provider is not ready.', true);
+    }
+  });
 });
 
 els.adminToggle.addEventListener('click', () => {

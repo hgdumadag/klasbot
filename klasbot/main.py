@@ -58,6 +58,8 @@ from klasbot.ollama_client import OllamaStreamError
 from klasbot.vertex_gemma_client import VertexGemmaStreamError
 from klasbot.print_utils import export_pdf, print_html, render_print_html
 from klasbot.prompts import build_prompt
+from klasbot.prompts.help import build_help_messages
+from klasbot.prompts.insights import build_insights_messages
 from klasbot.prompts.teaching_aid import (
     teaching_aid_label,
     valid_teaching_aid_types,
@@ -154,6 +156,11 @@ class PromptPreviewRequest(BaseModel):
     week_number: Optional[int] = Field(default=None, ge=1, le=10)
     grade_levels: list[str] = Field(default_factory=list)
     resources: list[str] = Field(default_factory=list)
+
+
+class HelpAskRequest(BaseModel):
+    question: str = Field(min_length=1, max_length=1200)
+    language: Literal["en", "fil"] = "en"
 
 
 class LessonPlanFormatUpdateRequest(BaseModel):
@@ -263,6 +270,7 @@ REMOTE_PUBLIC_PREFIXES = ("/share/", "/mobile/pair/")
 REMOTE_STATIC_PREFIXES = ("/static/mobile",)
 REMOTE_SESSION_PATHS = {"/mobile", "/api/me", "/api/ollama/status", "/api/auth/logout"}
 REMOTE_SESSION_PREFIXES = (
+    "/api/help/",
     "/api/generate/stream",
     "/api/curriculum/",
     "/api/library",
@@ -970,6 +978,66 @@ async def generate_stream(
 @app.get("/api/dev/prompt-preview/enabled")
 async def prompt_preview_enabled(teacher: Annotated[dict, Depends(get_current_teacher)]) -> dict:
     return {"enabled": PROMPT_PREVIEW_ENABLED and bool(teacher.get("is_admin"))}
+
+
+@app.post("/api/help/ask")
+async def help_ask(
+    payload: HelpAskRequest,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    question = payload.question.strip()
+    if not question:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Enter a help question.")
+    _check_generation_rate_limit(int(teacher["id"]))
+    model = current_ai_model()
+    messages = build_help_messages(question, payload.language, is_admin=bool(teacher.get("is_admin")))
+    try:
+        answer = (await ollama_client.chat(model, messages)).strip()
+    except (OllamaStreamError, VertexGemmaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
+        reason = _ollama_error_message(exc)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Help assistant is unavailable: {reason}",
+        ) from exc
+    if not answer:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Help assistant returned no answer. Try again.",
+        )
+    return {"answer": answer, "language": payload.language, "model": model}
+
+
+@app.post("/api/class-records/classes/{class_id}/insights")
+async def class_records_insights(
+    class_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+) -> dict:
+    dashboard = db.get_class_dashboard(teacher["id"], class_id)
+    if not dashboard:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    if not dashboard.get("student_count") or not dashboard.get("assessment_count"):
+        return {
+            "answer": "Add students, create at least one assessment, and enter scores before generating insights.",
+            "model": None,
+            "empty": True,
+        }
+    _check_generation_rate_limit(int(teacher["id"]))
+    model = current_ai_model()
+    messages = build_insights_messages(dashboard["class"], dashboard)
+    try:
+        answer = (await ollama_client.chat(model, messages)).strip()
+    except (OllamaStreamError, VertexGemmaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
+        reason = _ollama_error_message(exc)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Insights are unavailable: {reason}",
+        ) from exc
+    if not answer:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Insights returned no answer. Try again.",
+        )
+    return {"answer": answer, "model": model, "empty": False}
 
 
 @app.post("/api/dev/prompt-preview")

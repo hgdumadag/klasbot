@@ -251,6 +251,37 @@ def test_admin_tools_use_middle_workspace_views():
     assert "|| state.lessonPlanFormats[0]" in app_js
 
 
+def test_help_workspace_has_role_aware_grounded_qna():
+    app_js = (ROOT / "klasbot" / "static" / "app.js").read_text(encoding="utf-8")
+    index_html = (ROOT / "klasbot" / "static" / "index.html").read_text(encoding="utf-8")
+    styles_css = (ROOT / "klasbot" / "static" / "styles.css").read_text(encoding="utf-8")
+
+    assert 'id="help-button"' in index_html
+    assert 'id="help-panel" class="workspace-panel help-panel hidden"' in index_html
+    assert 'id="help-language"' in index_html
+    assert '<option value="en">English</option>' in index_html
+    assert '<option value="fil">Filipino</option>' in index_html
+    assert 'id="help-ask-form"' in index_html
+    assert 'id="help-question"' in index_html
+    assert 'id="help-answer"' in index_html
+    assert 'id="help-check-provider"' in index_html
+    assert 'id="help-provider-label"' in index_html
+    assert 'data-help-example=' in index_html
+    assert 'class="help-topic help-admin-only hidden"' in index_html
+    assert 'class="secondary compact help-admin-only hidden"' in index_html
+    assert "if (workspace === 'help') return 'help';" in app_js
+    assert "switchWorkspace('help')" in app_js
+    assert "renderHelpRoleVisibility" in app_js
+    assert "state.teacher?.is_admin" in app_js
+    assert "/api/help/ask" in app_js
+    assert "ensureHelpProviderReady" in app_js
+    assert "/api/ollama/status" in app_js
+    assert ".help-layout" in styles_css
+    assert ".help-assistant" in styles_css
+    assert ".help-provider-status" in styles_css
+    assert '.workspace-frame[data-area="help"]' in styles_css
+
+
 def test_mobile_teacher_workspace_static_assets():
     mobile_html = (ROOT / "klasbot" / "static" / "mobile.html").read_text(encoding="utf-8")
     mobile_js = (ROOT / "klasbot" / "static" / "mobile.js").read_text(encoding="utf-8")
