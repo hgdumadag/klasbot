@@ -760,6 +760,7 @@ async function generateClassInsights() {
   statusEl.textContent = 'Generating…';
   const classId = state.activeClassRecord?.class?.id;
   const data = await api(`/api/class-records/classes/${classId}/insights`, { method: 'POST' });
+  state.activeClassRecord = { ...state.activeClassRecord, insights: data };
   output.innerHTML = markdownToHtml(data.answer || '');
   statusEl.textContent = data.empty
     ? 'No insights yet — add students and scores first.'
@@ -1834,10 +1835,16 @@ function renderClassRecordDetail() {
         <div class="class-insights-panel">
           <div class="class-insights-toolbar">
             <button class="primary compact" type="button" data-class-insights-generate>Generate Insights</button>
-            <span class="class-insights-status microcopy"></span>
+            <span class="class-insights-status microcopy">${active.insights
+              ? (active.insights.empty ? 'No insights yet — add students and scores first.' : `Generated with ${escapeHtml(active.insights.model || '')}.`)
+              : ''
+            }</span>
           </div>
           <div class="class-insights-output draft-preview">
-            <div class="draft-preview__empty">Click <strong>Generate Insights</strong> to summarize this class with AI.</div>
+            ${active.insights
+              ? markdownToHtml(active.insights.answer || '')
+              : '<div class="draft-preview__empty">Click <strong>Generate Insights</strong> to summarize this class with AI.</div>'
+            }
           </div>
         </div>
       </section>
