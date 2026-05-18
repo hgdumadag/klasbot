@@ -122,6 +122,7 @@ def test_class_records_forms_do_not_overflow_workspace():
     assert "Create Assessments" in app_js
     assert "Daily Attendance" in app_js
     assert "Attendance Performance" in app_js
+    assert "AI Insights" in app_js
     assert "renderAttendanceCapture" in app_js
     assert "renderAttendancePerformance" in app_js
     assert "renderAttendancePerformanceDashboard" in app_js
@@ -134,6 +135,9 @@ def test_class_records_forms_do_not_overflow_workspace():
     assert "syncRangeTableScroller" in app_js
     assert "days=220" in app_js
     assert "data-attendance-form" in app_js
+    assert "data-class-insights-generate" in app_js
+    assert "/insights" in app_js
+    assert "/insights/stream" not in app_js
     assert "Student Performance" in app_js
     assert "renderClassDashboardGraphs" in app_js
     assert "class-dashboard-actions" in app_js
@@ -165,6 +169,8 @@ def test_class_records_forms_do_not_overflow_workspace():
     assert ".table-scroll-control" in styles_css
     assert '.table-scroll-control input[type="range"]' in styles_css
     assert ".attendance-status--absent" in styles_css
+    assert ".class-insights-panel" in styles_css
+    assert ".class-insights-output" in styles_css
     assert ".performance-dashboard" in styles_css
     assert ".performance-average-row th" in styles_css
     assert ".rank-list" in styles_css

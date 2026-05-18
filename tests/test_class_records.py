@@ -140,6 +140,87 @@ def test_class_records_daily_attendance_grid_and_summary(client):
     assert students_by_name["Ben Reyes"]["attendance_records"][0]["status"] == "absent"
 
 
+def test_class_insight_snapshot_combines_attendance_and_performance(client):
+    login(client, "1111")
+    class_id = _create_class(client)
+    first_student = _add_student(client, class_id, "Ana", "Santos")
+    second_student = _add_student(client, class_id, "Ben", "Reyes")
+    quiz_id = _create_assessment(client, class_id, "Quiz 1")
+    exam_id = _create_assessment(client, class_id, "Exam 1")
+
+    client.put(
+        f"/api/class-records/assessments/{quiz_id}/scores",
+        json={
+            "scores": [
+                {"student_id": first_student, "score": 18},
+                {"student_id": second_student, "score": 10},
+            ]
+        },
+    )
+    client.put(
+        f"/api/class-records/assessments/{exam_id}/scores",
+        json={
+            "scores": [
+                {"student_id": first_student, "score": 16},
+                {"student_id": second_student, "score": 8},
+            ]
+        },
+    )
+    for attendance_date in ["2026-06-17", "2026-06-18"]:
+        client.put(
+            f"/api/class-records/classes/{class_id}/attendance",
+            json={
+                "attendance_date": attendance_date,
+                "rows": [
+                    {"student_id": first_student, "status": "present"},
+                    {"student_id": second_student, "status": "absent"},
+                ],
+            },
+        )
+
+    response = client.get(f"/api/class-records/classes/{class_id}/insight-snapshot")
+
+    assert response.status_code == 200
+    snapshot = response.json()["snapshot"]
+    assert snapshot["class"]["name"] == "Grade 6A Science"
+    assert snapshot["summary"]["attendance_rate"] == 50
+    assert snapshot["performance"]["lowest_assessments"][0]["title"] == "Exam 1"
+    assert snapshot["attendance"]["most_absent_students"][0]["display_name"] == "Ben Reyes"
+    overlap = snapshot["attendance_performance_overlap"]["below_target_and_frequently_absent"]
+    assert overlap[0]["display_name"] == "Ben Reyes"
+
+
+def test_class_insights_endpoint_uses_snapshot_prompt(client, monkeypatch):
+    from klasbot import main
+
+    seen = {}
+
+    class FakeOllama:
+        async def chat(self, model, messages, *, format=None):
+            seen["messages"] = messages
+            return "# Class Insight\n## Key Findings\n"
+
+    login(client, "1111")
+    class_id = _create_class(client)
+    student_id = _add_student(client, class_id, "Ana", "Santos")
+    assessment_id = _create_assessment(client, class_id)
+    client.put(
+        f"/api/class-records/assessments/{assessment_id}/scores",
+        json={"scores": [{"student_id": student_id, "score": 18}]},
+    )
+    monkeypatch.setattr(main, "ollama_client", FakeOllama())
+
+    response = client.post(f"/api/class-records/classes/{class_id}/insights")
+    body = response.json()["answer"]
+
+    assert response.status_code == 200
+    assert "# Class Insight" in body
+    prompt = seen["messages"][0]["content"]
+    assert "Class insight snapshot" in prompt
+    assert "attendance" in prompt
+    assert "Do not invent students" in prompt
+
+
 def test_class_records_are_scoped_to_teacher(client):
     login(client, "1111")
     class_id = _create_class(client)
@@ -153,6 +234,7 @@ def test_class_records_are_scoped_to_teacher(client):
     assert client.get(f"/api/class-records/classes/{class_id}/students").status_code == 404
     assert client.get(f"/api/class-records/assessments/{assessment_id}/scores").status_code == 404
     assert client.get(f"/api/class-records/classes/{class_id}/attendance").status_code == 404
+    assert client.get(f"/api/class-records/classes/{class_id}/insight-snapshot").status_code == 404
     response = client.patch(
         f"/api/class-records/students/{student_id}",
         json={"first_name": "Blocked", "last_name": "Teacher", "status": "active"},

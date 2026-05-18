@@ -1789,7 +1789,7 @@ function renderClassRecordDetail() {
     ['attendance_performance', 'Attendance Performance'],
     ['assessments', 'Assessments'],
     ['performance', 'Student Performance'],
-    ['insights', 'Insights'],
+    ['insights', 'AI Insights'],
   ];
   const tabButtons = tabs.map(([value, label]) => `
     <button class="class-tab${activeTab === value ? ' class-tab--on' : ''}" type="button" data-class-tab="${value}">${label}</button>

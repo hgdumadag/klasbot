@@ -2118,6 +2118,225 @@ def get_class_dashboard(teacher_id: int, class_id: int, target: float = 75.0) ->
         }
 
 
+def get_class_insight_snapshot(
+    teacher_id: int,
+    class_id: int,
+    *,
+    days: int = 30,
+    target: float = 75.0,
+    focus_date: str = "",
+    lesson_topic: str = "",
+    week_number: int | None = None,
+) -> dict[str, Any] | None:
+    dashboard = get_class_dashboard(teacher_id, class_id, target)
+    if not dashboard:
+        return None
+    attendance_summary = get_attendance_summary(teacher_id, class_id, days)
+    if not attendance_summary:
+        return None
+
+    students = dashboard.get("students") or []
+    assessments = dashboard.get("assessments") or []
+    dates = attendance_summary.get("dates") or []
+    attendance_students = attendance_summary.get("students") or []
+    attendance_by_student = {int(student["id"]): student for student in attendance_students}
+
+    student_signals = []
+    for student in students:
+        attendance_row = attendance_by_student.get(int(student["id"]), {})
+        records = attendance_row.get("attendance_records") or []
+        attendance_counts = _student_attendance_counts(records)
+        attendance_rate = _student_attendance_rate(attendance_counts, len(dates))
+        average = student.get("average_percentage")
+        below_target = average is not None and float(average) < target
+        missing_scores = int(student.get("missing_count") or 0)
+        absent_scores = int(student.get("absent_count") or 0)
+        student_signals.append(
+            {
+                "student_id": student["id"],
+                "display_name": student["display_name"],
+                "average_percentage": average,
+                "status_indicator": student.get("status_indicator"),
+                "below_target": below_target,
+                "score_missing_count": missing_scores,
+                "score_absent_count": absent_scores,
+                "attendance_absent_count": attendance_counts["absent"],
+                "attendance_late_count": attendance_counts["late"],
+                "attendance_missing_count": attendance_counts["missing"],
+                "attendance_rate": attendance_rate,
+            }
+        )
+
+    frequent_absence_threshold = max(2, round(len(dates) * 0.25)) if dates else 2
+    frequently_absent = [
+        row for row in student_signals if row["attendance_absent_count"] >= frequent_absence_threshold
+    ]
+    frequently_absent.sort(key=lambda row: (-row["attendance_absent_count"], row["display_name"]))
+    late_often = [row for row in student_signals if row["attendance_late_count"] > 0]
+    late_often.sort(key=lambda row: (-row["attendance_late_count"], row["display_name"]))
+    below_target_students = [row for row in student_signals if row["below_target"]]
+    no_score_data = [row for row in student_signals if row["average_percentage"] is None]
+
+    attendance_performance_overlap = {
+        "below_target_and_frequently_absent": [
+            row for row in frequently_absent if row["below_target"]
+        ],
+        "below_target_but_usually_present": [
+            row
+            for row in below_target_students
+            if row["attendance_absent_count"] < frequent_absence_threshold
+        ],
+        "frequently_absent_but_at_or_above_target": [
+            row
+            for row in frequently_absent
+            if row["average_percentage"] is not None and float(row["average_percentage"]) >= target
+        ],
+    }
+
+    assessment_signals = []
+    for assessment in assessments:
+        assessment_signals.append(
+            {
+                "assessment_id": assessment["id"],
+                "title": assessment["title"],
+                "assessment_type": assessment["assessment_type"],
+                "assessment_date": assessment["assessment_date"],
+                "max_score": assessment["max_score"],
+                "average_percentage": assessment.get("average_percentage"),
+                "completion_count": assessment.get("completion_count"),
+                "missing_count": assessment.get("missing_count"),
+                "absent_count": assessment.get("absent_count"),
+                "highest_score": assessment.get("highest_score"),
+                "lowest_score": assessment.get("lowest_score"),
+            }
+        )
+    assessments_with_average = [
+        assessment for assessment in assessment_signals if assessment.get("average_percentage") is not None
+    ]
+    assessments_with_average.sort(key=lambda row: float(row["average_percentage"]))
+
+    return {
+        "class": dashboard["class"],
+        "context": {
+            "analysis_days": max(1, min(int(days or 30), 60)),
+            "focus_date": focus_date,
+            "lesson_topic": lesson_topic,
+            "week_number": week_number,
+            "target_percentage": target,
+        },
+        "summary": {
+            "student_count": dashboard.get("student_count"),
+            "assessment_count": dashboard.get("assessment_count"),
+            "class_average": dashboard.get("class_average"),
+            "below_target_count": dashboard.get("below_target_count"),
+            "missing_or_absent_score_count": dashboard.get("missing_or_absent_count"),
+            "attendance_recorded_dates": len(dates),
+            "attendance_rate": _period_attendance_rate(attendance_summary.get("day_summaries") or []),
+            "frequent_absence_threshold": frequent_absence_threshold,
+        },
+        "attendance": {
+            "dates": dates,
+            "weakest_days": _weakest_attendance_days(attendance_summary.get("day_summaries") or []),
+            "most_absent_students": frequently_absent[:8],
+            "late_often_students": late_often[:8],
+            "students_with_missing_attendance": [
+                row for row in student_signals if row["attendance_missing_count"] > 0
+            ][:8],
+        },
+        "performance": {
+            "students_below_target": below_target_students[:12],
+            "students_with_no_score_data": no_score_data[:12],
+            "students_with_missing_or_absent_scores": [
+                row
+                for row in student_signals
+                if row["score_missing_count"] or row["score_absent_count"]
+            ][:12],
+            "lowest_assessments": assessments_with_average[:5],
+            "highest_assessments": list(reversed(assessments_with_average[-5:])),
+            "assessment_signals": assessment_signals,
+            "declining_students": _declining_student_signals(students, assessments),
+        },
+        "attendance_performance_overlap": attendance_performance_overlap,
+        "records_to_complete": {
+            "attendance_dates_with_missing_records": [
+                day for day in attendance_summary.get("day_summaries") or [] if day.get("missing")
+            ],
+            "assessments_with_missing_or_absent_scores": [
+                assessment
+                for assessment in assessment_signals
+                if assessment.get("missing_count") or assessment.get("absent_count")
+            ],
+        },
+    }
+
+
+def _student_attendance_counts(records: list[dict[str, Any]]) -> dict[str, int]:
+    counts = {"present": 0, "absent": 0, "late": 0, "excused": 0, "missing": 0}
+    for record in records:
+        status = record.get("status") if record.get("is_recorded") else "missing"
+        if status in counts:
+            counts[status] += 1
+    return counts
+
+
+def _student_attendance_rate(counts: dict[str, int], date_count: int) -> float | None:
+    if date_count <= 0:
+        return None
+    attended = int(counts.get("present") or 0) + int(counts.get("late") or 0)
+    return round(attended / date_count * 100, 1)
+
+
+def _period_attendance_rate(day_summaries: list[dict[str, Any]]) -> float | None:
+    student_days = sum(int(day.get("student_count") or 0) for day in day_summaries)
+    if not student_days:
+        return None
+    attended = sum(int(day.get("present") or 0) + int(day.get("late") or 0) for day in day_summaries)
+    return round(attended / student_days * 100, 1)
+
+
+def _weakest_attendance_days(day_summaries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    recorded_days = [day for day in day_summaries if day.get("attendance_rate") is not None]
+    recorded_days.sort(key=lambda day: (float(day["attendance_rate"]), day["attendance_date"]))
+    return recorded_days[:5]
+
+
+def _declining_student_signals(
+    students: list[dict[str, Any]], assessments: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    chronological_assessments = sorted(
+        assessments,
+        key=lambda assessment: (assessment.get("assessment_date") or "", int(assessment.get("id") or 0)),
+    )
+    assessment_order = {int(assessment["id"]): index for index, assessment in enumerate(chronological_assessments)}
+    declines = []
+    for student in students:
+        results = [
+            result
+            for result in student.get("assessment_results") or []
+            if result.get("percentage") is not None and int(result["assessment_id"]) in assessment_order
+        ]
+        results.sort(key=lambda result: assessment_order[int(result["assessment_id"])])
+        if len(results) < 2:
+            continue
+        first = results[0]
+        latest = results[-1]
+        change = round(float(latest["percentage"]) - float(first["percentage"]), 2)
+        if change <= -10:
+            declines.append(
+                {
+                    "student_id": student["id"],
+                    "display_name": student["display_name"],
+                    "first_assessment": first["title"],
+                    "first_percentage": first["percentage"],
+                    "latest_assessment": latest["title"],
+                    "latest_percentage": latest["percentage"],
+                    "change_points": change,
+                }
+            )
+    declines.sort(key=lambda row: (row["change_points"], row["display_name"]))
+    return declines[:10]
+
+
 def get_assessment_dashboard(teacher_id: int, assessment_id: int) -> dict[str, Any] | None:
     with connect() as connection:
         assessment = get_assessment_by_id(connection, teacher_id, assessment_id)

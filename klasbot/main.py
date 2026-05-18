@@ -59,12 +59,12 @@ from klasbot.vertex_gemma_client import VertexGemmaStreamError
 from klasbot.print_utils import export_pdf, print_html, render_print_html
 from klasbot.prompts import build_prompt
 from klasbot.prompts.help import build_help_messages
-from klasbot.prompts.insights import build_insights_messages
 from klasbot.prompts.teaching_aid import (
     teaching_aid_label,
     valid_teaching_aid_types,
     build_teaching_aid_prompt,
 )
+from klasbot.prompts.class_insights import build_class_insight_prompt
 
 STATIC_DIR = Path(__file__).parent / "static"
 
@@ -1022,10 +1022,11 @@ async def class_records_insights(
     class_id: int,
     teacher: Annotated[dict, Depends(get_current_teacher)],
 ) -> dict:
-    dashboard = db.get_class_dashboard(teacher["id"], class_id)
-    if not dashboard:
+    snapshot = db.get_class_insight_snapshot(teacher["id"], class_id)
+    if not snapshot:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
-    if not dashboard.get("student_count") or not dashboard.get("assessment_count"):
+    summary = snapshot.get("summary") or {}
+    if not summary.get("student_count") or not summary.get("assessment_count"):
         return {
             "answer": "Add students, create at least one assessment, and enter scores before generating insights.",
             "model": None,
@@ -1033,9 +1034,9 @@ async def class_records_insights(
         }
     _check_generation_rate_limit(int(teacher["id"]))
     model = current_ai_model()
-    messages = build_insights_messages(dashboard["class"], dashboard)
+    prompt = build_class_insight_prompt(snapshot)
     try:
-        answer = (await ollama_client.chat(model, messages)).strip()
+        answer = (await ollama_client.chat(model, [{"role": "user", "content": prompt}])).strip()
     except (OllamaStreamError, VertexGemmaStreamError, httpx.HTTPError, ValueError, KeyError) as exc:
         reason = _ollama_error_message(exc)
         raise HTTPException(
@@ -1613,6 +1614,30 @@ async def class_records_dashboard(
     if not dashboard:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
     return {"dashboard": dashboard}
+
+
+@app.get("/api/class-records/classes/{class_id}/insight-snapshot")
+async def class_records_insight_snapshot(
+    class_id: int,
+    teacher: Annotated[dict, Depends(get_current_teacher)],
+    days: int = Query(default=30, ge=1, le=60),
+    focus_date: str = Query(default="", max_length=32),
+    lesson_topic: str = Query(default="", max_length=200),
+    week_number: Optional[int] = Query(default=None, ge=1, le=10),
+    target_percentage: float = Query(default=75.0, ge=0, le=100),
+) -> dict:
+    snapshot = db.get_class_insight_snapshot(
+        teacher["id"],
+        class_id,
+        days=days,
+        target=target_percentage,
+        focus_date=focus_date,
+        lesson_topic=lesson_topic,
+        week_number=week_number,
+    )
+    if not snapshot:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+    return {"snapshot": snapshot}
 
 
 @app.get("/api/class-records/assessments/{assessment_id}/dashboard")

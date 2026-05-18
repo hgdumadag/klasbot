@@ -317,9 +317,18 @@ textarea {
 }
 
 .window-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   justify-self: center;
   color: var(--ink-700);
   font-weight: 700;
+}
+
+.demo-mode-badge {
+  color: var(--ink-500);
+  font-size: 0.82rem;
+  font-weight: 800;
 }
 
 .connection-state {
