@@ -172,6 +172,27 @@ def test_generation_inputs_keep_resources_for_assessments_only():
 
     assert lesson_inputs["resources"] == []
     assert assessment_inputs["resources"] == ["paper"]
+    assert lesson_inputs["difficulty"] == ""
+    assert assessment_inputs["difficulty"] == "normal"
+
+
+def test_generation_inputs_accept_assessment_difficulty():
+    from klasbot.main import _generation_inputs
+
+    assessment_inputs = _generation_inputs(
+        "assessment",
+        "quiz",
+        "Science",
+        "Materials",
+        "Grade 3",
+        1,
+        1,
+        ["Grade 3"],
+        ["paper"],
+        "hard",
+    )
+
+    assert assessment_inputs["difficulty"] == "hard"
 
 
 def test_generation_fallback_when_ollama_unavailable(client, monkeypatch):

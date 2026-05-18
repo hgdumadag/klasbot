@@ -887,6 +887,14 @@
                   Resources
                   <input id="resources" type="text" placeholder="paper, stones, bottle caps" />
                 </label>
+                <label id="difficulty-field" class="hidden">
+                  Difficulty
+                  <select id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
                 <p id="curriculum-match" class="microcopy">Upload and activate curriculum to enable guided selections.</p>
                 <button id="preview-prompt-button" class="ghost hidden" type="button">Preview prompt</button>
                 <textarea id="prompt-preview" class="prompt-preview hidden" readonly spellcheck="false"></textarea>

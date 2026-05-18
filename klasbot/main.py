@@ -109,6 +109,7 @@ class OutputSaveRequest(BaseModel):
     week_number: Optional[int] = Field(default=None, ge=1, le=10)
     grade_levels: list[str] = Field(default_factory=list)
     resources: list[str] = Field(default_factory=list)
+    difficulty: Literal["easy", "normal", "hard", ""] = ""
     inputs: dict[str, Any]
     content_md: str = Field(min_length=1)
 
@@ -156,6 +157,7 @@ class PromptPreviewRequest(BaseModel):
     week_number: Optional[int] = Field(default=None, ge=1, le=10)
     grade_levels: list[str] = Field(default_factory=list)
     resources: list[str] = Field(default_factory=list)
+    difficulty: Literal["easy", "normal", "hard", ""] = ""
 
 
 class HelpAskRequest(BaseModel):
@@ -685,10 +687,16 @@ def _generation_inputs(
     week_number: int | None,
     grade_levels: list[str] | None,
     resources: list[str] | None,
+    difficulty: str | None = None,
 ) -> dict[str, Any]:
     clean_grades = _clean_list(grade_levels)
     if grade_level and grade_level.strip() and grade_level.strip() not in clean_grades:
         clean_grades.insert(0, grade_level.strip())
+    normalized_difficulty = (difficulty or "").strip().lower()
+    if normalized_difficulty not in {"easy", "normal", "hard"}:
+        normalized_difficulty = "normal" if kind == "assessment" else ""
+    if kind != "assessment":
+        normalized_difficulty = ""
     return {
         "kind": kind,
         "format": format_name.strip(),
@@ -699,6 +707,7 @@ def _generation_inputs(
         "week_number": week_number,
         "grade_levels": clean_grades,
         "resources": _clean_list(resources) if kind == "assessment" else [],
+        "difficulty": normalized_difficulty,
     }
 
 
@@ -968,9 +977,10 @@ async def generate_stream(
     week_number: Optional[int] = Query(default=None, ge=1, le=10),
     grade_levels: list[str] | None = Query(default=None),
     resources: list[str] | None = Query(default=None),
+    difficulty: Literal["easy", "normal", "hard", ""] = Query(default=""),
 ):
     _check_generation_rate_limit(int(teacher["id"]))
-    inputs = _generation_inputs(kind, format, subject, topic, grade_level, quarter, week_number, grade_levels, resources)
+    inputs = _generation_inputs(kind, format, subject, topic, grade_level, quarter, week_number, grade_levels, resources, difficulty)
     _ensure_week_scoped_generation(inputs)
     return StreamingResponse(_sse_tokens(inputs), media_type="text/event-stream")
 
@@ -1058,6 +1068,7 @@ async def prompt_preview(
         payload.week_number,
         payload.grade_levels,
         payload.resources,
+        payload.difficulty,
     )
     if not inputs["topic"] or not inputs["subject"]:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Subject and topic are required")

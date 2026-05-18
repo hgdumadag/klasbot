@@ -288,6 +288,26 @@ def test_assessment_prompt_keeps_teacher_resources_visible():
     assert "Use only the resources listed by the teacher" in prompt
 
 
+def test_assessment_prompt_includes_selected_difficulty():
+    from klasbot.prompts.assessment import build_assessment_prompt
+
+    prompt = build_assessment_prompt(
+        {
+            "kind": "assessment",
+            "format": "quiz",
+            "subject": "Science",
+            "topic": "Materials",
+            "grade_levels": ["Grade 3"],
+            "resources": ["paper"],
+            "difficulty": "hard",
+            "curriculum_context": "Science context",
+        }
+    )
+
+    assert "Difficulty: Hard" in prompt
+    assert "Calibrate the questions to the hard difficulty level." in prompt
+
+
 def test_teaching_aid_prompt_requires_classroom_usable_worked_example():
     from klasbot.prompts.teaching_aid import build_teaching_aid_prompt
 

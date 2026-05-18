@@ -113,6 +113,8 @@ const els = {
   weekNumber: document.getElementById('week-number'),
   resources: document.getElementById('resources'),
   resourcesField: document.getElementById('resources-field'),
+  difficulty: document.getElementById('difficulty'),
+  difficultyField: document.getElementById('difficulty-field'),
   curriculumMatch: document.getElementById('curriculum-match'),
   previewPromptButton: document.getElementById('preview-prompt-button'),
   promptPreview: document.getElementById('prompt-preview'),
@@ -739,8 +741,10 @@ function updateFormats() {
 function updateResourcesVisibility() {
   const showResources = els.kind.value === 'assessment';
   els.resourcesField?.classList.toggle('hidden', !showResources);
+  els.difficultyField?.classList.toggle('hidden', !showResources);
   if (!showResources) {
     els.resources.value = '';
+    if (els.difficulty) els.difficulty.value = 'normal';
   }
 }
 
@@ -1031,6 +1035,9 @@ function collectInputs() {
       .map((item) => item.trim())
       .filter(Boolean)
     : [];
+  const difficulty = els.kind.value === 'assessment'
+    ? (els.difficulty?.value || 'normal')
+    : '';
   return {
     kind: els.kind.value,
     format: els.format.value,
@@ -1041,6 +1048,7 @@ function collectInputs() {
     week_number: els.weekNumber.value ? Number(els.weekNumber.value) : null,
     grade_levels: gradeLevels,
     resources,
+    difficulty,
   };
 }
 
@@ -1054,6 +1062,7 @@ function setFormFromInputs(inputs) {
   ensureSelectValue(els.topic, inputs.topic || '');
   ensureSelectValue(els.weekNumber, inputs.week_number ? String(inputs.week_number) : '');
   els.resources.value = (inputs.resources || []).join(', ');
+  if (els.difficulty) els.difficulty.value = inputs.difficulty || 'normal';
   updateResourcesVisibility();
   updateDocumentChrome(inputs);
   updateCurriculumMatch();
@@ -1092,6 +1101,7 @@ function streamGenerate(inputs, control = null) {
   if (inputs.week_number) params.set('week_number', String(inputs.week_number));
   inputs.grade_levels.forEach((grade) => params.append('grade_levels', grade));
   inputs.resources.forEach((resource) => params.append('resources', resource));
+  if (inputs.difficulty) params.set('difficulty', inputs.difficulty);
 
   const source = new EventSource(`/api/generate/stream?${params.toString()}`);
   source.onmessage = (event) => {
